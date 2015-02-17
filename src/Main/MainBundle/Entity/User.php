@@ -168,4 +168,224 @@ class User implements UserInterface, \Serializable
             $this->perfectMoney,
             $this->active) = unserialize($serialized);
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    
+        return $this;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    
+        return $this;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set surname
+     *
+     * @param string $surname
+     * @return User
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+    
+        return $this;
+    }
+
+    /**
+     * Get surname
+     *
+     * @return string 
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+
+    /**
+     * Set registered
+     *
+     * @param \DateTime $registered
+     * @return User
+     */
+    public function setRegistered($registered)
+    {
+        $this->registered = $registered;
+    
+        return $this;
+    }
+
+    /**
+     * Get registered
+     *
+     * @return \DateTime 
+     */
+    public function getRegistered()
+    {
+        return $this->registered;
+    }
+
+    /**
+     * Set lastactive
+     *
+     * @param \DateTime $lastactive
+     * @return User
+     */
+    public function setLastactive($lastactive)
+    {
+        $this->lastactive = $lastactive;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastactive
+     *
+     * @return \DateTime 
+     */
+    public function getLastactive()
+    {
+        return $this->lastactive;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return User
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set perfectMoney
+     *
+     * @param string $perfectMoney
+     * @return User
+     */
+    public function setPerfectMoney($perfectMoney)
+    {
+        $this->perfectMoney = $perfectMoney;
+    
+        return $this;
+    }
+
+    /**
+     * Get perfectMoney
+     *
+     * @return string 
+     */
+    public function getPerfectMoney()
+    {
+        return $this->perfectMoney;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+    
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string 
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
 }
