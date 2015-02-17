@@ -15,7 +15,7 @@ security:
             security: false
 
         register:
-            pattern:  ^/register/
+            pattern:  ^/signup/
             security: false
 
         register_action:
@@ -34,15 +34,11 @@ security:
             pattern:  ^/login/
             security: false
 
-        reset_password:
-            pattern: ^/
-            security: false
-
         secured_area:
             pattern: ^/*
             anonymous: ~
             form_login:
-                login_path: main_login
+                login_path: main_userpage
                 check_path: main_login_check
 
             logout:
@@ -56,4 +52,4 @@ security:
 
     access_control:
          - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/*, roles: ROLE_USER }
+         #- { path: ^/*, roles: ROLE_USER }

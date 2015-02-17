@@ -19,3 +19,7 @@ main_login_check:
 
 main_logout:
     path: /logout
+
+main_userpage:
+    path: /user/
+    defaults: { _controller: MainMainBundle:User:index }

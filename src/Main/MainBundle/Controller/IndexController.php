@@ -11,9 +11,8 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 class IndexController extends Controller
 {
-    public function indexAction()
-    {
-        return $this->render('MainMainBundle:Default:index.html.twig');
+    public function indexAction() {
+        return $this->render('MainMainBundle::index.html.twig');
     }
 
     public function loginAction()
