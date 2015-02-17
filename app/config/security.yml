@@ -1,12 +1,64 @@
 security:
+    #encoders:
+    #    Intranet\MainBundle\Entity\User:
+    #        algorithm: sha512
+    #        encode_as_base64: false
+    #        iterations: 1
+
     providers:
-        in_memory:
-            memory: ~
+        user_db:
+            entity: { class: Main\MainBundle\Entity\User }
 
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        default:
+        welcome:
+            pattern:  ^/welcome/
+            security: false
+
+        register:
+            pattern:  ^/register/
+            security: false
+
+        register_action:
+            pattern:  ^/register_action/
+            security: false
+
+        check_username:
+            pattern:  ^/user/check/username/
+            security: false
+
+        check_email:
+            pattern:  ^/user/check/email/
+            security: false
+
+        login:
+            pattern:  ^/login/
+            security: false
+
+        reset_password:
+            pattern: ^/
+            security: false
+
+        secured_area:
+            pattern:    ^/*
             anonymous: ~
+            #form_login:
+            #    login_path: main_homepage
+            #    check_path: main_homepage
+
+            #logout:
+            #    path: main_logout
+            #remember_me:
+            #    key: mycookie
+            #    lifetime: 2592000 # 30 days
+            #    path: /
+            #    domain: ~
+            #    always_remember_me: true
+
+
+    #access_control:
+    #     - { path: ^/homepage/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    #     - { path: ^/*, roles: ROLE_USER }
