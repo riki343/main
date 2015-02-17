@@ -35,11 +35,14 @@ security:
             security: false
 
         secured_area:
-            pattern: ^/*
+            pattern: ^/.*
             anonymous: ~
             form_login:
-                login_path: main_userpage
                 check_path: main_login_check
+                login_path: main_userpage
+                logout: true
+                security: true
+                anonymous: true
 
             logout:
                 path: main_logout
@@ -52,4 +55,4 @@ security:
 
     access_control:
          - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         #- { path: ^/*, roles: ROLE_USER }
+         #- { path: ^/.*, roles: ROLE_USER }

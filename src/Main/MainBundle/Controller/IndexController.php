@@ -15,9 +15,8 @@ class IndexController extends Controller
         return $this->render('MainMainBundle::index.html.twig');
     }
 
-    public function loginAction()
+    public function loginAction(Request $request)
     {
-        $request = $this->getRequest();
         $session = $request->getSession();
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
