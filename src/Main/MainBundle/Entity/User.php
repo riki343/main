@@ -388,4 +388,24 @@ class User implements UserInterface, \Serializable
     {
         return $this->avatar;
     }
+
+    public static function addUser($em, $encoderFactory, $parameters)
+    {
+        $user = new User();
+        $encoder = $encoderFactory->getEncoder($user);
+
+        $user->setUsername($parameters['username']);
+        $user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
+        $user->setEmail($parameters['email']);
+        $user->setName($parameters['name']);
+        $user->setSurname($parameters['surname']);
+        $user->setRegistered(new \DateTime());
+        $user->setLastactive(new \DateTime());
+        $user->setActive(0);
+        $user->setPerfectMoney($parameters['perfectMoney']);
+        $user->setAvatar('default.png');
+
+        $em->persist($user);
+        $em->flush();
+    }
 }
