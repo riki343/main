@@ -167,9 +167,7 @@ class appDevDebugProjectContainer extends Container
             'security.firewall.map.context.login' => 'getSecurity_Firewall_Map_Context_LoginService',
             'security.firewall.map.context.register' => 'getSecurity_Firewall_Map_Context_RegisterService',
             'security.firewall.map.context.register_action' => 'getSecurity_Firewall_Map_Context_RegisterActionService',
-            'security.firewall.map.context.reset_password' => 'getSecurity_Firewall_Map_Context_ResetPasswordService',
             'security.firewall.map.context.secured_area' => 'getSecurity_Firewall_Map_Context_SecuredAreaService',
-            'security.firewall.map.context.welcome' => 'getSecurity_Firewall_Map_Context_WelcomeService',
             'security.password_encoder' => 'getSecurity_PasswordEncoderService',
             'security.rememberme.response_listener' => 'getSecurity_Rememberme_ResponseListenerService',
             'security.role_hierarchy' => 'getSecurity_RoleHierarchyService',
@@ -628,7 +626,7 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\DBAL\Configuration();
         $b->setSQLLogger($a);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => NULL, 'dbname' => 'main', 'user' => 'main', 'password' => 123456, 'charset' => 'UTF8', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => NULL, 'dbname' => 'main', 'user' => 'main', 'password' => '123456', 'charset' => 'UTF8', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
     }
 
     /**
@@ -1980,7 +1978,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_EncoderFactoryService()
     {
-        return $this->services['security.encoder_factory'] = new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array());
+        return $this->services['security.encoder_factory'] = new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array('Main\\MainBundle\\Entity\\User' => array('class' => 'Symfony\\Component\\Security\\Core\\Encoder\\MessageDigestPasswordEncoder', 'arguments' => array(0 => 'sha512', 1 => false, 2 => 1))));
     }
 
     /**
@@ -1993,7 +1991,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_FirewallService()
     {
-        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.dev' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/(_(profiler|wdt)|css|images|js)/'), 'security.firewall.map.context.welcome' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/welcome/'), 'security.firewall.map.context.register' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/register/'), 'security.firewall.map.context.register_action' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/register_action/'), 'security.firewall.map.context.check_username' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/user/check/username/'), 'security.firewall.map.context.check_email' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/user/check/email/'), 'security.firewall.map.context.login' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/login/'), 'security.firewall.map.context.reset_password' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/reset_password'), 'security.firewall.map.context.secured_area' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/*'))), $this->get('debug.event_dispatcher'));
+        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.dev' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/(_(profiler|wdt)|css|images|js)/'), 'security.firewall.map.context.register' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/signup/'), 'security.firewall.map.context.register_action' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/register_action/'), 'security.firewall.map.context.check_username' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/user/check/username/'), 'security.firewall.map.context.check_email' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/user/check/email/'), 'security.firewall.map.context.login' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/login/'), 'security.firewall.map.context.secured_area' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/*'))), $this->get('debug.event_dispatcher'));
     }
 
     /**
@@ -2075,19 +2073,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'security.firewall.map.context.reset_password' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return \Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
-     */
-    protected function getSecurity_Firewall_Map_Context_ResetPasswordService()
-    {
-        return $this->services['security.firewall.map.context.reset_password'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(), NULL);
-    }
-
-    /**
      * Gets the 'security.firewall.map.context.secured_area' service.
      *
      * This service is shared.
@@ -2105,46 +2090,30 @@ class appDevDebugProjectContainer extends Container
         $f = $this->get('http_kernel');
         $g = $this->get('security.authentication.manager');
 
-        $h = new \Symfony\Component\HttpFoundation\RequestMatcher('^/homepage/');
+        $h = new \Symfony\Component\HttpFoundation\RequestMatcher('^/home');
 
-        $i = new \Symfony\Component\HttpFoundation\RequestMatcher('^/*');
+        $i = new \Symfony\Component\Security\Http\AccessMap();
+        $i->add($h, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
 
-        $j = new \Symfony\Component\Security\Http\AccessMap();
-        $j->add($h, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
-        $j->add($i, array(0 => 'ROLE_USER'), NULL);
+        $j = new \Symfony\Component\Security\Http\HttpUtils($e, $e);
 
-        $k = new \Symfony\Component\Security\Http\HttpUtils($e, $e);
+        $k = new \Symfony\Component\Security\Http\RememberMe\TokenBasedRememberMeServices(array(0 => $c), 'mycookie', 'secured_area', array('lifetime' => 2592000, 'path' => '/', 'domain' => NULL, 'always_remember_me' => true, 'name' => 'REMEMBERME', 'secure' => false, 'httponly' => true, 'remember_me_parameter' => '_remember_me'), $a);
 
-        $l = new \Symfony\Component\Security\Http\RememberMe\TokenBasedRememberMeServices(array(0 => $c), 'mycookie', 'secured_area', array('lifetime' => 2592000, 'path' => '/', 'domain' => NULL, 'always_remember_me' => true, 'name' => 'REMEMBERME', 'secure' => false, 'httponly' => true, 'remember_me_parameter' => '_remember_me'), $a);
+        $l = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $j, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($j, '/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => 'main_logout'));
+        $l->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
+        $l->addHandler($k);
 
-        $m = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $k, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($k, '/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => 'main_logout'));
-        $m->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
-        $m->addHandler($l);
+        $m = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($j, array());
+        $m->setOptions(array('login_path' => 'main_userpage', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
+        $m->setProviderKey('secured_area');
 
-        $n = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($k, array());
-        $n->setOptions(array('login_path' => 'intranet_homepage', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
-        $n->setProviderKey('secured_area');
+        $n = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($f, $j, array(), $a);
+        $n->setOptions(array('login_path' => 'main_userpage', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'));
 
-        $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($f, $k, array(), $a);
-        $o->setOptions(array('login_path' => 'intranet_homepage', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'));
+        $o = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $g, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $j, 'secured_area', $m, $n, array('check_path' => 'main_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $d, NULL);
+        $o->setRememberMeServices($k);
 
-        $p = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $g, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $k, 'secured_area', $n, $o, array('check_path' => 'intranet_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $d, NULL);
-        $p->setRememberMeServices($l);
-
-        return $this->services['security.firewall.map.context.secured_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($j, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c), 'secured_area', $a, $d), 2 => $m, 3 => $p, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $l, $g, $a, $d, true), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '54e35bbacd9a7', $a, $g), 6 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $j, $g)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $k, 'secured_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($f, $k, 'intranet_homepage', false), NULL, NULL, $a));
-    }
-
-    /**
-     * Gets the 'security.firewall.map.context.welcome' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return \Symfony\Bundle\SecurityBundle\Security\FirewallContext A Symfony\Bundle\SecurityBundle\Security\FirewallContext instance.
-     */
-    protected function getSecurity_Firewall_Map_Context_WelcomeService()
-    {
-        return $this->services['security.firewall.map.context.welcome'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(), NULL);
+        return $this->services['security.firewall.map.context.secured_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($i, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c), 'secured_area', $a, $d), 2 => $l, 3 => $o, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $k, $g, $a, $d, true), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '54e38c8a041c2', $a, $g), 6 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $i, $g)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $j, 'secured_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($f, $j, 'main_userpage', false), NULL, NULL, $a));
     }
 
     /**
@@ -3343,7 +3312,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getUriSignerService()
     {
-        return $this->services['uri_signer'] = new \Symfony\Component\HttpKernel\UriSigner('ThisTokenIsNotSoSecretChangeIt');
+        return $this->services['uri_signer'] = new \Symfony\Component\HttpKernel\UriSigner('760c640b956ea8106efaa5d1adc7c46fc1ba9563');
     }
 
     /**
@@ -3604,7 +3573,7 @@ class appDevDebugProjectContainer extends Container
     {
         $a = new \Symfony\Component\Security\Core\User\UserChecker();
 
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.user_db'), $a, 'secured_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'mycookie', 'secured_area'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('54e35bbacd9a7')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.user_db'), $a, 'secured_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'mycookie', 'secured_area'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('54e38c8a041c2')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3811,13 +3780,14 @@ class appDevDebugProjectContainer extends Container
             'database_port' => NULL,
             'database_name' => 'main',
             'database_user' => 'main',
-            'database_password' => 123456,
+            'database_password' => '123456',
             'mailer_transport' => 'smtp',
             'mailer_host' => '127.0.0.1',
             'mailer_user' => NULL,
             'mailer_password' => NULL,
             'locale' => 'ru',
-            'secret' => 'ThisTokenIsNotSoSecretChangeIt',
+            'secret' => '760c640b956ea8106efaa5d1adc7c46fc1ba9563',
+            'database_path' => NULL,
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
@@ -3866,7 +3836,7 @@ class appDevDebugProjectContainer extends Container
             'translation.extractor.class' => 'Symfony\\Component\\Translation\\Extractor\\ChainExtractor',
             'translation.writer.class' => 'Symfony\\Component\\Translation\\Writer\\TranslationWriter',
             'property_accessor.class' => 'Symfony\\Component\\PropertyAccess\\PropertyAccessor',
-            'kernel.secret' => 'ThisTokenIsNotSoSecretChangeIt',
+            'kernel.secret' => '760c640b956ea8106efaa5d1adc7c46fc1ba9563',
             'kernel.http_method_override' => true,
             'kernel.trusted_hosts' => array(
 

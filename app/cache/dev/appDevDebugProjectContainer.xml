@@ -36,7 +36,8 @@
     <parameter key="mailer_user">null</parameter>
     <parameter key="mailer_password">null</parameter>
     <parameter key="locale">ru</parameter>
-    <parameter key="secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+    <parameter key="secret">760c640b956ea8106efaa5d1adc7c46fc1ba9563</parameter>
+    <parameter key="database_path">null</parameter>
     <parameter key="controller_resolver.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver</parameter>
     <parameter key="controller_name_converter.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser</parameter>
     <parameter key="response_listener.class">Symfony\Component\HttpKernel\EventListener\ResponseListener</parameter>
@@ -85,7 +86,7 @@
     <parameter key="translation.extractor.class">Symfony\Component\Translation\Extractor\ChainExtractor</parameter>
     <parameter key="translation.writer.class">Symfony\Component\Translation\Writer\TranslationWriter</parameter>
     <parameter key="property_accessor.class">Symfony\Component\PropertyAccess\PropertyAccessor</parameter>
-    <parameter key="kernel.secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+    <parameter key="kernel.secret">760c640b956ea8106efaa5d1adc7c46fc1ba9563</parameter>
     <parameter key="kernel.http_method_override">true</parameter>
     <parameter key="kernel.trusted_hosts" type="collection"/>
     <parameter key="kernel.trusted_proxies" type="collection"/>
@@ -735,7 +736,7 @@
       <argument>X:\home\localhost\www\main\app/Resources</argument>
     </service>
     <service id="uri_signer" class="Symfony\Component\HttpKernel\UriSigner">
-      <argument>ThisTokenIsNotSoSecretChangeIt</argument>
+      <argument>760c640b956ea8106efaa5d1adc7c46fc1ba9563</argument>
     </service>
     <service id="fragment.handler" class="Symfony\Component\HttpKernel\Fragment\FragmentHandler">
       <argument type="collection"/>
@@ -1788,7 +1789,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>54e35bbacd9a7</argument>
+            <argument>54e38c8a041c2</argument>
           </service>
         </argument>
       </argument>
@@ -1847,14 +1848,9 @@
                 <argument>^/(_(profiler|wdt)|css|images|js)/</argument>
               </service>
             </argument>
-            <argument key="security.firewall.map.context.welcome" type="service">
-              <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                <argument>^/welcome/</argument>
-              </service>
-            </argument>
             <argument key="security.firewall.map.context.register" type="service">
               <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                <argument>^/register/</argument>
+                <argument>^/signup/</argument>
               </service>
             </argument>
             <argument key="security.firewall.map.context.register_action" type="service">
@@ -1875,11 +1871,6 @@
             <argument key="security.firewall.map.context.login" type="service">
               <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
                 <argument>^/login/</argument>
-              </service>
-            </argument>
-            <argument key="security.firewall.map.context.reset_password" type="service">
-              <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                <argument>^/reset_password</argument>
               </service>
             </argument>
             <argument key="security.firewall.map.context.secured_area" type="service">
@@ -1926,10 +1917,6 @@
       <argument type="collection"/>
       <argument>null</argument>
     </service>
-    <service id="security.firewall.map.context.welcome" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext">
-      <argument type="collection"/>
-      <argument>null</argument>
-    </service>
     <service id="security.firewall.map.context.register" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext">
       <argument type="collection"/>
       <argument>null</argument>
@@ -1950,10 +1937,6 @@
       <argument type="collection"/>
       <argument>null</argument>
     </service>
-    <service id="security.firewall.map.context.reset_password" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext">
-      <argument type="collection"/>
-      <argument>null</argument>
-    </service>
     <service id="security.firewall.map.context.secured_area" class="Symfony\Bundle\SecurityBundle\Security\FirewallContext">
       <argument type="collection">
         <argument type="service">
@@ -1964,22 +1947,11 @@
                 <call method="add">
                   <argument type="service">
                     <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/homepage/</argument>
+                      <argument>^/home</argument>
                     </service>
                   </argument>
                   <argument type="collection">
                     <argument>IS_AUTHENTICATED_ANONYMOUSLY</argument>
-                  </argument>
-                  <argument>null</argument>
-                </call>
-                <call method="add">
-                  <argument type="service">
-                    <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/*</argument>
-                    </service>
-                  </argument>
-                  <argument type="collection">
-                    <argument>ROLE_USER</argument>
                   </argument>
                   <argument>null</argument>
                 </call>
@@ -2087,7 +2059,7 @@
                 <argument type="collection"/>
                 <call method="setOptions">
                   <argument type="collection">
-                    <argument key="login_path">intranet_homepage</argument>
+                    <argument key="login_path">main_userpage</argument>
                     <argument key="always_use_default_target_path">false</argument>
                     <argument key="default_target_path">/</argument>
                     <argument key="target_path_parameter">_target_path</argument>
@@ -2112,7 +2084,7 @@
                 <argument type="service" id="monolog.logger.security" on-invalid="null"/>
                 <call method="setOptions">
                   <argument type="collection">
-                    <argument key="login_path">intranet_homepage</argument>
+                    <argument key="login_path">main_userpage</argument>
                     <argument key="failure_path">null</argument>
                     <argument key="failure_forward">false</argument>
                     <argument key="failure_path_parameter">_failure_path</argument>
@@ -2121,7 +2093,7 @@
               </service>
             </argument>
             <argument type="collection">
-              <argument key="check_path">intranet_login_check</argument>
+              <argument key="check_path">main_login_check</argument>
               <argument key="use_forward">false</argument>
               <argument key="require_previous_session">true</argument>
               <argument key="username_parameter">_username</argument>
@@ -2189,7 +2161,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>54e35bbacd9a7</argument>
+            <argument>54e38c8a041c2</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -2204,22 +2176,11 @@
                 <call method="add">
                   <argument type="service">
                     <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/homepage/</argument>
+                      <argument>^/home</argument>
                     </service>
                   </argument>
                   <argument type="collection">
                     <argument>IS_AUTHENTICATED_ANONYMOUSLY</argument>
-                  </argument>
-                  <argument>null</argument>
-                </call>
-                <call method="add">
-                  <argument type="service">
-                    <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/*</argument>
-                    </service>
-                  </argument>
-                  <argument type="collection">
-                    <argument>ROLE_USER</argument>
                   </argument>
                   <argument>null</argument>
                 </call>
@@ -2249,7 +2210,7 @@
                   <argument type="service" id="router" on-invalid="null"/>
                 </service>
               </argument>
-              <argument>intranet_homepage</argument>
+              <argument>main_userpage</argument>
               <argument>false</argument>
             </service>
           </argument>
@@ -3093,7 +3054,16 @@
       <argument>true</argument>
     </service>
     <service id="security.encoder_factory" class="Symfony\Component\Security\Core\Encoder\EncoderFactory">
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="Main\MainBundle\Entity\User" type="collection">
+          <argument key="class">%security.encoder.digest.class%</argument>
+          <argument key="arguments" type="collection">
+            <argument>sha512</argument>
+            <argument>false</argument>
+            <argument>1</argument>
+          </argument>
+        </argument>
+      </argument>
     </service>
     <service id="security.password_encoder" class="Symfony\Component\Security\Core\Encoder\UserPasswordEncoder">
       <argument type="service" id="security.encoder_factory"/>
