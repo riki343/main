@@ -1,4 +1,21 @@
 main_homepage:
-    path: /
+    path: /home
     defaults: { _controller: MainMainBundle:Index:index }
 
+main_signup:
+    pattern: /signup/{sponsor_id}
+    defaults: { _controller: MainMainBundle:Index:registerCheckId }
+
+main_signup_action:
+    pattern: /signup_action/{sponsor_id}
+    defaults: { _controller: MainMainBundle:Index:register }
+
+main_login:
+    path: /login
+    defaults: { _controller: MainMainBundle:Index:login }
+
+main_login_check:
+    path: /login_check
+
+main_logout:
+    path: /logout

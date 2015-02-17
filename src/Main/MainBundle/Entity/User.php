@@ -10,8 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="users")
  */
-class User implements UserInterface, \Serializable
-{
+class User implements UserInterface, \Serializable {
     /**
      * @var integer
      *
@@ -79,7 +78,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="perfect_money", type="string", length=8)
+     * @ORM\Column(name="perfect_money", type="string", length=8, unique=true)
      */
     private $perfectMoney;
 
@@ -95,6 +94,15 @@ class User implements UserInterface, \Serializable
      *
      * @return string
      */
+
+    /**
+     * @var integer
+     * @ORM\Column(name="sponsor_id", type="integer")
+     */
+    private $sponsorid;
+
+    //
+
     public function getPassword()
     {
         return $this->password;
@@ -404,8 +412,32 @@ class User implements UserInterface, \Serializable
         $user->setActive(0);
         $user->setPerfectMoney($parameters['perfectMoney']);
         $user->setAvatar('default.png');
+        $user->setSponsorid($parameters['sponsor_id']);
 
         $em->persist($user);
         $em->flush();
+    }
+
+    /**
+     * Set sponsorid
+     *
+     * @param integer $sponsorid
+     * @return User
+     */
+    public function setSponsorid($sponsorid)
+    {
+        $this->sponsorid = $sponsorid;
+
+        return $this;
+    }
+
+    /**
+     * Get sponsorid
+     *
+     * @return integer 
+     */
+    public function getSponsorid()
+    {
+        return $this->sponsorid;
     }
 }

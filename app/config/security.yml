@@ -1,9 +1,9 @@
 security:
-    #encoders:
-    #    Intranet\MainBundle\Entity\User:
-    #        algorithm: sha512
-    #        encode_as_base64: false
-    #        iterations: 1
+    encoders:
+        Main\MainBundle\Entity\User:
+            algorithm: sha512
+            encode_as_base64: false
+            iterations: 1
 
     providers:
         user_db:
@@ -12,10 +12,6 @@ security:
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        welcome:
-            pattern:  ^/welcome/
             security: false
 
         register:
@@ -43,22 +39,21 @@ security:
             security: false
 
         secured_area:
-            pattern:    ^/*
+            pattern: ^/*
             anonymous: ~
-            #form_login:
-            #    login_path: main_homepage
-            #    check_path: main_homepage
+            form_login:
+                login_path: main_login
+                check_path: main_login_check
 
-            #logout:
-            #    path: main_logout
-            #remember_me:
-            #    key: mycookie
-            #    lifetime: 2592000 # 30 days
-            #    path: /
-            #    domain: ~
-            #    always_remember_me: true
+            logout:
+                path: main_logout
+            remember_me:
+                key: mycookie
+                lifetime: 2592000 # 30 days
+                path: /
+                domain: ~
+                always_remember_me: true
 
-
-    #access_control:
-    #     - { path: ^/homepage/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    #     - { path: ^/*, roles: ROLE_USER }
+    access_control:
+         - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/*, roles: ROLE_USER }
