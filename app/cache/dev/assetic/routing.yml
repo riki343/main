@@ -1,0 +1,5 @@
+_assetic:
+    resource: .
+    type: assetic
+_app:
+    resource: 'C:\WebServers\home\localhost\www\main\app/config/routing_dev.yml'
