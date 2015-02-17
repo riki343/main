@@ -1,5 +1,5 @@
 main_homepage:
-    path: /
+    path: /home
     defaults: { _controller: MainMainBundle:Index:index }
 
 main_signup:
