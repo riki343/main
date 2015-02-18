@@ -114,6 +114,13 @@ class User implements UserInterface, \Serializable {
      */
     protected $roles;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="account_active", type="boolean")
+     */
+    private $accountActive;
+
+
     public function getPassword()
     {
         return $this->password;
@@ -151,6 +158,7 @@ class User implements UserInterface, \Serializable {
      */
     public function eraseCredentials()
     {
+
     }
 
     /**
@@ -513,5 +521,28 @@ class User implements UserInterface, \Serializable {
     public function removeRole(\Main\MainBundle\Entity\Role $roles)
     {
         $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Set accountActive
+     *
+     * @param boolean $accountActive
+     * @return User
+     */
+    public function setAccountActive($accountActive)
+    {
+        $this->accountActive = $accountActive;
+
+        return $this;
+    }
+
+    /**
+     * Get accountActive
+     *
+     * @return boolean 
+     */
+    public function getAccountActive()
+    {
+        return $this->accountActive;
     }
 }
