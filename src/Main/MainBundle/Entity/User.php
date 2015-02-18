@@ -120,6 +120,13 @@ class User implements UserInterface, \Serializable {
      */
     private $accountActive;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Wallet", inversedBy="user")
+     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     * @var Wallet
+     */
+    protected $wallet;
+
 
     public function getPassword()
     {
@@ -544,5 +551,28 @@ class User implements UserInterface, \Serializable {
     public function getAccountActive()
     {
         return $this->accountActive;
+    }
+
+    /**
+     * Set wallet
+     *
+     * @param \Main\MainBundle\Entity\Wallet $wallet
+     * @return User
+     */
+    public function setWallet(\Main\MainBundle\Entity\Wallet $wallet = null)
+    {
+        $this->wallet = $wallet;
+
+        return $this;
+    }
+
+    /**
+     * Get wallet
+     *
+     * @return \Main\MainBundle\Entity\Wallet 
+     */
+    public function getWallet()
+    {
+        return $this->wallet;
     }
 }
