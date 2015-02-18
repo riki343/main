@@ -8,39 +8,22 @@
    		<section id="login">
     		<div class="row animated fadeILeftBig">
 				<div class="login-holder" style="width: 60%; margin: auto;">
-					{% if messageError is defined %}
-						<div class="message">
-							{{ messageError }}
-						</div>
+					<h2 class="page-header text-center text-primary" style="font-size: 30px"> Wellcome </h2>
+					{% if error %}
+						<div>{{ error.messageKey|trans(error.messageData) }}</div>
 					{% endif %}
-					{% if messageError1 is defined %}
-						<div class="message1">
-							{{ messageError1 }}
-						</div>
-					{% endif %}
-       				<h2 class="page-header text-center text-primary" style="font-size: 30px"> Wellcome </h2>
-       				<form role="form" action="{{ path('main_homepage') }}" method="post">
-        				<div class="form-group">
-          					<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter username/email" name="_username" value="{{ last_username }}">
-        				</div>
-        				<div class="form-group">
-          					<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="_password">
-        				</div>
-        				{% if error %}
-        				<div class="alert alert-danger">
-						{{ error.message }}
-						</div>
-						{% endif %}
 
-						<!-- Forgot password -->
-						<a href="#" data-toggle="modal" data-target="#myModal">
-							Forgot your password?
-						</a>
+					<form action="{{ path('main_login_check') }}" method="post">
+						<label for="username">Username:</label>
+						<input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-        				<div class="form-footer">
-         	 				<button type="submit" class="btn btn-info pull-right btn-submit">Login</button>
-        				</div>
-      				</form>
+						<label for="password">Password:</label>
+						<input type="password" id="password" name="_password" />
+
+						<input type="hidden" name="_target_path" value="/user" />
+
+						<button type="submit">login</button>
+					</form>
     			</div>
   			</div>
 		</section>

@@ -4,10 +4,12 @@ namespace Main\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Main\MainBundle\Entity\UserRepository")
  * @ORM\Table(name="users")
  */
 class User implements UserInterface, \Serializable {
@@ -101,7 +103,16 @@ class User implements UserInterface, \Serializable {
      */
     private $sponsorid;
 
-    //
+    /**
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="user_role",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $roles
+     */
+    protected $roles;
 
     public function getPassword()
     {
@@ -439,5 +450,68 @@ class User implements UserInterface, \Serializable {
     public function getSponsorid()
     {
         return $this->sponsorid;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userRoles = new ArrayCollection();
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \Main\MainBundle\Entity\Role $roles
+     * @return User
+     */
+    public function addUserRole(Role $roles)
+    {
+        $this->roles[] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Main\MainBundle\Entity\Role $roles
+     */
+    public function removeUserRole(Role $roles)
+    {
+        $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Get userRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \Main\MainBundle\Entity\Role $roles
+     * @return User
+     */
+    public function addRole(\Main\MainBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Main\MainBundle\Entity\Role $roles
+     */
+    public function removeRole(\Main\MainBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
     }
 }

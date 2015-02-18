@@ -7,52 +7,26 @@ security:
 
     providers:
         user_db:
-            entity: { class: Main\MainBundle\Entity\User }
+            entity: { class: Main\MainBundle\Entity\User, property: username }
 
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        register:
-            pattern:  ^/signup/
-            security: false
-
-        register_action:
-            pattern:  ^/register_action/
-            security: false
-
-        check_username:
-            pattern:  ^/user/check/username/
-            security: false
-
-        check_email:
-            pattern:  ^/user/check/email/
-            security: false
-
-        login:
-            pattern:  ^/login/
-            security: false
-
-        secured_area:
-            pattern: ^/.*
+        default:
             anonymous: ~
+            http_basic: ~
             form_login:
-                check_path: main_login_check
-                login_path: main_userpage
-                logout: true
-                security: true
-                anonymous: true
+                login_path: /login
+                check_path: /login_check
 
             logout:
-                path: main_logout
-            remember_me:
-                key: mycookie
-                lifetime: 2592000 # 30 days
-                path: /
-                domain: ~
-                always_remember_me: true
+                path: /logout
+                target: /home
+
 
     access_control:
-         - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         #- { path: ^/.*, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/, roles: USER_ROLE }

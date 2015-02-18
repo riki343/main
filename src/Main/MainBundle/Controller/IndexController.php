@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class IndexController extends Controller
 {
@@ -15,20 +16,30 @@ class IndexController extends Controller
         return $this->render('MainMainBundle::index.html.twig');
     }
 
+    /**
+     * @Route("/login", name="login_route")
+     */
     public function loginAction(Request $request)
     {
-        $session = $request->getSession();
+        $authenticationUtils = $this->get('security.authentication_utils');
 
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } else {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-        }
+        $error = $authenticationUtils->getLastAuthenticationError();
 
-        return $this->render('MainMainBundle::login.html.twig', array(
-            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
-        ));
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('MainMainBundle::login.html.twig',
+            array(
+                'last_username' => $lastUsername,
+                'error'         => $error,
+            )
+        );
+    }
+
+    /**
+     * @Route("/login_check", name="login_check")
+     */
+    public function loginCheckAction() {
+
     }
 
     public function registerCheckIdAction(Request $request, $sponsor_id) {
@@ -36,6 +47,8 @@ class IndexController extends Controller
         if ($user != null) {
             return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
                 'sponsor_id' => $sponsor_id));
+        } else {
+            return null;
         }
     }
 
