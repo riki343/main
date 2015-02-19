@@ -5,10 +5,6 @@ main:
         route: main_login
         permanent: true
 
-main_homepage:
-    path: /home
-    defaults: { _controller: MainMainBundle:Index:index }
-
 main_signup:
     pattern: /signup/{sponsor_id}
     defaults: { _controller: MainMainBundle:Index:registerCheckId }
