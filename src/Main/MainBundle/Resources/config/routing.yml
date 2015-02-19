@@ -35,3 +35,7 @@ main_userpage:
 main_userpage_statistics:
     path: /user/statistics
     defaults: { _controller: MainMainBundle:User:statistics }
+
+main_activate_acount:
+    path: /user/activateAcount
+    defaults: { _controller: MainMainBundle:User:activateAcount }
