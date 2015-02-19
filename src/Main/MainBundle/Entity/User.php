@@ -128,6 +128,12 @@ class User implements UserInterface, \Serializable {
      */
     protected $wallet;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user")
+     * @var Statistics
+     */
+    protected $statistics;
+
     public function getPassword()
     {
         return $this->password;
@@ -469,12 +475,12 @@ class User implements UserInterface, \Serializable {
     {
         return $this->sponsorid;
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        //$this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
     }
 
@@ -517,7 +523,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\Role $roles
      * @return User
      */
-    public function addRole(\Main\MainBundle\Entity\Role $roles)
+    public function addRole(Role $roles)
     {
         $this->roles[] = $roles;
 
@@ -529,7 +535,7 @@ class User implements UserInterface, \Serializable {
      *
      * @param \Main\MainBundle\Entity\Role $roles
      */
-    public function removeRole(\Main\MainBundle\Entity\Role $roles)
+    public function removeRole(Role $roles)
     {
         $this->roles->removeElement($roles);
     }
@@ -563,7 +569,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\Wallet $wallet
      * @return User
      */
-    public function setWallet(\Main\MainBundle\Entity\Wallet $wallet = null)
+    public function setWallet(Wallet $wallet = null)
     {
         $this->wallet = $wallet;
 
@@ -578,5 +584,28 @@ class User implements UserInterface, \Serializable {
     public function getWallet()
     {
         return $this->wallet;
+    }
+
+    /**
+     * Set statistics
+     *
+     * @param \Main\MainBundle\Entity\Statistics $statistics
+     * @return User
+     */
+    public function setStatistics(Statistics $statistics = null)
+    {
+        $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    /**
+     * Get statistics
+     *
+     * @return \Main\MainBundle\Entity\Statistics 
+     */
+    public function getStatistics()
+    {
+        return $this->statistics;
     }
 }
