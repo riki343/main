@@ -27,11 +27,10 @@ security:
 
             logout:
                 path: /logout
-                target: /home
+                target: main_login
 
 
     access_control:
-        - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: main_userpage, roles: USER_ROLE }
         - { path: main_userpage_statistics, roles: USER_ROLE }
         - { path: main_activate_acount, roles: USER_ROLE }
