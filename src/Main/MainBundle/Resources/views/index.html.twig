@@ -1,2 +1,43 @@
-Hello Guys<br>
-<a href="{{ path('main_login') }}">LogIn</a>
+{% extends '@MainMain/layout.html.twig' %}
+
+{% block title %}
+    Index page
+{% endblock %}
+
+{% if app.user != null %}
+    {% block navigation %}
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; background:white;border: medium none;">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Money</a>
+        </div>
+        {% block leftSidebar %}
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li><a href="#"><img src="{{ asset(app.user.avatar) }}" style="height:90px;"><br><br>
+                                {{ app.user.name ~ ' ' ~ app.user.surname }}
+                            </a>
+                        </li>
+                        {% if app.user.accountActive == false %}
+                            <li><a class="activeacc" href="#">Активировать Акаунт</a></li>
+                        {% endif %}
+                        <li><a href="#">Баланс <span class="label label-primary">{{ app.user.wallet.balance }}$</span></a></li>
+                        <li><a href="#">Статистика</a></li>
+                        <li><a href="#">Сообщения <span class="label label-primary">2</span></a></li>
+                        <li><a href="#">Моя команда</a></li>
+                        <li><a href="#">Аккаунт</a></li>
+                        <li><a href="#">Поддержка</a></li>
+                        <li><a href="{{ path('main_logout') }}">Выйти</a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endblock %}
+        </nav>
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,8 @@
+{% extends '@MainMain/layout.html.twig' %}
+
+{% block body %}
+    <h1 align="center" style="margin: 20% auto">
+        <a class="btn btn-default btn-primary" href="{{ path('main_login') }}">Login</a>
+        <a class="btn btn-default btn-primary" href="{{ path('main_signup', {'sponsor_id': '1'}) }}">Sign Up</a>
+    </h1>
+{% endblock %}

@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Main\MainBundle\Extras\ChromePhp as console;
 
 class IndexController extends Controller
 {
     public function indexAction() {
-        return $this->render('MainMainBundle::index.html.twig');
+        return $this->render('MainMainBundle::home.html.twig');
     }
 
     /**

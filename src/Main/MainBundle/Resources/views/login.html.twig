@@ -13,16 +13,18 @@
 						<div>{{ error.messageKey|trans(error.messageData) }}</div>
 					{% endif %}
 
-					<form action="{{ path('main_login_check') }}" method="post">
+					<form class="form-horizontal" action="{{ path('main_login_check') }}" method="post">
 						<label for="username">Username:</label>
-						<input type="text" id="username" name="_username" value="{{ last_username }}" />
+						<input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" />
 
 						<label for="password">Password:</label>
-						<input type="password" id="password" name="_password" />
+						<input class="form-control" type="password" id="password" name="_password" />
 
 						<input type="hidden" name="_target_path" value="/user" />
 
-						<button type="submit">login</button>
+						<p align="middle" style="margin: 8px;">
+							<button class="btn btn-default btn-success" type="submit">login</button>
+						</p>
 					</form>
     			</div>
   			</div>

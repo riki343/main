@@ -23,15 +23,16 @@ class Wallet {
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="userid", type="integer")
      */
     private $userid;
 
     /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="wallet")
+     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
      * @var User
-     * @ORM\OneToOne(targetEntity="User", mappedBy="wallet")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var float
@@ -118,5 +119,13 @@ class Wallet {
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->balance = 0;
     }
 }

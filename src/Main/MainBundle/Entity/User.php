@@ -114,6 +114,8 @@ class User implements UserInterface, \Serializable {
      */
     protected $roles;
 
+    private $salt;
+
     /**
      * @var boolean
      * @ORM\Column(name="account_active", type="boolean")
@@ -121,12 +123,10 @@ class User implements UserInterface, \Serializable {
     private $accountActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="Wallet", inversedBy="user")
-     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user")
      * @var Wallet
      */
     protected $wallet;
-
 
     public function getPassword()
     {
@@ -175,6 +175,7 @@ class User implements UserInterface, \Serializable {
     {
         return serialize(array(
             $this->id,
+            $this->username,
             $this->password,
             $this->email,
             $this->name,
@@ -182,7 +183,7 @@ class User implements UserInterface, \Serializable {
             $this->registered,
             $this->lastactive,
             $this->perfectMoney,
-            $this->active
+            $this->active,
         ));
     }
 
@@ -193,6 +194,7 @@ class User implements UserInterface, \Serializable {
     {
         list(
             $this->id,
+            $this->username,
             $this->password,
             $this->email,
             $this->name,
@@ -437,8 +439,9 @@ class User implements UserInterface, \Serializable {
         $user->setLastactive(new \DateTime());
         $user->setActive(0);
         $user->setPerfectMoney($parameters['perfectMoney']);
-        $user->setAvatar('default.png');
+        $user->setAvatar('files/default/default-avatar.png');
         $user->setSponsorid($parameters['sponsor_id']);
+        $user->setAccountActive(false);
 
         $em->persist($user);
         $em->flush();
@@ -471,7 +474,8 @@ class User implements UserInterface, \Serializable {
      */
     public function __construct()
     {
-        $this->userRoles = new ArrayCollection();
+        //$this->salt = md5(uniqid(null, true));
+        $this->roles = new ArrayCollection();
     }
 
     /**

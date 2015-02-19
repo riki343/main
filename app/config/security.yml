@@ -14,6 +14,10 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login:
+            pattern: ^/login$
+            anonymous: ~
+
         default:
             anonymous: ~
             http_basic: ~
@@ -27,6 +31,6 @@ security:
 
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/, roles: USER_ROLE }
+        - { path: ^/user/.*, roles: USER_ROLE }
+        - { path: ^/admin/*, roles: ADMIN_ROLE }
