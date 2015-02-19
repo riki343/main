@@ -28,7 +28,7 @@
                             <li><a class="activeacc" href="#">Активировать Акаунт</a></li>
                         {% endif %}
                         <li><a href="#">Баланс <span class="label label-primary">{{ app.user.wallet.balance }}$</span></a></li>
-                        <li><a href="#">Статистика</a></li>
+                        <li><a href="{{ path('main_userpage_statistics') }}">Статистика</a></li>
                         <li><a href="#">Сообщения <span class="label label-primary">2</span></a></li>
                         <li><a href="#">Моя команда</a></li>
                         <li><a href="#">Аккаунт</a></li>
