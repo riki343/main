@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Main\MainBundle\Extras\ChromePhp as console;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller {
 
@@ -24,6 +25,8 @@ class UserController extends Controller {
     /**
      * @Route("/user/statistics", name="main_userpage_statistics")
      * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
      */
     public function statisticsAction(Request $request)
     {
@@ -33,14 +36,16 @@ class UserController extends Controller {
     /**
      * @Route("/user/activateAcount", name="main_activate_acount")
      * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
      */
-    public function activateAcountAction()
+    public function activateAcountAction(Request $request)
     {
-        $user = $this ->getUser();
+        $user = $this->getUser();
         $userId = $user->getId();
-        $parrentId = $user -> getSponsorid();
-        console::log('$userId',$userId);
-        console::log('$parrentId',$parrentId);
+        $parrentId = $user->getSponsorid();
+        console::log('$userId', $userId);
+        console::log('$parrentId', $parrentId);
         console::log('succses');
         return $this->render('MainMainBundle::userpage.html.twig');
     }
