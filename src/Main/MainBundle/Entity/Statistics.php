@@ -27,7 +27,7 @@ class Statistics {
 
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="statistics")
-     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @var User
      */
     protected $user;
@@ -159,7 +159,7 @@ class Statistics {
      * @param \Main\MainBundle\Entity\User $user
      * @return Statistics
      */
-    public function setUser(\Main\MainBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
