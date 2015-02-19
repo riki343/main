@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Main\MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -36,6 +37,21 @@ class UserController extends Controller {
     public function statisticsAction(Request $request)
     {
         return $this->render('MainMainBundle::statistics.html.twig');
+    }
+
+    /**
+     * @Rout("/user/my_team", name="main_userpage_my_team")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public function my_teamAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $numberChild = User::getChild($em, $user->getId());
+        if (count($numberChild) == 0) return $this->render('MainMainBundle::myTeam.html.twig', array('empty' => "У вас пока нет команды"));
+        return $this->render('MainMainBundle::myTeam.html.twig', array('numberChild' => $numberChild));
     }
 
     /**

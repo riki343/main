@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -451,6 +452,19 @@ class User implements UserInterface, \Serializable {
 
         $em->persist($user);
         $em->flush();
+    }
+
+    public static function getChild(EntityManager $em, $userid)
+    {
+        $numberChild = array();
+        $child = $em->getRepository('MainMainBundle:User')->findBy(array('sponsorid' => $userid));
+        if ($child == null) return $numberChild;
+        foreach($child as $ch)
+        {
+            $temp = $em->getRepository('MainMainBundle:Statistics')->findOneBy(array('userid' => $ch->getId()));
+            $numberChild[] = $temp->getPeopleCount();
+        }
+        return $numberChild;
     }
 
     /**
