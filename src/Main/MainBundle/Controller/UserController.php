@@ -7,16 +7,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Request;
 
-// @Route \\
+// |@Route| \\
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-// @Security \\
+// |@Security| \\
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Main\MainBundle\Extras\ChromePhp as console;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller {
-
+    /**
+     * @Route("/user", name="main_userpage")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
     public function indexAction(Request $request) {
         $user = $this->getUser();
         return $this->render('MainMainBundle::userpage.html.twig');
@@ -57,8 +62,6 @@ class UserController extends Controller {
             $em->flush();
             $parrentId1lvl = $user->getSponsorid();
             //----------(user - 21$)
-
-
 
             //------(parrent 1 level +3$)
             $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl);
