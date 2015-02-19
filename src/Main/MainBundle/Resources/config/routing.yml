@@ -2,7 +2,7 @@ main:
     pattern: /
     defaults:
         _controller: FrameworkBundle:Redirect:redirect
-        route: main_homepage
+        route: main_login
         permanent: true
 
 main_homepage:
