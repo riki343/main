@@ -1,1 +1,12 @@
 {% extends '@MainMain/index.html.twig' %}
+
+{% block title %}
+    Statistics
+{% endblock %}
+
+{% block body %}
+    userid: {{ app.user.statistics.userid }}
+    earnedMoney: {{ app.user.statistics.earnedMoney }}
+    spentMoney: {{ app.user.statistics.spentMoney }}
+    peopleCount: {{ app.user.statistics.peopleCount }}
+{% endblock %}

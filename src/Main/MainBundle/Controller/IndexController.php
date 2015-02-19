@@ -73,6 +73,12 @@ class IndexController extends Controller
         $name = $request->request->get('name');
         $surname = $request->request->get('surname');
         $perfectMoney = $request->request->get('perfectMoney');
+        $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByPerfectMoney($perfectMoney);
+        if ($exists != null)
+        {
+            return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
+                'zm' => "Пользователь с данным perfectMoney уже зарегестрирован", "sponsor_id" => $sponsor_id));
+        }
 
         $em = $this->getDoctrine()->getManager();
 
