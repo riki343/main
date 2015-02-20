@@ -34,4 +34,5 @@ security:
         - { path: main_userpage, roles: USER_ROLE }
         - { path: main_userpage_statistics, roles: USER_ROLE }
         - { path: main_activate_acount, roles: USER_ROLE }
+        - { path: main_withdraw_money, roles: USER_ROLE }
         - { path: ^/admin/*, roles: ADMIN_ROLE }

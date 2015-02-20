@@ -39,3 +39,7 @@ main_userpage_my_team:
 main_activate_acount:
     path: /user/activateAcount
     defaults: { _controller: MainMainBundle:User:activateAcount }
+
+main_withdraw_money:
+    path: /user/withdrawMoney
+    defaults: { _controller: MainMainBundle:User:withdrawMoney }
