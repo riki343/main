@@ -1,0 +1,22 @@
+{% extends '@MainMain/index.html.twig' %}
+
+{% block title %}
+    Statistics
+{% endblock %}
+
+{% block body %}
+    <h3>Моя команда</h3>
+
+    {% if empty is defined %}
+        {{ empty }}
+    {% endif %}
+
+    Общий розмер команды: {{ app.user.statistics.peopleCount + 1}}<br><br>
+
+    {% for ch in child %}
+        <br><a href="#"><img src="{{ asset(ch.avatar) }}" style="height:90px;"></a><br>
+        {{ ch.name ~ ' ' ~ ch.surname}}<br>
+        Время регистрации: {{ ch.registered| date('Y-m-d H:i:s') }}<br>
+        Количество подчиненных: {{ ch.statistics.peopleCount }} <br>
+    {% endfor %}
+{% endblock %}

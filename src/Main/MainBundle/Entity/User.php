@@ -483,17 +483,10 @@ class User implements UserInterface, \Serializable {
      * @param $userid
      * @return array
      */
-    public static function getChild(EntityManager $em, $userid)
+    public static function getChild($em, $userid)
     {
-        $numberChild = array();
         $child = $em->getRepository('MainMainBundle:User')->findBy(array('sponsorid' => $userid));
-        if ($child == null) return $numberChild;
-        foreach($child as $ch)
-        {
-            $temp = $em->getRepository('MainMainBundle:Statistics')->findOneBy(array('userid' => $ch->getId()));
-            $numberChild[] = $temp->getPeopleCount();
-        }
-        return $numberChild;
+        return $child;
     }
 
     /**

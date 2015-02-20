@@ -40,7 +40,7 @@ class UserController extends Controller {
     }
 
     /**
-     * @Rout("/user/my_team", name="main_userpage_my_team")
+     * @Route("/user/my_team", name="main_userpage_my_team")
      * @Security("has_role('USER_ROLE')")
      * @param Request $request
      * @return Response $response
@@ -49,11 +49,9 @@ class UserController extends Controller {
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $numberChild = User::getChild($em, $user->getId());
-        if (count($numberChild) == 0) return $this->render('MainMainBundle::myTeam.html.twig',
-            array('empty' => "У вас пока нет команды"));
-        return $this->render('MainMainBundle::myTeam.html.twig',
-            array('numberChild' => $numberChild));
+        $child = User::getChild($em, $user->getId());
+        if ($child == null) return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child, 'empty' => "У вас пока нет команды"));
+        return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child));
     }
 
     /**
