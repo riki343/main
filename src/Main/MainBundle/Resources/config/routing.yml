@@ -6,11 +6,11 @@ main:
         permanent: true
 
 main_signup:
-    pattern: /signup/{sponsor_id}
+    pattern: /signup
     defaults: { _controller: MainMainBundle:Index:registerCheckId }
 
 main_signup_action:
-    pattern: /signup_action/{sponsor_id}
+    pattern: /signup_action
     defaults: { _controller: MainMainBundle:Index:register }
 
 main_login:
@@ -34,7 +34,7 @@ main_userpage_statistics:
 
 main_userpage_my_team:
     path: /user/my_team
-    defaults: { _controller: MainMainBundle:User:my_team }
+    defaults: { _controller: MainMainBundle:User:myTeam }
 
 main_activate_acount:
     path: /user/activateAcount

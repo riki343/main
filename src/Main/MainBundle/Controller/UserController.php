@@ -45,13 +45,15 @@ class UserController extends Controller {
      * @param Request $request
      * @return Response $response
      */
-    public function my_teamAction(Request $request)
+    public function myTeamAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $numberChild = User::getChild($em, $user->getId());
-        if (count($numberChild) == 0) return $this->render('MainMainBundle::myTeam.html.twig', array('empty' => "У вас пока нет команды"));
-        return $this->render('MainMainBundle::myTeam.html.twig', array('numberChild' => $numberChild));
+        if (count($numberChild) == 0) return $this->render('MainMainBundle::myTeam.html.twig',
+            array('empty' => "У вас пока нет команды"));
+        return $this->render('MainMainBundle::myTeam.html.twig',
+            array('numberChild' => $numberChild));
     }
 
     /**

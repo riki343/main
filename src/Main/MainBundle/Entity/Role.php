@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -63,6 +64,7 @@ class Role implements RoleInterface
     {
         return $this->name;
     }
+
     /**
      * Constructor
      */
@@ -102,5 +104,29 @@ class Role implements RoleInterface
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return Role
+     */
+    public static function getUserRole(EntityManager $em) {
+        return $em->getRepository('MainMainBundle:Role')->find(1);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return Role
+     */
+    public static function getAdminRole(EntityManager $em) {
+        return $em->getRepository('MainMainBundle:Role')->find(2);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return Role
+     */
+    public static function getSuperAdminRole(EntityManager $em) {
+        return $em->getRepository('MainMainBundle:Role')->find(3);
     }
 }

@@ -100,9 +100,16 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @var integer
-     * @ORM\Column(name="sponsor_id", type="integer")
+     * @ORM\Column(name="sponsor_id", type="integer", nullable=true, options={"default":NULL})
      */
     private $sponsorid;
+
+    /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="sponsor_id", referencedColumnName="id")
+     * @var User
+     */
+    protected $sponsor;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role")
@@ -124,7 +131,7 @@ class User implements UserInterface, \Serializable {
     private $accountActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user", cascade={"persist"})
      * @var Wallet
      */
     protected $wallet;
@@ -142,7 +149,7 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @inheritDoc
-     * @return multitype:string
+     * @return ArrayCollection
      */
     public function getRoles()
     {
@@ -432,7 +439,12 @@ class User implements UserInterface, \Serializable {
         return $this->avatar;
     }
 
-    public static function addUser($em, $encoderFactory, $parameters)
+    /**
+     * @param EntityManager $em
+     * @param $encoderFactory
+     * @param $parameters
+     */
+    public static function addUser(EntityManager $em, $encoderFactory, $parameters)
     {
         $user = new User();
         $encoder = $encoderFactory->getEncoder($user);
@@ -444,16 +456,33 @@ class User implements UserInterface, \Serializable {
         $user->setSurname($parameters['surname']);
         $user->setRegistered(new \DateTime());
         $user->setLastactive(new \DateTime());
-        $user->setActive(0);
+        $user->setActive(false);
         $user->setPerfectMoney($parameters['perfectMoney']);
         $user->setAvatar('files/default/default-avatar.png');
-        $user->setSponsorid($parameters['sponsor_id']);
         $user->setAccountActive(false);
 
+        $user->addRole(Role::getUserRole($em));
+
+        $wallet = new Wallet();
+        $user->setWallet($wallet);
+
+        $statistics = new Statistics();
+        $user->setStatistics($statistics);
         $em->persist($user);
+
+        $wallet->setUser($user);
+        $em->persist($wallet);
+
+        $statistics->setUser($user);
+        $em->persist($statistics);
         $em->flush();
     }
 
+    /**
+     * @param EntityManager $em
+     * @param $userid
+     * @return array
+     */
     public static function getChild(EntityManager $em, $userid)
     {
         $numberChild = array();
@@ -465,6 +494,24 @@ class User implements UserInterface, \Serializable {
             $numberChild[] = $temp->getPeopleCount();
         }
         return $numberChild;
+    }
+
+    /**
+     * @param User $user
+     * @param Matrix $level
+     */
+    public static function addUserToLevel(User $user, Matrix $level)
+    {
+
+    }
+
+    /**
+     * @param User $user
+     * @param Matrix $level
+     */
+    public static function addUserToNewLevel(User $user, Matrix $level)
+    {
+
     }
 
     /**
@@ -496,39 +543,6 @@ class User implements UserInterface, \Serializable {
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-    }
-
-    /**
-     * Add roles
-     *
-     * @param \Main\MainBundle\Entity\Role $roles
-     * @return User
-     */
-    public function addUserRole(Role $roles)
-    {
-        $this->roles[] = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Remove roles
-     *
-     * @param \Main\MainBundle\Entity\Role $roles
-     */
-    public function removeUserRole(Role $roles)
-    {
-        $this->roles->removeElement($roles);
-    }
-
-    /**
-     * Get userRoles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUserRoles()
-    {
-        return $this->roles;
     }
 
     /**
@@ -621,5 +635,28 @@ class User implements UserInterface, \Serializable {
     public function getStatistics()
     {
         return $this->statistics;
+    }
+
+    /**
+     * Set sponsor
+     *
+     * @param \Main\MainBundle\Entity\User $sponsor
+     * @return User
+     */
+    public function setSponsor(\Main\MainBundle\Entity\User $sponsor = null)
+    {
+        $this->sponsor = $sponsor;
+
+        return $this;
+    }
+
+    /**
+     * Get sponsor
+     *
+     * @return \Main\MainBundle\Entity\User 
+     */
+    public function getSponsor()
+    {
+        return $this->sponsor;
     }
 }

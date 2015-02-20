@@ -43,31 +43,36 @@ class IndexController extends Controller
 
     }
 
-    public function registerCheckIdAction(Request $request, $sponsor_id) {
-        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->find($sponsor_id);
-        if ($user != null) {
-            return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
-                'sponsor_id' => $sponsor_id));
-        } else {
-            return null;
-        }
+    /**
+     * @Route("/signup", name="main_signup")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function registerCheckIdAction(Request $request) {
+        return $this->render('MainMainBundle::register.html.twig');
     }
 
-    public function registerAction(Request $request, $sponsor_id)
+    /**
+     * @Route("/signup_action", name="main_signup_action")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function registerAction(Request $request)
     {
         $username = $request->request->get('username');
-        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->find($sponsor_id);
         $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByUsername($username);
         if ($exists != null) {
-            return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
-                'zm' => "Пользователь с данным логином уже зарегестрирован", "sponsor_id" => $sponsor_id));
+            return $this->render('MainMainBundle::register.html.twig', array(
+                'zm' => "Пользователь с данным логином уже зарегестрирован"
+            ));
         }
 
         $password = $request->request->get('password');
         $repeatPassword = $request->request->get('repeatPassword');
         if ($password != $repeatPassword)
-            return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
-                'zm' => "Пароль и повтренный пароль не совпадают", "sponsor_id" => $sponsor_id));
+            return $this->render('MainMainBundle::register.html.twig', array(
+                'zm' => "Пароли не совпадают"
+            ));
 
         $email = $request->request->get('email');
         $name = $request->request->get('name');
@@ -76,8 +81,9 @@ class IndexController extends Controller
         $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByPerfectMoney($perfectMoney);
         if ($exists != null)
         {
-            return $this->render('MainMainBundle::register.html.twig', array('user' => $user,
-                'zm' => "Пользователь с данным perfectMoney уже зарегестрирован", "sponsor_id" => $sponsor_id));
+            return $this->render('MainMainBundle::register.html.twig', array(
+                'zm' => "Пользователь с данным perfectMoney уже зарегестрирован"
+            ));
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -88,8 +94,7 @@ class IndexController extends Controller
             'email' => $email,
             'name' => $name,
             'surname' => $surname,
-            'perfectMoney' => $perfectMoney,
-            'sponsor_id' => $sponsor_id
+            'perfectMoney' => $perfectMoney
         );
 
         User::addUser($em, $this->get('security.encoder_factory'), $parameters);
