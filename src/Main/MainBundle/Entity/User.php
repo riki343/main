@@ -131,13 +131,13 @@ class User implements UserInterface, \Serializable {
     private $accountActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user", cascade={"persist"}, fetch="LAZY")
      * @var Wallet
      */
     protected $wallet;
 
     /**
-     * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user", fetch="LAZY")
      * @var Statistics
      */
     protected $statistics;
