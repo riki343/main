@@ -14,9 +14,9 @@
     Общий розмер команды: {{ app.user.statistics.peopleCount + 1}}<br><br>
 
     {% for ch in child %}
-        <br><a href="#"><img src="{{ asset(ch.avatar) }}" style="height:90px;"></a><br>
-        {{ ch.name ~ ' ' ~ ch.surname}}<br>
+        Фотка: <br><a href="#"><img src="{{ asset(ch.avatar) }}" style="height:90px;"></a><br>
+        Имя: {{ ch.name ~ ' ' ~ ch.surname}}<br>
         Время регистрации: {{ ch.registered| date('Y-m-d H:i:s') }}<br>
-        Количество подчиненных: {{ ch.statistics.peopleCount }} <br>
+        Количество подчиненных: {{ ch.statistics.peopleCount }} <br><br>
     {% endfor %}
 {% endblock %}
