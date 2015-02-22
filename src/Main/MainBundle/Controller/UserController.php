@@ -20,6 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller {
 
     /**
+     * @Route("/user/active_account", name="main_userpage_active_account")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public function active_accountAction(Request $request)
+    {
+        return $this->render('MainMainBundle::account.html.twig', array('zm' => ""));
+    }
+
+    /**
      * @Route("/user/statistics", name="main_userpage_statistics")
      * @Security("has_role('USER_ROLE')")
      * @param Request $request
@@ -55,12 +66,7 @@ class UserController extends Controller {
      */
     public  function accountAction(Request $request)
     {
-        /** @var User $user */
-        $user = $this->getUser();
-        $sponsor = $user->getSponsor();
-        if ($sponsor == null)
-            return $this->render('MainMainBundle::account.html.twig', array('sponsor' => $sponsor));
-        return $this->render('MainMainBundle::account.html.twig', array('sponsor' => $sponsor, 'zm' => ""));
+        return $this->render('MainMainBundle::account.html.twig');
     }
 
     /**

@@ -11,8 +11,8 @@
                 <h3>Ваш аккаунт</h3><br>
 
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
-                    <li class="active" role="presentation">
-                        <a id="home-tab" aria-expanded="true" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
+                    <li class="{% if zm is not defined %}active{% endif %}" role="presentation">
+                        <a id="home-tab" aria-expanded="{% if zm is not defined %}true{% else %}false{% endif %}" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
                     </li>
 
                     <li class="" role="presentation">
@@ -27,8 +27,8 @@
                         <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Безопасность</a>
                     </li>
 
-                    <li class="" role="presentation">
-                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="false">Активация аккаунта</a>
+                    <li class="{% if zm is defined %}active{% endif %}" role="presentation">
+                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="{% if zm is defined %}true{% else %}false{% endif %}">Активация аккаунта</a>
                     </li>
                 </ul>
 
@@ -50,17 +50,17 @@
                             </dl>
                         </div> <!-- ends.yourinformation -->
                         <div class="col-md-5">
-                            {% if zm is defined %}
+                            {% if app.user.sponsor != null %}
                                 <h4 class="page-header">Информация про вашего спонсора</h4>
                                 <dl>
-                                    <dt><img src="{{ asset(sponsor.avatar) }}" style="height:90px;"></dt>
+                                    <dt><img src="{{ asset(app.user.sponsor.avatar) }}" style="height:90px;"></dt>
                                     <br>
                                     <dt>Имя:</dt>
-                                    <dd>{{ sponsor.name ~ ' ' ~ sponsor.surname }}</dd>
+                                    <dd>{{ app.user.sponsor.name ~ ' ' ~ app.user.sponsor.surname }}</dd>
                                     <dt>Email:</dt>
-                                    <dd>{{ sponsor.email }}</dd>
+                                    <dd>{{ app.user.sponsor.email }}</dd>
                                     <dt>Кошелек perfect money</dt>
-                                    <dd>{{ sponsor.perfectMoney }}</dd>
+                                    <dd>{{ app.user.sponsor.perfectMoney }}</dd>
                                 </dl>
                             {% endif %}
                         </div><!-- ends.referalinformartioon -->

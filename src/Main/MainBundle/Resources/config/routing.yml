@@ -28,6 +28,10 @@ main_userpage:
     path: /user
     defaults: { _controller: MainMainBundle:User:account }
 
+main_userpage_active_account:
+    path: /user/active_account
+    defaults: { _controller: MainMainBundle:User:active_account }
+
 main_userpage_statistics:
     path: /user/statistics
     defaults: { _controller: MainMainBundle:User:statistics }
