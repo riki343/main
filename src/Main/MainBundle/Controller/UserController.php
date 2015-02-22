@@ -3,9 +3,9 @@
 namespace Main\MainBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Main\MainBundle\Entity\Matrix;
 use Main\MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Request;
 
 // |@Route| \\
@@ -24,7 +24,6 @@ class UserController extends Controller {
      * @return Response $response
      */
     public function indexAction(Request $request) {
-        $user = $this->getUser();
         return $this->render('MainMainBundle::userpage.html.twig');
     }
 
@@ -47,10 +46,12 @@ class UserController extends Controller {
      */
     public function myTeamAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $child = User::getChild($em, $user->getId());
-        if ($child == null) return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child, 'empty' => "У вас пока нет команды"));
+        if ($child == null) return $this->render('MainMainBundle::myTeam.html.twig',
+            array('child' => $child, 'empty' => "У вас пока нет команды"));
         return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child));
     }
 
@@ -62,45 +63,57 @@ class UserController extends Controller {
      */
     public function activateAcountAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
         $user = $this->getUser();
 
         $activation = $user->getAccountActive();
         $userwallet = $user->getWallet()->getBalance();
-        if($activation != 1 && $userwallet >= 21) {
+        if($activation == false && $userwallet >= 21) {
+
+            /** @var Matrix $level */
+            $level = Matrix::getNotFullLevel($em);
+            $user_id = $user->getId();
+            Matrix::addChildToUser($em, $user->getId(), $level->getId());
+            $user = $em->getRepository('MainMainBundle:User')->find($user_id);
 
             //-----(user - 21$)
-            $userwallet = $user->getWallet()->getBalance();
-            $userwallet = $userwallet - 21;
-            $user->getWallet()->setBalance($userwallet);
-            $user->setAccountActive(1);
-            $parrentId1lvl = $user->getSponsorid();
-            //----------(user - 21$)
+            $user->getWallet()->setBalance($userwallet - 21);
+            $user->setAccountActive(true);
 
+            /** @var User $parrentId1lvl */
+            $parrentId1lvl = $user;
             //------(parrent 1-7 level +3$)
-            for($i=0;$i<7;$i++)
+            for($i = 0; $i < 7; $i++)
             {
-                $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl);
-                $parrent_1lvl_wallet = $parrent_1lvl->getWallet()->getBalance();
-                $parrent_1lvl_wallet = $parrent_1lvl_wallet + 3;
-                $parrent_1lvl->getWallet()->setBalance($parrent_1lvl_wallet);
+                /** @var User $parrent_1lvl */
+                $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl->getSponsorid());
 
-                $parrent_1lvl_Statistic_earned_money = $parrent_1lvl->getStatistics()->getEarnedMoney();
-                $parrent_1lvl_Statistic_earned_money += 3;
-                $parrent_1lvl->getStatistics()->setEarnedMoney($parrent_1lvl_Statistic_earned_money);
-                $parrentId1lvl = $parrent_1lvl->getSponsorid();
+                $statistics = $parrent_1lvl->getStatistics();
+                $statistics->setPeopleCount($statistics->getPeopleCount() + 1);
+                $parrent_1lvl->setStatistics($statistics);
+
+                if ($i < 7 && $parrent_1lvl->getId() == 1) {
+                    break;
+                }
+
+                $parrent_1lvl->getWallet()
+                    ->setBalance($parrent_1lvl->getWallet()->getBalance() + 3);
+
+                $parrent_1lvl->getStatistics()
+                    ->setEarnedMoney($parrent_1lvl->getStatistics()->getEarnedMoney() + 3);
+
+                $parrentId1lvl = $parrent_1lvl;
+                $em->persist($parrent_1lvl);
             }
-
-            //---------(parrent 1-7 level +3$)
 
             //------Global Wallet + 21$
             $globalWallet = $em->getRepository('MainMainBundle:User')->find(1);
+            $globalWallet->getWallet()
+                ->setBalance($globalWallet->getWallet()->getBalance() + 21);
 
-            $globalWallet_wallet = $globalWallet->getWallet()->getBalance();
-            $globalWallet_wallet = $globalWallet_wallet + 21;
-            $globalWallet->getWallet()->setBalance($globalWallet_wallet);
             $em->flush();
-            //-------------------Global Wallet + 21$
 
         }
         return $this->render('MainMainBundle::userpage.html.twig');
@@ -114,10 +127,13 @@ class UserController extends Controller {
      */
     public function withdrawMoneyAction(Request $request)
     {
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+
+        /** @var User $user */
         $user = $this->getUser();
         $amount = $request->request->get('Amount');
-        $percent = (0.5/$amount)*100;
+        $percent = (0.5 / $amount) * 100;
         $amount_plus_percent = $amount - $percent;
         $user_balance = $user->getWallet()->getBalance();
         if($user_balance >= $amount) {
@@ -134,7 +150,6 @@ class UserController extends Controller {
             $globalWallet_wallet = $globalWallet->getWallet()->getBalance();
             $globalWallet_wallet = $globalWallet_wallet - $amount;
             $globalWallet->getWallet()->setBalance($globalWallet_wallet);
-
         }
         console::log($amount_plus_percent);
         $em->flush();

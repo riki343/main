@@ -2,8 +2,11 @@
 
 namespace Main\MainBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+
+use Main\MainBundle\Extras\ChromePhp as console;
 
 /**
  * Matrix
@@ -29,25 +32,21 @@ class Matrix
     private $maxCount;
 
     /**
-     * @var ArrayCollection $childs_0
      * @ORM\Column(name="child_0", type="array")
      */
     private $childs_0;
 
     /**
-     * @var ArrayCollection $childs_1
      * @ORM\Column(name="child_1", type="array")
      */
     private $childs_1;
 
     /**
-     * @var ArrayCollection $childs_2
      * @ORM\Column(name="child_2", type="array")
      */
     private $childs_2;
 
     /**
-     * @var ArrayCollection $childs_3
      * @ORM\Column(name="child_3", type="array")
      */
     private $childs_3;
@@ -67,20 +66,23 @@ class Matrix
 
     /**
      * Constructor
+     * @param int $max
      */
-    public function __construct()
+    public function __construct($max = 1)
     {
-        $this->childs_0 = new ArrayCollection();
-        $this->childs_1 = new ArrayCollection();
-        $this->childs_2 = new ArrayCollection();
-        $this->childs_3 = new ArrayCollection();
+        $this->childs_0 = array();
+        $this->childs_1 = array();
+        $this->childs_2 = array();
+        $this->childs_3 = array();
+        $this->setMaxCount($max);
+        $this->setUserCount(0);
         $this->full = false;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -103,7 +105,7 @@ class Matrix
     /**
      * Get maxCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxCount()
     {
@@ -126,11 +128,66 @@ class Matrix
     /**
      * Get childs_0
      *
-     * @return array 
+     * @return array
      */
     public function getChilds0()
     {
         return $this->childs_0;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function addToChilds0($user_id) {
+        $this->childs_0[] = $user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function addToChilds1($user_id) {
+        $this->childs_1[] = $user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function addToChilds2($user_id) {
+        $this->childs_2[] = $user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function addToChilds3($user_id) {
+        $this->childs_3[] = $user_id;
+        if (count($this->childs_3) == $this->getMaxCount()) {
+            $this->setFull(true);
+        }
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function removeFromChilds0($user_id) {
+        $indx = array_search($user_id, $this->childs_0, true);
+        unset($this->childs_0[$indx]);
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function removeFromChilds1($user_id) {
+        $indx = array_search($user_id, $this->childs_1, true);
+        unset($this->childs_1[$indx]);
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function removeFromChilds2($user_id) {
+        $indx = array_search($user_id, $this->childs_2, true);
+        unset($this->childs_2[$indx]);
     }
 
     /**
@@ -149,7 +206,7 @@ class Matrix
     /**
      * Get childs_1
      *
-     * @return array 
+     * @return array
      */
     public function getChilds1()
     {
@@ -172,7 +229,7 @@ class Matrix
     /**
      * Get childs_2
      *
-     * @return array 
+     * @return array
      */
     public function getChilds2()
     {
@@ -195,7 +252,7 @@ class Matrix
     /**
      * Get childs_3
      *
-     * @return array 
+     * @return array
      */
     public function getChilds3()
     {
@@ -218,7 +275,7 @@ class Matrix
     /**
      * Get full
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFull()
     {
@@ -241,10 +298,66 @@ class Matrix
     /**
      * Get userCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserCount()
     {
         return $this->userCount;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $child_id
+     * @param int $level
+     */
+    public static function addChildToUser(EntityManager $em, $child_id, $level) {
+
+        $level = $em->getRepository('MainMainBundle:Matrix')->find($level);
+        $nextLevel = $em->getRepository('MainMainBundle:Matrix')->find($level->getId() + 1);
+        $user = $em->getRepository('MainMainBundle:User')->find($child_id);
+
+        if ($nextLevel == null) {
+            $nextLevel = new Matrix($level->getMaxCount() * 3);
+            $nextLevel->addToChilds0($child_id);
+            $nextLevel->setUserCount(1);
+            $em->persist($nextLevel);
+        } else {
+            $nextLevel->addToChilds0($child_id);
+            $nextLevel->setUserCount($nextLevel->getUserCount() + 1);
+        }
+
+        if (count($level->getChilds0()) > 0) {
+            $array = $level->getChilds0();
+            $sponsor_id = array_shift($array);
+            $level->setChilds0($array);
+            $level->addToChilds1($sponsor_id);
+            $user->setSponsorid($sponsor_id);
+        } else if (count($level->getChilds1()) > 0) {
+            $array = $level->getChilds1();
+            $sponsor_id = array_shift($array);
+            $level->setChilds1($array);
+            $level->addToChilds2($sponsor_id);
+            $user->setSponsorid($sponsor_id);
+        } else if (count($level->getChilds2()) > 0) {
+            $array = $level->getChilds2();
+            $sponsor_id = array_shift($array);
+            $level->setChilds2($array);
+            $level->addToChilds3($sponsor_id);
+            $user->setSponsorid($sponsor_id);
+            if (count($level->getChilds3()) == $level->getMaxCount()) {
+                $level->setFull(true);
+            }
+        }
+
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return Matrix
+     */
+    public static function getNotFullLevel(EntityManager $em) {
+        $level = $em->getRepository('MainMainBundle:Matrix')->findOneBy(array('full' => false));
+        return $level;
     }
 }

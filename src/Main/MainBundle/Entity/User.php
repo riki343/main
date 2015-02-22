@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Main\MainBundle\Extras\ChromePhp as console;
 
 /**
  * User
@@ -105,7 +106,7 @@ class User implements UserInterface, \Serializable {
     private $sponsorid;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinColumn(name="sponsor_id", referencedColumnName="id")
      * @var User
      */
@@ -131,13 +132,13 @@ class User implements UserInterface, \Serializable {
     private $accountActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user", cascade={"persist"}, fetch="LAZY")
+     * @ORM\OneToOne(targetEntity="Wallet", mappedBy="user")
      * @var Wallet
      */
     protected $wallet;
 
     /**
-     * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user", fetch="LAZY")
+     * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user")
      * @var Statistics
      */
     protected $statistics;
@@ -197,7 +198,7 @@ class User implements UserInterface, \Serializable {
             $this->registered,
             $this->lastactive,
             $this->perfectMoney,
-            $this->active,
+            $this->active
         ));
     }
 
@@ -216,7 +217,8 @@ class User implements UserInterface, \Serializable {
             $this->registered,
             $this->lastactive,
             $this->perfectMoney,
-            $this->active) = unserialize($serialized);
+            $this->active
+        ) = unserialize($serialized);
     }
 
     /**
@@ -490,24 +492,6 @@ class User implements UserInterface, \Serializable {
     }
 
     /**
-     * @param User $user
-     * @param Matrix $level
-     */
-    public static function addUserToLevel(User $user, Matrix $level)
-    {
-
-    }
-
-    /**
-     * @param User $user
-     * @param Matrix $level
-     */
-    public static function addUserToNewLevel(User $user, Matrix $level)
-    {
-
-    }
-
-    /**
      * Set sponsorid
      *
      * @param integer $sponsorid
@@ -651,5 +635,28 @@ class User implements UserInterface, \Serializable {
     public function getSponsor()
     {
         return $this->sponsor;
+    }
+
+    /**
+     * Add sponsor
+     *
+     * @param \Main\MainBundle\Entity\User $sponsor
+     * @return User
+     */
+    public function addSponsor(\Main\MainBundle\Entity\User $sponsor)
+    {
+        $this->sponsor[] = $sponsor;
+
+        return $this;
+    }
+
+    /**
+     * Remove sponsor
+     *
+     * @param \Main\MainBundle\Entity\User $sponsor
+     */
+    public function removeSponsor(\Main\MainBundle\Entity\User $sponsor)
+    {
+        $this->sponsor->removeElement($sponsor);
     }
 }
