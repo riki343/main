@@ -1,12 +1,60 @@
 {% extends '@MainMain/index.html.twig' %}
 
 {% block title %}
-    Statistics
+    Статистика
 {% endblock %}
 
 {% block body %}
-    userid: {{ app.user.statistics.userid }}
-    earnedMoney: {{ app.user.statistics.earnedMoney }}
-    spentMoney: {{ app.user.statistics.spentMoney }}
-    peopleCount: {{ app.user.statistics.peopleCount }}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">Статистика</h3> <br>
+
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Сумма заработанная за все время:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green;   margin-bottom: 0; margin-top: 0;">
+                            {{ app.user.statistics.earnedMoney ~ '$' }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Сумма выведенных денег:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green;   margin-bottom: 0; margin-top: 0;">
+                                {{ app.user.statistics.spentMoney ~ '$' }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Количество подчиненных:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green;   margin-bottom: 0; margin-top: 0;">
+                                {{ app.user.statistics.peopleCount }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+
 {% endblock %}

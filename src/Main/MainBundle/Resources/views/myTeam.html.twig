@@ -1,22 +1,56 @@
 {% extends '@MainMain/index.html.twig' %}
 
 {% block title %}
-    Statistics
+    Моя команда
 {% endblock %}
 
 {% block body %}
-    <h3>Моя команда</h3>
 
-    {% if empty is defined %}
-        {{ empty }}
-    {% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="page-header">Моя команда</h3> <br>
 
-    Общий розмер команды: {{ app.user.statistics.peopleCount + 1}}<br><br>
+                {% if empty is defined %}
+                    <div class="alert alert-info" style="max-width: 400px;">
+                        <span style="font-size: 1.2em;">{{ empty }}</span>
+                    </div>
 
-    {% for ch in child %}
-        Фотка: <br><a href="#"><img src="{{ asset(ch.avatar) }}" style="height:90px;"></a><br>
-        Имя: {{ ch.name ~ ' ' ~ ch.surname}}<br>
-        Время регистрации: {{ ch.registered| date('Y-m-d H:i:s') }}<br>
-        Количество подчиненных: {{ ch.statistics.peopleCount }} <br><br>
-    {% endfor %}
+                {% else %}
+                    <div class="alert alert-success" style="max-width: 400px;">
+                        <h4>Общий размер структуры:</h4>
+                        <h2>
+                            {{ (app.user.statistics.peopleCount + 1) ~ ' человек'}}
+                        </h2>
+                    </div>
+
+                    {% for ch in child %}
+                        <div class="col-md-4">
+                            <div class="panel" style="box-shadow: 0 0 2px 0 #dddddd;">
+                                <div class="panel-heading">
+                                    <div>
+                                        <div style="display: inline-block; vertical-align: top;">
+                                            <img src="{{ asset(ch.avatar) }}" style="height:90px;">
+                                        </div>
+                                        <div style="display: inline-block; vertical-align: top; margin-left: 15px;">
+                                            <span style="font-size: 1.2em;"><b>{{ ch.name }}</b></span>
+                                            <h5 style="color: #666666; margin-top: 5px;">{{ ch.surname }}</h5>
+                                            <span style="color: #666666; font-size: 0.7em;">{{ ch.registered| date('Y-m-d H:i:s') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div style="text-align: center">
+                                        Количество подчиненных:<br>
+                                        {{ ch.statistics.peopleCount }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
