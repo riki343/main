@@ -106,7 +106,7 @@ class User implements UserInterface, \Serializable {
     private $sponsorid;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="sponsor_id", referencedColumnName="id")
      * @var User
      */
