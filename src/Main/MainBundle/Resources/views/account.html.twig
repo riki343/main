@@ -12,7 +12,7 @@
 
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
                     <li class="{% if zm is not defined %}active{% endif %}" role="presentation">
-                        <a id="home-tab" aria-expanded="{% if zm is not defined %}true{% else %}false{% endif %}" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
+                        <a id="home-tab" aria-expanded="true" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
                     </li>
 
                     <li class="" role="presentation">
@@ -28,12 +28,12 @@
                     </li>
 
                     <li class="{% if zm is defined %}active{% endif %}" role="presentation">
-                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="{% if zm is defined %}true{% else %}false{% endif %}">Активация аккаунта</a>
+                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="false">Активация аккаунта</a>
                     </li>
                 </ul>
 
                 <div id="myTabContent" class="tab-content">
-                    <div id="home" class="tab-pane fade active in" aria-labelledby="home-tab" role="tabpanel">
+                    <div id="home" class="tab-pane fade {% if zm is not defined %}active in{% endif %}" aria-labelledby="home-tab" role="tabpanel">
                         <br>
                         <br>
                         <div class="col-md-5">
@@ -57,19 +57,15 @@
                                     <br>
                                     <dt>Имя:</dt>
                                     <dd>{{ app.user.sponsor.name ~ ' ' ~ app.user.sponsor.surname }}</dd>
-                                    <dt>Email:</dt>
-                                    <dd>{{ app.user.sponsor.email }}</dd>
-                                    <dt>Кошелек perfect money</dt>
-                                    <dd>{{ app.user.sponsor.perfectMoney }}</dd>
                                 </dl>
                             {% endif %}
                         </div><!-- ends.referalinformartioon -->
                     </div><!-- ends.user-info -->
 
-                    <div id="activeaccaunt" class="tab-pane fade" aria-labelledby="activeaccaunt-tab" role="tabpanel">
+                    <div id="activeaccaunt" class="tab-pane fade{% if zm is defined %} active in{% endif %}" aria-labelledby="activeaccaunt-tab" role="tabpanel">
                         <br><br>
                         <blockquote style="margin:10px;">
-                            <h4>Стоимость активации аккаунта составляет 21.00$ + <span style="color: red;">комиссия perfectMoney</span></h4>
+                            <h4>Стоимость активации аккаунта составляет 21.00$ + <span style="color: red;">комиссия perfect money</span></h4>
                             <footer>
                                 Оплата активации акаунта происходит с вашего внутренного баланса, для этого на нем должна быть необходимая сумма. Активация аккаунта выполняеться единоразово
                             </footer>
