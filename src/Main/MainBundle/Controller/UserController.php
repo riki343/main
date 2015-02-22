@@ -56,6 +56,11 @@ class UserController extends Controller {
         return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child));
     }
 
+    public  function accountAction(Request $request)
+    {
+        return $this->render('MainMainBundle::account.html.twig');
+    }
+
     /**
      * @Route("/user/activateAcount", name="main_activate_acount")
      * @Security("has_role('USER_ROLE')")
