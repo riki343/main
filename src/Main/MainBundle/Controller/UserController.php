@@ -5,6 +5,7 @@ namespace Main\MainBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Main\MainBundle\Entity\Matrix;
 use Main\MainBundle\Entity\User;
+use Main\MainBundle\Entity\UserHistory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -78,16 +79,13 @@ class UserController extends Controller {
             Matrix::addChildToUser($em, $user->getId(), $level->getId());
             $user = $em->getRepository('MainMainBundle:User')->find($user_id);
 
-            //-----(user - 21$)
             $user->getWallet()->setBalance($userwallet - 21);
             $user->setAccountActive(true);
 
             /** @var User $parrentId1lvl */
             $parrentId1lvl = $user;
-            //------(parrent 1-7 level +3$)
             for($i = 0; $i < 7; $i++)
             {
-                /** @var User $parrent_1lvl */
                 $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl->getSponsorid());
 
                 $statistics = $parrent_1lvl->getStatistics();
@@ -97,6 +95,10 @@ class UserController extends Controller {
                 if ($i < 7 && $parrent_1lvl->getId() == 1) {
                     break;
                 }
+
+                $message = 'Получено 3$ за активацию аккаунта от пользователя ' .
+                    $user->getName() . ' ' . $user->getSurname();
+                UserHistory::addToHistory($em, $parrent_1lvl->getId(), $user->getId(), 3, $message);
 
                 $parrent_1lvl->getWallet()
                     ->setBalance($parrent_1lvl->getWallet()->getBalance() + 3);
@@ -108,7 +110,6 @@ class UserController extends Controller {
                 $em->persist($parrent_1lvl);
             }
 
-            //------Global Wallet + 21$
             $globalWallet = $em->getRepository('MainMainBundle:User')->find(1);
             $globalWallet->getWallet()
                 ->setBalance($globalWallet->getWallet()->getBalance() + 21);

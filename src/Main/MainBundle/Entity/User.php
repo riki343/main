@@ -143,6 +143,12 @@ class User implements UserInterface, \Serializable {
      */
     protected $statistics;
 
+    /**
+     * @ORM\OneToMany(targetEntity="UserHistory", mappedBy="user")
+     * @var UserHistory
+     */
+    protected $history;
+
     public function getPassword()
     {
         return $this->password;
@@ -470,6 +476,7 @@ class User implements UserInterface, \Serializable {
 
         $statistics = new Statistics();
         $user->setStatistics($statistics);
+
         $em->persist($user);
 
         $wallet->setUser($user);
@@ -638,6 +645,29 @@ class User implements UserInterface, \Serializable {
     }
 
     /**
+     * Set history
+     *
+     * @param \Main\MainBundle\Entity\UserHistory $history
+     * @return User
+     */
+    public function setHistory(\Main\MainBundle\Entity\UserHistory $history = null)
+    {
+        $this->history = $history;
+
+        return $this;
+    }
+
+    /**
+     * Get history
+     *
+     * @return \Main\MainBundle\Entity\UserHistory 
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
      * Add sponsor
      *
      * @param \Main\MainBundle\Entity\User $sponsor
@@ -658,5 +688,28 @@ class User implements UserInterface, \Serializable {
     public function removeSponsor(\Main\MainBundle\Entity\User $sponsor)
     {
         $this->sponsor->removeElement($sponsor);
+    }
+
+    /**
+     * Add history
+     *
+     * @param \Main\MainBundle\Entity\UserHistory $history
+     * @return User
+     */
+    public function addHistory(\Main\MainBundle\Entity\UserHistory $history)
+    {
+        $this->history[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \Main\MainBundle\Entity\UserHistory $history
+     */
+    public function removeHistory(\Main\MainBundle\Entity\UserHistory $history)
+    {
+        $this->history->removeElement($history);
     }
 }
