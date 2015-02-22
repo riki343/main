@@ -26,7 +26,7 @@ main_logout:
 
 main_userpage:
     path: /user
-    defaults: { _controller: MainMainBundle:User:index }
+    defaults: { _controller: MainMainBundle:User:account }
 
 main_userpage_statistics:
     path: /user/statistics

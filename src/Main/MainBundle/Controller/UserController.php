@@ -18,15 +18,6 @@ use Main\MainBundle\Extras\ChromePhp as console;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller {
-    /**
-     * @Route("/user", name="main_userpage")
-     * @Security("has_role('USER_ROLE')")
-     * @param Request $request
-     * @return Response $response
-     */
-    public function indexAction(Request $request) {
-        return $this->render('MainMainBundle::userpage.html.twig');
-    }
 
     /**
      * @Route("/user/statistics", name="main_userpage_statistics")
@@ -56,9 +47,20 @@ class UserController extends Controller {
         return $this->render('MainMainBundle::myTeam.html.twig', array('child' => $child));
     }
 
+    /**
+     * @Route("/user/account", name="main_userpage_account")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
     public  function accountAction(Request $request)
     {
-        return $this->render('MainMainBundle::account.html.twig');
+        /** @var User $user */
+        $user = $this->getUser();
+        $sponsor = $user->getSponsor();
+        if ($sponsor == null)
+            return $this->render('MainMainBundle::account.html.twig', array('sponsor' => $sponsor));
+        return $this->render('MainMainBundle::account.html.twig', array('sponsor' => $sponsor, 'zm' => ""));
     }
 
     /**
@@ -81,7 +83,7 @@ class UserController extends Controller {
             /** @var Matrix $level */
             $level = Matrix::getNotFullLevel($em);
             $user_id = $user->getId();
-            Matrix::addChildToUser($em, $user->getId(), $level->getId());
+            Matrix::addChildToUser($em, $user_id, $level->getId());
             $user = $em->getRepository('MainMainBundle:User')->find($user_id);
 
             $user->getWallet()->setBalance($userwallet - 21);

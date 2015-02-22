@@ -5,9 +5,6 @@
 {% endblock %}
 
 {% block body %}
-    <form>
-        <button formaction="{{ path('main_activate_acount') }}" formmethod="post" > Activate </button>
-    </form>
 
     <form  action="{{ path('main_withdraw_money') }}" method="post">
         <input type="text" name="Amount" style="width: 350px;" placeholder="Введите суму которую хотите вывести">

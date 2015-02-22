@@ -5,5 +5,87 @@
 {% endblock %}
 
 {% block body %}
+    <div class="container-fluid" style="padding-left: 0;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Ваш аккаунт</h3><br>
 
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li class="active" role="presentation">
+                        <a id="home-tab" aria-expanded="true" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
+                    </li>
+
+                    <li class="" role="presentation">
+                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Изменить личные данные</a>
+                    </li>
+
+                    <li class="" role="presentation">
+                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Настройки</a>
+                    </li>
+
+                    <li class="" role="presentation">
+                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Безопасность</a>
+                    </li>
+
+                    <li class="" role="presentation">
+                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="false">Активация аккаунта</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    <div id="home" class="tab-pane fade active in" aria-labelledby="home-tab" role="tabpanel">
+                        <br>
+                        <br>
+                        <div class="col-md-5">
+                            <h4 class="page-header">Ваша информация</h4>
+                            <dl>
+                                <dt><img src="{{ asset(app.user.avatar) }}" style="height:90px;"></dt>
+                                <br>
+                                <dt>Имя:</dt>
+                                <dd>{{ app.user.name ~ ' ' ~ app.user.surname }}</dd>
+                                <dt>Email:</dt>
+                                <dd>{{ app.user.email }}</dd>
+                                <dt>Кошелек perfect money</dt>
+                                <dd>{{ app.user.perfectMoney }}</dd>
+                            </dl>
+                        </div> <!-- ends.yourinformation -->
+                        <div class="col-md-5">
+                            {% if zm is defined %}
+                                <h4 class="page-header">Информация про вашего спонсора</h4>
+                                <dl>
+                                    <dt><img src="{{ asset(sponsor.avatar) }}" style="height:90px;"></dt>
+                                    <br>
+                                    <dt>Имя:</dt>
+                                    <dd>{{ sponsor.name ~ ' ' ~ sponsor.surname }}</dd>
+                                    <dt>Email:</dt>
+                                    <dd>{{ sponsor.email }}</dd>
+                                    <dt>Кошелек perfect money</dt>
+                                    <dd>{{ sponsor.perfectMoney }}</dd>
+                                </dl>
+                            {% endif %}
+                        </div><!-- ends.referalinformartioon -->
+                    </div><!-- ends.user-info -->
+
+                    <div id="activeaccaunt" class="tab-pane fade" aria-labelledby="activeaccaunt-tab" role="tabpanel">
+                        <br><br>
+                        <blockquote style="margin:10px;">
+                            <h4>Стоимость активации аккаунта составляет 21.00$ + <span style="color: red;">комиссия perfectMoney</span></h4>
+                            <footer>
+                                Оплата активации акаунта происходит с вашего внутренного баланса, для этого на нем должна быть необходимая сумма. Активация аккаунта выполняеться единоразово
+                            </footer>
+                        </blockquote>
+                        <br><br>
+                        <p style="text-align: left;">
+                            <form method="post" action="{{ path('main_activate_acount') }}">
+                                <button type="submit" class="btn btn-primary">Активировать аккаунт</button>
+                            </form>
+                        </p>
+                    </div><!-- ends.activeacaunt -->
+
+                </div><!-- ends.myTabContent -->
+
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
 {% endblock %}
