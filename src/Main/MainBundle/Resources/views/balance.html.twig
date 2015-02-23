@@ -1,0 +1,89 @@
+{% extends '@MainMain/index.html.twig' %}
+
+{% block title %}
+    Баланс
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="page-header">Баланс</h3> <br>
+
+                <div class="col-md-4 yourbalans">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">На вашем балансе:</h3>
+                        </div>
+                        <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;"> {{ app.user.wallet.balance }}$</h2> </div>
+                    </div>
+                </div><!-- ends.yourbalans -->
+                <div class="col-md-4 yourbalans">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Пополнить баланс</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">$</span>
+                                <input class="form-control" type="text" placeholder="Введите сумму">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">Пополнить</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Вывод средств</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">$</span>
+                                <input class="form-control" type="text" placeholder="Введите сумму">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">Вывести</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Статистика по балансу</h4>
+                <br>
+
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Дата</th>
+                            <th>Описание</th>
+                            <th>Баланс до</th>
+                            <th>Сумма</th>
+                            <th>Баланс после</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in 0..app.user.history| slice(0, 10) |length - 1 %}
+                        <tr>
+                            <th scope="row">{{ i + 1 }}</th>
+                            <td>{{ app.user.history[i].date | date('Y-m-d H:i:s') }}</td>
+                            <td>{{ app.user.history[i].description }}</td>
+                            <td>{{ app.user.history[i].balanceBefore }}</td>
+                            <td>{{ app.user.history[i].ammount }}</td>
+                            <td>{{ app.user.history[i].balanceAfter }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

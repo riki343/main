@@ -134,18 +134,21 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @ORM\OneToOne(targetEntity="Statistics", mappedBy="user")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var Statistics
      */
     protected $statistics;
 
     /**
      * @ORM\OneToMany(targetEntity="UserHistory", mappedBy="user")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var UserHistory
      */
     protected $history;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var Notification
      */
     protected $notifications;

@@ -153,4 +153,13 @@ class UserController extends Controller {
         $em->flush();
         return $this->render('MainMainBundle::userpage.html.twig');
     }
+
+    /**
+     * @Route("/user/balance", name="main_balance")
+     * @Security("has_role('USER_ROLE')")
+     * @return Response $response
+     */
+    public function balanceAction() {
+        return $this->render('@MainMain/balance.html.twig');
+    }
 }

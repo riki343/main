@@ -51,3 +51,7 @@ main_activate_acount:
 main_withdraw_money:
     path: /user/withdrawMoney
     defaults: { _controller: MainMainBundle:User:withdrawMoney }
+
+main_balance:
+    path: /user/balance
+    defaults: { _controller: MainMainBundle:User:balance }
