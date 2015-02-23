@@ -21,7 +21,7 @@ class UserHistory
     private $id;
 
     /**
-     * @var DateTime $date
+     * @var \DateTime $date
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
@@ -268,13 +268,11 @@ class UserHistory
     /**
      * @param EntityManager $em
      * @param int $user_id
-     * @param int $from_id
      * @param float $ammount
      * @param string $message
      */
-    public static function addToHistory(EntityManager $em, $user_id, $from_id, $ammount, $message) {
+    public static function addToHistory(EntityManager $em, $user_id, $ammount, $message) {
         $user = $em->getRepository('MainMainBundle:User')->find($user_id);
-        $from = $em->getRepository('MainMainBundle:User')->find($from_id);
 
         $history = new UserHistory();
         $history->setUser($user);

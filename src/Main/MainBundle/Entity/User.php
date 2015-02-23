@@ -4,6 +4,7 @@ namespace Main\MainBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
+use Main\MainBundle\Services\Notifier;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Main\MainBundle\Extras\ChromePhp as console;
@@ -94,12 +95,6 @@ class User implements UserInterface, \Serializable {
     private $avatar;
 
     /**
-     * Get password
-     *
-     * @return string
-     */
-
-    /**
      * @var integer
      * @ORM\Column(name="sponsor_id", type="integer", nullable=true, options={"default":NULL})
      */
@@ -148,6 +143,12 @@ class User implements UserInterface, \Serializable {
      * @var UserHistory
      */
     protected $history;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @var Notification
+     */
+    protected $notifications;
 
     public function getPassword()
     {
@@ -627,7 +628,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\User $sponsor
      * @return User
      */
-    public function setSponsor(\Main\MainBundle\Entity\User $sponsor = null)
+    public function setSponsor(User $sponsor = null)
     {
         $this->sponsor = $sponsor;
 
@@ -650,7 +651,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\UserHistory $history
      * @return User
      */
-    public function setHistory(\Main\MainBundle\Entity\UserHistory $history = null)
+    public function setHistory(UserHistory $history = null)
     {
         $this->history = $history;
 
@@ -673,7 +674,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\User $sponsor
      * @return User
      */
-    public function addSponsor(\Main\MainBundle\Entity\User $sponsor)
+    public function addSponsor(User $sponsor)
     {
         $this->sponsor[] = $sponsor;
 
@@ -685,7 +686,7 @@ class User implements UserInterface, \Serializable {
      *
      * @param \Main\MainBundle\Entity\User $sponsor
      */
-    public function removeSponsor(\Main\MainBundle\Entity\User $sponsor)
+    public function removeSponsor(User $sponsor)
     {
         $this->sponsor->removeElement($sponsor);
     }
@@ -696,7 +697,7 @@ class User implements UserInterface, \Serializable {
      * @param \Main\MainBundle\Entity\UserHistory $history
      * @return User
      */
-    public function addHistory(\Main\MainBundle\Entity\UserHistory $history)
+    public function addHistory(UserHistory $history)
     {
         $this->history[] = $history;
 
@@ -708,8 +709,78 @@ class User implements UserInterface, \Serializable {
      *
      * @param \Main\MainBundle\Entity\UserHistory $history
      */
-    public function removeHistory(\Main\MainBundle\Entity\UserHistory $history)
+    public function removeHistory(UserHistory $history)
     {
         $this->history->removeElement($history);
+    }
+
+    /**
+     * @param User $user
+     * @param int $ammount
+     * @param EntityManager $em
+     * @param Notifier $notifier
+     */
+    public function childAccountActivate(User $user, $ammount, EntityManager $em, Notifier $notifier) {
+        $this->statistics->setPeopleCount($this->statistics->getPeopleCount() + 1);
+        $message = "На ваш счет зачислено " . $ammount . "$ от " . $user->getName() . " " .
+            $user->getSurname() . ", который присоединился к вашей команде!";
+        $notifier->createNotification($this->getId(), $message);
+
+        $message = 'Получено ' . $ammount . '$ за активацию аккаунта от пользователя ' .
+            $user->getName() . ' ' . $user->getSurname();
+        UserHistory::addToHistory($em, $this->getId(), $ammount, $message);
+        $this->wallet->setBalance($this->wallet->getBalance() + $ammount);
+        $this->statistics->setEarnedMoney($this->statistics->getEarnedMoney() + $ammount);
+        if ($this->sponsor == null) {
+            $this->setSponsorid($user->getId());
+        }
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param \Main\MainBundle\Entity\Notification $notifications
+     * @return User
+     */
+    public function addNotification(\Main\MainBundle\Entity\Notification $notifications)
+    {
+        $this->notifications[] = $notifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \Main\MainBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\Main\MainBundle\Entity\Notification $notifications)
+    {
+        $this->notifications->removeElement($notifications);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNewNotificationsCount() {
+        $newNotifications = 0;
+
+        /** @var Notification $notify */
+        foreach($this->notifications as $notify) {
+            if ($notify->getActive() == false) {
+                $newNotifications++;
+            }
+        }
+        return $newNotifications;
     }
 }

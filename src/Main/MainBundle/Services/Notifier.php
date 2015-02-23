@@ -5,7 +5,7 @@ namespace Main\MainBundle\Services;
 use Doctrine\ORM\Mapping as ORM;
 //use Main\MainBundle\Entity\Notification;
 //use Main\MainBundle\Entity\Message;
-use Intranet\MainBundle\Entity\Notification;
+use Main\MainBundle\Entity\Notification;
 use Main\MainBundle\Entity\User;
 
 class Notifier {
@@ -34,27 +34,30 @@ class Notifier {
         } catch (\Swift_RfcComplianceException $ex) {  }
     }
 
-    public function createNotification($newUser)
+    /**
+     * @param int $user_id
+     * @param string $message
+     */
+    public function createNotification($user_id, $message)
     {
-        $message = "На ваш счет зачислено 3$ от: " . $newUser->getName() . " " . $newUser->getSurname . "который пресоединился к вашей команде!"
         $notification = new Notification();
-        $notification->setUserid($this->user->getId());
+        $notification->setUserid($user_id);
         $notification->setMessage($message);
         $notification->setActive(false);
         $notification->setRegistered(new \DateTime());
         $this->em->persist($notification);
 		$this->em->flush();
 
-        $this->sendNotificationToEmail($newUser, $message);
+        //$this->sendNotificationToEmail($newUser, $message);
     }
 
     public function clearNotifications()
     {
-        $notifications = $this->em->getRepository('MainMainBundle:Notification')->findBy(array('activate' => true))
+        $notifications = $this->em->getRepository('MainMainBundle:Notification')
+            ->findBy(array('active' => true));
         if ($notifications == null) return;
-        foreach($notifications as $notification)
-        {
-            $this->em->remove($notification)
+        foreach($notifications as $notification) {
+            $this->em->remove($notification);
         }
         $this->em->flush();
     }

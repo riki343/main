@@ -75,8 +75,8 @@ swiftmailer:
     spool:     { type: memory }
 
 services:
-    intranet.notifier:
-        class: main\MainBundle\Services\Notifier
+    main.notifier:
+        class: Main\MainBundle\Services\Notifier
         arguments:
             - @security.context
             - @doctrine.orm.entity_manager

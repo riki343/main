@@ -77,14 +77,15 @@ class UserController extends Controller {
      */
     public function activateAcountAction(Request $request)
     {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
 
         $activation = $user->getAccountActive();
         $userwallet = $user->getWallet()->getBalance();
         if($activation == false && $userwallet >= 21) {
+
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
 
             /** @var Matrix $level */
             $level = Matrix::getNotFullLevel($em);
@@ -97,38 +98,21 @@ class UserController extends Controller {
 
             /** @var User $parrentId1lvl */
             $parrentId1lvl = $user;
-            for($i = 0; $i < 7; $i++)
-            {
+            $notifier = $this->get('main.notifier');
+            for($i = 0; $i < 7; $i++) {
                 $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl->getSponsorid());
-
-                $statistics = $parrent_1lvl->getStatistics();
-                $statistics->setPeopleCount($statistics->getPeopleCount() + 1);
-                $parrent_1lvl->setStatistics($statistics);
-
-                if ($i < 7 && $parrent_1lvl->getId() == 1) {
+                if ($parrent_1lvl && $parrent_1lvl->getId() == 1) {
+                    $parrent_1lvl->childAccountActivate($user, (7 - $i) * 3, $em, $notifier);
+                    $em->persist($parrent_1lvl);
                     break;
+                } else {
+                    $parrent_1lvl->childAccountActivate($user, 3, $em, $notifier);
                 }
-
-                $message = 'Получено 3$ за активацию аккаунта от пользователя ' .
-                    $user->getName() . ' ' . $user->getSurname();
-                UserHistory::addToHistory($em, $parrent_1lvl->getId(), $user->getId(), 3, $message);
-
-                $parrent_1lvl->getWallet()
-                    ->setBalance($parrent_1lvl->getWallet()->getBalance() + 3);
-
-                $parrent_1lvl->getStatistics()
-                    ->setEarnedMoney($parrent_1lvl->getStatistics()->getEarnedMoney() + 3);
-
-                $parrentId1lvl = $parrent_1lvl;
                 $em->persist($parrent_1lvl);
+                $parrentId1lvl = $parrent_1lvl;
             }
 
-            $globalWallet = $em->getRepository('MainMainBundle:User')->find(1);
-            $globalWallet->getWallet()
-                ->setBalance($globalWallet->getWallet()->getBalance() + 21);
-
             $em->flush();
-
         }
         return $this->render('MainMainBundle::userpage.html.twig');
     }

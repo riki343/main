@@ -29,6 +29,13 @@ class Notification
     private $userid;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="notifications")
+     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     * @var User
+     */
+    protected $user;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="message", type="text")
@@ -128,14 +135,26 @@ class Notification
         $this->registered = $registered;
     }
 
-    public function getInArray()
+    /**
+     * Set user
+     *
+     * @param \Main\MainBundle\Entity\User $user
+     * @return Notification
+     */
+    public function setUser(\Main\MainBundle\Entity\User $user = null)
     {
-        return array(
-            'id' => $this->getId(),
-            'user' => $this->getUser()->getInArray(),
-            'message' => $this->getMessage(),
-            'activate' => $this->getActivated(),
-            'registered' => $this->getRegistered()
-        );
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Main\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
