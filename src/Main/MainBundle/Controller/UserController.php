@@ -7,6 +7,7 @@ use Main\MainBundle\Entity\Matrix;
 use Main\MainBundle\Entity\User;
 use Main\MainBundle\Entity\UserHistory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 // |@Route| \\
@@ -66,6 +67,43 @@ class UserController extends Controller {
      */
     public  function accountAction(Request $request)
     {
+        return $this->render('MainMainBundle::account.html.twig');
+    }
+
+    /**
+     * @Route("/user/change_profile", name="main_userpage_change_profile")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public  function changeProfileAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $FS = new Filesystem();
+        if (!$FS->exists(__DIR__ . '/../../../../web/files/' . $user->getUsername()))
+            $FS->mkdir(__DIR__ . '/../../../../web/files/' . $user->getUsername());
+
+        $file_path = __DIR__.'/../../../../web/files/' . $user->getAvatar();
+        if(file_exists($file_path)) unlink($file_path);
+
+        $em = $this->getDoctrine()->getManager();
+        $usr = $em->getRepository('MainMainBundle:User')->find($user->getId());
+        $file = $request->files->get('new_image');
+        if ($file != null)
+        {
+            $extension = $file->guessExtension();
+            $file_name = rand(1000,100000);
+            $file = $file->move(__DIR__.'/../../../../web/files/' . $user->getUsername() . '/avatar',
+                $file_name . '.' . $extension);
+            $usr->setAvatar('files/' . $user->getUsername() . '/avatar/' . $file_name . '.' . $extension);
+        }
+
+        $new_name = $request->request->get('new_name');
+        $new_surname = $request->request->get('new_surname');
+        $user->setName($new_name);
+        $user->setSurname($new_surname);
+        $em->flush();
         return $this->render('MainMainBundle::account.html.twig');
     }
 

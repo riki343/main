@@ -16,7 +16,7 @@
                     </li>
 
                     <li class="" role="presentation">
-                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Изменить личные данные</a>
+                        <a id="changeProfile-tab" aria-controls="changeProfile" data-toggle="tab" role="tab" href="#changeProfile" aria-expanded="false">Изменить личные данные</a>
                     </li>
 
                     <li class="" role="presentation">
@@ -63,6 +63,34 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    <div id="changeProfile" class="tab-pane fade" aria-labelledby="changeProfile-tab" role="tabpanel">
+                        <br>
+                        <br>
+                        <form method="post" action="{{ path('main_userpage_change_profile') }}" style="max-width: 350px;" enctype="multipart/form-data">
+
+                            <div class="form-group" style="margin-bottom: 30px;">
+                                <label class="control-label" style="margin-bottom: 20px;">Изображение профиля (аватар)</label>
+                                <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+                                <input type="file" name="new_image" accept="image/*">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Имя</label>
+                                <input type="text" name="new_name" value="{{ app.user.name }}" class=" form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Фамилия</label>
+                                <input type="text" name="new_surname" value="{{ app.user.surname }}" class=" form-control" required>
+                            </div>
+
+                            <div style="margin-top: 40px;">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+
                     {% if app.user.accountActive == false %}
                     <div id="activeaccaunt" class="tab-pane fade{% if zm is defined %} active in{% endif %}" aria-labelledby="activeaccaunt-tab" role="tabpanel">
                         <br><br>

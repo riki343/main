@@ -44,6 +44,10 @@ main_userpage_account:
     path: /user/account
     defaults: { _controller: MainMainBundle:User:account }
 
+main_userpage_change_profile:
+    path: /user/change_profile
+    defaults: { _controller: MainMainBundle:User:changeProfile }
+
 main_activate_acount:
     path: /user/activateAcount
     defaults: { _controller: MainMainBundle:User:activateAcount }
