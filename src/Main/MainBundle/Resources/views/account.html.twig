@@ -85,20 +85,26 @@
                         <br>
 
                         {% if (mes is defined) and (mes == 0) %}
-                            <div class="message">
+                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                                    <span aria-hidden="true">×</span>
+                                </button>
                                 Не правильный старый пароль!
                             </div>
-
                         {% elseif (mes is defined) and (mes == 1) %}
-                            <div class="message">
+                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                                    <span aria-hidden="true">×</span>
+                                </button>
                                 Новый пароль и повторенный пароль не совпадают!
                             </div>
-
                         {% elseif (mes is defined) and (mes == 2) %}
-                            <div class="message1">
+                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                                    <span aria-hidden="true">×</span>
+                                </button>
                                 Пароль успешно изменен!
                             </div>
-
                         {% endif %}
 
                         <form method="post" action="{{ path('main_userpage_change_password') }}" style="max-width: 350px; ">
