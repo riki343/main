@@ -727,7 +727,7 @@ class User implements UserInterface, \Serializable {
         $this->statistics->setPeopleCount($this->statistics->getPeopleCount() + 1);
         $message = "На ваш счет зачислено " . $ammount . "$ от " . $user->getName() . " " .
             $user->getSurname() . ", который присоединился к вашей команде!";
-        $notifier->createNotification($this->getId(), $message);
+        $notifier->createNotification($this->id, $message);
 
         $message = 'Получено ' . $ammount . '$ за активацию аккаунта от пользователя ' .
             $user->getName() . ' ' . $user->getSurname();

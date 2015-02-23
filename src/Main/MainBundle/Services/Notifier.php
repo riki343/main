@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Services;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 //use Main\MainBundle\Entity\Notification;
 //use Main\MainBundle\Entity\Message;
@@ -10,7 +11,8 @@ use Main\MainBundle\Entity\User;
 
 class Notifier {
     private $user = null;
-    private $em = null;
+    /** @var EntityManager $em */
+    private $em;
     private $router = null;
     private $mailer = null;
 
@@ -40,8 +42,9 @@ class Notifier {
      */
     public function createNotification($user_id, $message)
     {
+        $user = $this->em->getRepository('MainMainBundle:User')->find($user_id);
         $notification = new Notification();
-        $notification->setUserid($user_id);
+        $notification->setUser($user);
         $notification->setMessage($message);
         $notification->setActive(false);
         $notification->setRegistered(new \DateTime());

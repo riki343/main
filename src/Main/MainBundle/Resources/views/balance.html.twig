@@ -71,16 +71,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for i in 0..app.user.history| slice(0, 10) |length - 1 %}
-                        <tr>
-                            <th scope="row">{{ i + 1 }}</th>
-                            <td>{{ app.user.history[i].date | date('Y-m-d H:i:s') }}</td>
-                            <td>{{ app.user.history[i].description }}</td>
-                            <td>{{ app.user.history[i].balanceBefore }}</td>
-                            <td>{{ app.user.history[i].ammount }}</td>
-                            <td>{{ app.user.history[i].balanceAfter }}</td>
-                        </tr>
-                    {% endfor %}
+                    {% if app.user.history | length != 0 %}
+                        {% for i in 0..app.user.history| slice(0, 10) |length - 1 %}
+                            <tr>
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>{{ app.user.history[i].date | date('Y-m-d H:i:s') }}</td>
+                                <td>{{ app.user.history[i].description }}</td>
+                                <td>{{ app.user.history[i].balanceBefore }}</td>
+                                <td>{{ app.user.history[i].ammount }}</td>
+                                <td>{{ app.user.history[i].balanceAfter }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     </tbody>
                 </table>
             </div>
