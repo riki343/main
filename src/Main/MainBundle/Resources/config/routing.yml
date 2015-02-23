@@ -59,3 +59,7 @@ main_withdraw_money:
 main_balance:
     path: /user/balance
     defaults: { _controller: MainMainBundle:User:balance }
+
+main_admin_panel:
+    path: /admin
+    defaults: { _controller: MainMainBundle:Admin:index }

@@ -9,6 +9,10 @@ security:
         user_db:
             entity: { class: Main\MainBundle\Entity\User, property: username }
 
+    role_hierarchy:
+            ADMIN_ROLE:       USER_ROLE
+            SUPER_ADMIN_ROLE: [ADMIN_ROLE, ROLE_ALLOWED_TO_SWITCH]
+
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -31,8 +35,7 @@ security:
 
 
     access_control:
-        - { path: main_userpage, roles: USER_ROLE }
-        - { path: main_userpage_statistics, roles: USER_ROLE }
-        - { path: main_activate_acount, roles: USER_ROLE }
-        - { path: main_withdraw_money, roles: USER_ROLE }
-        - { path: ^/admin/*, roles: ADMIN_ROLE }
+    #    - { path: ^/user, roles: USER_ROLE }
+    #    - { path: ^/user/statistics, roles: USER_ROLE }
+    #    - { path: ^/admin, roles: [USER_ROLE, ADMIN_ROLE] }
+    #    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
