@@ -108,6 +108,38 @@ class UserController extends Controller {
     }
 
     /**
+     * @Route("/user/change_password", name="main_userpage_change_password")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $currentPassword = $request->request->get('currentPassword');
+        $newPassword = $request->request->get('newPassword');
+        $repeatNewPassword = $request->request->get('repeatNewPassword');
+
+        $parameters = array(
+            'currentPassword' => $currentPassword,
+            'newPassword' => $newPassword,
+            'repeatNewPassword' => $repeatNewPassword
+        );
+
+        $user = $this->getUser();
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $status = User::changePassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+
+        if ($status == 0)
+            return $this->render('MainMainBundle::account.html.twig', array('mes' => 0));
+        if ($status == 1)
+            return $this->render('MainMainBundle::account.html.twig', array('mes' => 1));
+        return $this->render('MainMainBundle::account.html.twig', array('mes' => 2));
+    }
+
+    /**
      * @Route("/user/activateAcount", name="main_activate_acount")
      * @Security("has_role('USER_ROLE')")
      * @param Request $request

@@ -11,7 +11,7 @@
                 <h3>Ваш аккаунт</h3><br>
 
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
-                    <li class="{% if zm is not defined %}active{% endif %}" role="presentation">
+                    <li class="{% if (zm is not defined) and (mes is not defined) %}active{% endif %}" role="presentation">
                         <a id="home-tab" aria-expanded="true" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
                     </li>
 
@@ -19,8 +19,8 @@
                         <a id="changeProfile-tab" aria-controls="changeProfile" data-toggle="tab" role="tab" href="#changeProfile" aria-expanded="false">Изменить личные данные</a>
                     </li>
 
-                    <li class="" role="presentation">
-                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Настройки</a>
+                    <li class="{% if mes is defined %}active{% endif %}" role="presentation">
+                        <a id="settings-tab" aria-controls="settings" data-toggle="tab" role="tab" href="#settings" aria-expanded="false">Настройки</a>
                     </li>
 
                     <li class="" role="presentation">
@@ -35,7 +35,7 @@
                 </ul>
 
                 <div id="myTabContent" class="tab-content">
-                    <div id="home" class="tab-pane fade {% if zm is not defined %}active in{% endif %}" aria-labelledby="home-tab" role="tabpanel">
+                    <div id="home" class="tab-pane fade {% if (zm is not defined) and (mes is not defined) %}active in{% endif %}" aria-labelledby="home-tab" role="tabpanel">
                         <br>
                         <br>
                         <div class="col-md-5">
@@ -72,6 +72,51 @@
                             <div class="form-group">
                                 <label class="control-label">Фамилия</label>
                                 <input type="text" name="new_surname" value="{{ app.user.surname }}" class=" form-control" required>
+                            </div>
+
+                            <div style="margin-top: 40px;">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="settings" class="tab-pane fade{% if mes is defined %} active in{% endif %}" aria-labelledby="settings-tab" role="tabpanel">
+                        <br>
+                        <br>
+
+                        {% if (mes is defined) and (mes == 0) %}
+                            <div class="message">
+                                Не правильный старый пароль!
+                            </div>
+
+                        {% elseif (mes is defined) and (mes == 1) %}
+                            <div class="message">
+                                Новый пароль и повторенный пароль не совпадают!
+                            </div>
+
+                        {% elseif (mes is defined) and (mes == 2) %}
+                            <div class="message1">
+                                Пароль успешно изменен!
+                            </div>
+
+                        {% endif %}
+
+                        <form method="post" action="{{ path('main_userpage_change_password') }}" style="max-width: 350px; ">
+                            <label class="control-label" style="font-size: 1.1em; margin-bottom: 30px;">Сменить пароль:</label>
+
+                            <div class="form-group">
+                                <span class="control-label">Старый пароль:</span>
+                                <input name="currentPassword" type="password" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="control-label">Новый пароль:</span>
+                                <input name="newPassword" type="password" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="control-label">Повторите новый пароль:</span>
+                                <input name="repeatNewPassword" type="password" class="form-control" required>
                             </div>
 
                             <div style="margin-top: 40px;">

@@ -503,6 +503,28 @@ class User implements UserInterface, \Serializable {
     }
 
     /**
+     * @param EntityManager $em
+     * @param $encoderFactory
+     * @param $user
+     * @param $parameters
+     * @return integer
+     */
+    public static function changePassword($em, $encoderFactory, User $user, $parameters)
+    {
+        $encoder = $encoderFactory->getEncoder($user);
+        $encodedPassword = $encoder->encodePassword($parameters['currentPassword'], $user->getSalt());
+        if ($encodedPassword != $user->getPassword())
+            return 0;
+        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
+            return 1;
+        $usr = $em->getRepository('MainMainBundle:User')->find($user->getId());
+        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
+        $usr->setPassword($newPassword);
+        $em->flush();
+        return 2;
+    }
+
+    /**
      * Set sponsorid
      *
      * @param integer $sponsorid
