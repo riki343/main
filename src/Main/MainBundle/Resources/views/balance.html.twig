@@ -42,16 +42,19 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Вывод средств</h3>
                         </div>
+                         <form action="{{ path('main_withdraw_money') }}" method="post">
+                            <div class="panel-body">
+                                 <div class="input-group">
 
-                        <div class="panel-body">
-                            <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1">$</span>
-                                <input class="form-control" type="text" placeholder="Введите сумму">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">Вывести</button>
-                                </span>
-                            </div>
-                        </div>
+                                     <span class="input-group-addon" id="basic-addon1">$</span>
+                                     <input class="form-control" type="text" placeholder="Введите сумму" name="Amount">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary" type="submit">Вывести</button>
+                                        </span>
+
+                                 </div>
+                             </div>
+                         </form>
                     </div>
                 </div>
 

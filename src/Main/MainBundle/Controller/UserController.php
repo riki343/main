@@ -152,7 +152,7 @@ class UserController extends Controller {
 
             $em->flush();
         }
-        return $this->render('MainMainBundle::userpage.html.twig');
+        return $this->render('MainMainBundle::balance.html.twig');
     }
 
     /**
@@ -179,7 +179,7 @@ class UserController extends Controller {
             UserHistory::addToHistory($em, $user->getId(), $amount, $message);
         }
         $em->flush();
-        return $this->render('MainMainBundle::userpage.html.twig');
+        return $this->render('MainMainBundle::balance.html.twig');
     }
 
     /**
