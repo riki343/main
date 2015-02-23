@@ -131,25 +131,15 @@ class UserController extends Controller {
         /** @var User $user */
         $user = $this->getUser();
         $amount = $request->request->get('Amount');
-        $percent = (0.5 / $amount) * 100;
-        $amount_plus_percent = $amount - $percent;
         $user_balance = $user->getWallet()->getBalance();
         if($user_balance >= $amount) {
-            $user_balance = $user_balance - $amount;
-            $user->getWallet()->setBalance($user_balance);
-            $spend = $user->getStatistics()->getSpentMoney();
-            $spend = $spend + $amount;
-            $user->getStatistics()->setSpentMoney($spend);
-            $earned = $user->getStatistics()->getEarnedMoney();
-            $earned = $earned - $amount;
-            $user->getStatistics()->setEarnedMoney($earned);
+            $user->getWallet()->setBalance($user_balance - $amount);
+            $user->getStatistics()
+                ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
 
-            $globalWallet = $em->getRepository('MainMainBundle:User')->find(1);
-            $globalWallet_wallet = $globalWallet->getWallet()->getBalance();
-            $globalWallet_wallet = $globalWallet_wallet - $amount;
-            $globalWallet->getWallet()->setBalance($globalWallet_wallet);
+            $message = 'Операция по выводу средств на кошелек Perfect Money';
+            UserHistory::addToHistory($em, $user->getId(), $amount, $message);
         }
-        console::log($amount_plus_percent);
         $em->flush();
         return $this->render('MainMainBundle::userpage.html.twig');
     }
