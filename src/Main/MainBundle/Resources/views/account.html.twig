@@ -47,20 +47,9 @@
                                 <dd>{{ app.user.name ~ ' ' ~ app.user.surname }}</dd>
                                 <dt>Email:</dt>
                                 <dd>{{ app.user.email }}</dd>
-                                <dt>Кошелек perfect money</dt>
+                                <dt>Кошелек perfect money:</dt>
                                 <dd>{{ app.user.perfectMoney }}</dd>
                             </dl>
-                        </div>
-                        <div class="col-md-5">
-                            {% if app.user.sponsor != null %}
-                                <h4 class="page-header">Информация про вашего спонсора</h4>
-                                <dl>
-                                    <dt><img src="{{ asset(app.user.sponsor.avatar) }}" style="height:90px;"></dt>
-                                    <br>
-                                    <dt>Имя:</dt>
-                                    <dd>{{ app.user.sponsor.name ~ ' ' ~ app.user.sponsor.surname }}</dd>
-                                </dl>
-                            {% endif %}
                         </div>
                     </div>
 
