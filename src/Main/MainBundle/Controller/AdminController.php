@@ -2,21 +2,13 @@
 
 namespace Main\MainBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Main\MainBundle\Entity\Matrix;
-use Main\MainBundle\Entity\User;
-use Main\MainBundle\Entity\UserHistory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Filesystem\Filesystem;
+
 use Symfony\Component\HttpFoundation\Request;
-
-// |@Route| \\
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-// |@Security| \\
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
-use Main\MainBundle\Extras\ChromePhp as console;
 use Symfony\Component\HttpFoundation\Response;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class AdminController extends Controller
