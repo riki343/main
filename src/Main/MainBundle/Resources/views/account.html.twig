@@ -10,6 +10,8 @@
             <div class="col-lg-12">
                 <h3>Ваш аккаунт</h3><br>
 
+                <!-- List of tabs -->
+
                 <ul id="myTab" class="nav nav-tabs" role="tablist">
                     <li class="{% if (zm is not defined) and (mes is not defined) %}active{% endif %}" role="presentation">
                         <a id="home-tab" aria-expanded="true" aria-controls="home" data-toggle="tab" role="tab" href="#home">Общая информаци</a>
@@ -34,7 +36,14 @@
                     {% endif %}
                 </ul>
 
+                <!-- End list of tabs -->
+
+                <!-- Content of all tabs -->
+
                 <div id="myTabContent" class="tab-content">
+
+                    <!-- Tab of profile -->
+
                     <div id="home" class="tab-pane fade {% if (zm is not defined) and (mes is not defined) %}active in{% endif %}" aria-labelledby="home-tab" role="tabpanel">
                         <br>
                         <br>
@@ -52,6 +61,10 @@
                             </dl>
                         </div>
                     </div>
+
+                    <!-- End Tab of profile -->
+
+                    <!-- Tab of change profile -->
 
                     <div id="changeProfile" class="tab-pane fade" aria-labelledby="changeProfile-tab" role="tabpanel">
                         <br>
@@ -80,32 +93,44 @@
                         </form>
                     </div>
 
+                    <!-- Tab of change profile -->
+
+                    <!-- Tab of settings -->
+
                     <div id="settings" class="tab-pane fade{% if mes is defined %} active in{% endif %}" aria-labelledby="settings-tab" role="tabpanel">
                         <br>
                         <br>
 
-                        {% if (mes is defined) and (mes == 0) %}
+                        <!-- Show alert of error or success-->
+
+                        {% if mes is defined %}
                             <div class="alert alert-warning alert-dismissible fade in" role="alert">
                                 <button class="close" aria-label="Close" data-dismiss="alert" type="button">
                                     <span aria-hidden="true">×</span>
                                 </button>
-                                Не правильный старый пароль!
-                            </div>
-                        {% elseif (mes is defined) and (mes == 1) %}
-                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
-                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                Новый пароль и повторенный пароль не совпадают!
-                            </div>
-                        {% elseif (mes is defined) and (mes == 2) %}
-                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
-                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                Пароль успешно изменен!
+                                {% if mes == 0 %}
+                                    Не правильный старый пароль!
+
+                                {% elseif mes == 1 %}
+                                    Новый пароль и повторенный пароль не совпадают!
+
+                                {% elseif mes == 2 %}
+                                    Пароль успешно изменен!
+
+                                {% elseif mes == 3 %}
+                                    Не правильный Email!
+
+                                {% elseif mes == 4 %}
+                                    Мы отправили вам Email с дальнейшими инструкциями!
+
+                                {% endif %}
+
                             </div>
                         {% endif %}
+
+                        <!-- End alert-->
+
+                        <!-- Change password -->
 
                         <form method="post" action="{{ path('main_userpage_change_password') }}" style="max-width: 350px; ">
                             <label class="control-label" style="font-size: 1.1em; margin-bottom: 30px;">Смена пароля:</label>
@@ -125,11 +150,50 @@
                                 <input name="repeatNewPassword" type="password" class="form-control" required>
                             </div>
 
-                            <div style="margin-top: 40px;">
+                            <div style="margin: 40px 0;">
                                 <button type="submit" class="btn btn-primary">Сохранить</button>
                             </div>
                         </form>
+
+                        <!-- End change password -->
+
+                        <!-- Change ID perfect money from Email -->
+
+                        <a href="#" data-toggle="modal" data-target="#myModal" style="font-size: 1.1em; text-decoration: none;">
+                            Смена perfect money
+                        </a>
+
+                        <!-- Modal window of perfect money-->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel" style="color: #495b79 ">
+                                            Смена perfect money
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{{ path('main_userpage_change_perfect_money') }}">
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="Введите свой Email" name="userEmail" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" class="btn btn-primary" value="Continue" style="margin-top: 10px; margin-bottom: -20px;">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End Change ID perfect money from Email -->
+
                     </div>
+
+                    <!-- End tab of settings -->
+
+                    <!-- Tab of active account -->
 
                     {% if app.user.accountActive == false %}
                     <div id="activeaccaunt" class="tab-pane fade{% if zm is defined %} active in{% endif %}" aria-labelledby="activeaccaunt-tab" role="tabpanel">
@@ -142,7 +206,11 @@
                     </div>
                     {% endif %}
 
+                    <!-- End tab of active account -->
+
                 </div>
+
+                <!-- End content of all tabs -->
 
             </div>
         </div>

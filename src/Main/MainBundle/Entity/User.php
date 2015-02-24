@@ -469,7 +469,7 @@ class User implements UserInterface, \Serializable {
         $user->setRegistered(new \DateTime());
         $user->setLastactive(new \DateTime());
         $user->setActive(false);
-        $user->setPerfectMoney($parameters['perfectMoney']);
+        $user->setPerfectMoney(strtoupper($parameters['perfectMoney']));
         $user->setAvatar('files/default/default-avatar.png');
         $user->setAccountActive(false);
 
@@ -522,6 +522,23 @@ class User implements UserInterface, \Serializable {
         $usr->setPassword($newPassword);
         $em->flush();
         return 2;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param $newPerfectMoney
+     * @return int
+     */
+    public static function changePerfectMoney($em, $user, $newPerfectMoney)
+    {
+        if (strlen($newPerfectMoney) != 8)
+            return 0;
+
+        $usr = $em->getRepository('MainMainBundle:User')->find($user->getId());
+        $usr->setPerfectMoney(strtoupper($newPerfectMoney));
+        $em->flush();
+        return 1;
     }
 
     /**

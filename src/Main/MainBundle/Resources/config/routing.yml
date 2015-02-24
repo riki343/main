@@ -52,6 +52,18 @@ main_userpage_change_password:
     path: /user/change_password
     defaults: { _controller: MainMainBundle:User:changePassword }
 
+main_userpage_change_perfect_money:
+    pattern: /user/change_perfect_money
+    defaults: { _controller: MainMainBundle:User:changePerfectMoney }
+
+main_userpage_change_perfect_money_page:
+    pattern: /user/change_perfect_money/{keyForAccess}
+    defaults: { _controller: MainMainBundle:User:changePerfectMoneyChange }
+
+main_userpage_change_perfect_money_page_save:
+    path: /user/change_perfect_money_save
+    defaults: { _controller: MainMainBundle:User:changePerfectMoneySave }
+
 main_activate_acount:
     path: /user/activateAcount
     defaults: { _controller: MainMainBundle:User:activateAcount }

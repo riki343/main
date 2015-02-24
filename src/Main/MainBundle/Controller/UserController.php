@@ -3,6 +3,7 @@
 namespace Main\MainBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Main\MainBundle\Entity\KeysForAccess;
 use Main\MainBundle\Entity\Matrix;
 use Main\MainBundle\Entity\User;
 use Main\MainBundle\Entity\UserHistory;
@@ -17,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Main\MainBundle\Extras\ChromePhp as console;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller {
 
@@ -137,6 +139,79 @@ class UserController extends Controller {
         if ($status == 1)
             return $this->render('MainMainBundle::account.html.twig', array('mes' => 1));
         return $this->render('MainMainBundle::account.html.twig', array('mes' => 2));
+    }
+
+    /**
+     * @Route("/user/change_perfect_money", name="main_userpage_change_perfect_money")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public function changePerfectMoneyAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $enteredEmail = $request->request->get('userEmail');
+        if ($user->getEmail() != $enteredEmail)
+            return $this->render('MainMainBundle::account.html.twig', array('mes' => 3));
+
+        $em = $this->getDoctrine()->getManager();
+        $keyForAccess = KeysForAccess::addKeyForPerfectMoney($em, $user);
+
+        $link = $this->get('router')->generate('main_userpage_change_perfect_money_page', array('keyForAccess' => $keyForAccess), true);
+
+        $message = "Dear, " . $user->getName();
+        $message .= "<br><br> для того чтобы изменить свой Perfect money<br> перейдите по следующей ссылке: <br>" . $link;
+        $mailer = $this->get('mailer');
+        try {
+            $message = $mailer->createMessage()
+                ->setSubject('Смена Perfect money!')
+                ->setFrom('')
+                ->setTo($user->getEmail())
+                ->setBody($message, 'text/html');
+            $mailer->send($message);
+        } catch (\Swift_RfcComplianceException $ex) { }
+        return $this->render('MainMainBundle::account.html.twig', array('mes' => 4));
+    }
+
+
+    /**
+     * @Route("/user/change_perfect_money/{keyForAccess}", name="main_userpage_change_perfect_money_page")
+     * @Security("has_role('USER_ROLE')")
+     * @param string $keyForAccess
+     * @return Response $response
+     */
+    public function changePerfectMoneyChangeAction($keyForAccess)
+    {
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForPerfectMoney' => $keyForAccess));
+        if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
+        $userid = $recordFromKey->getUserid();
+        $em = $this->getDoctrine()->getManager();
+        $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
+        foreach ($allRecords as $record)
+            $em->remove($record);
+        $em->flush();
+        return $this->render('MainMainBundle::changePerfectMoney.html.twig');
+    }
+
+    /**
+     * @Route("/user/change_perfect_money_save", name="main_userpage_change_perfect_money_page_save")
+     * @Security("has_role('USER_ROLE')")
+     * @param Request $request
+     * @return Response $response
+     */
+    public function changePerfectMoneySaveAction(Request $request)
+    {
+        $user = $this->getUser();
+        $newPerfectMoney = $request->request->get('newPerfectMoney');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $status = User::changePerfectMoney($em, $user, $newPerfectMoney);
+        if ($status == 0)
+            return $this->render('MainMainBundle::changePerfectMoney.html.twig', array('zm' => 0));
+        return $this->render('MainMainBundle::changePerfectMoney.html.twig', array('zm' => 1));
     }
 
     /**
