@@ -4,9 +4,7 @@ namespace Main\MainBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use Main\MainBundle\Extras\ChromePhp as console;
 
 /**
  * Matrix
