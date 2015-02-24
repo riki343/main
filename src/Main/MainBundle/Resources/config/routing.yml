@@ -67,3 +67,7 @@ main_balance:
 main_admin_panel:
     path: /admin
     defaults: { _controller: MainMainBundle:Admin:index }
+
+main_invest_money:
+    path: /user/investMoney
+    defaults: { _controller: MainMainBundle:User:investMoney }

@@ -133,16 +133,7 @@
 
                     {% if app.user.accountActive == false %}
                     <div id="activeaccaunt" class="tab-pane fade{% if zm is defined %} active in{% endif %}" aria-labelledby="activeaccaunt-tab" role="tabpanel">
-                        <br><br>
-                        <blockquote style="margin:10px;">
-                            <h4>Стоимость активации аккаунта составляет 21.00$ +
-                                <span style="color: red;">комиссия perfect money</span>
-                            </h4>
-                            <footer>
-                                Оплата активации акаунта происходит с вашего внутренного баланса, для этого на нем должна быть необходимая сумма. Активация аккаунта выполняеться единоразово
-                            </footer>
-                        </blockquote>
-                        <br><br>
+
                         <p style="text-align: left;">
                             <form method="post" action="{{ path('main_activate_acount') }}">
                                 <button type="submit" class="btn btn-primary">Активировать аккаунт</button>

@@ -147,12 +147,14 @@ class UserController extends Controller {
      */
     public function activateAcountAction(Request $request)
     {
+
         /** @var User $user */
         $user = $this->getUser();
 
         $activation = $user->getAccountActive();
         $userwallet = $user->getWallet()->getBalance();
-        if($activation == false && $userwallet >= 21) {
+
+        if ($activation == false && $userwallet >= 21) {
 
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
@@ -169,7 +171,7 @@ class UserController extends Controller {
             /** @var User $parrentId1lvl */
             $parrentId1lvl = $user;
             $notifier = $this->get('main.notifier');
-            for($i = 0; $i < 7; $i++) {
+            for ($i = 0; $i < 7; $i++) {
                 $parrent_1lvl = $em->getRepository('MainMainBundle:User')->find($parrentId1lvl->getSponsorid());
                 if ($parrent_1lvl && $parrent_1lvl->getId() == 1) {
                     $parrent_1lvl->childAccountActivate($user, (7 - $i) * 3, $em, $notifier);
@@ -183,8 +185,11 @@ class UserController extends Controller {
             }
 
             $em->flush();
+            return $this->render('MainMainBundle::balance.html.twig', array(
+                'err_cash' => "Поздравляем, активация прошла успешно  !!!"));
         }
-        return $this->render('MainMainBundle::balance.html.twig');
+        return $this->render('MainMainBundle::balance.html.twig', array(
+            'err_cash' => "На вашем счету, в системе, не достаточно денег!!!"));
     }
 
     /**
@@ -197,22 +202,76 @@ class UserController extends Controller {
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-
         /** @var User $user */
         $user = $this->getUser();
         $amount = $request->request->get('Amount');
         $user_balance = $user->getWallet()->getBalance();
-        if($user_balance >= $amount) {
-            $user->getWallet()->setBalance($user_balance - $amount);
-            $user->getStatistics()
-                ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
+        if($user_balance >= $amount+($amount*0.02)) {
 
-            $message = 'Операция по выводу средств на кошелек Perfect Money';
-            UserHistory::addToHistory($em, $user->getId(), $amount, $message);
+            $AccountID =  '8582760';
+            $PassPhrase = '2593509desk';
+            $payer_Account = 'U8339302';
+            $payee_Account = $user->getPerfectMoney(); //акаунт перфект моней
+            $payment_id = rand(1,9999);
+
+            $f_invest=fopen('https://perfectmoney.is/acct/confirm.asp?'
+                . 'AccountID=' . $AccountID . '&'
+                . 'PassPhrase=' . $PassPhrase . '&'
+                .'Payer_Account=' . $payer_Account . '&'
+                . 'Payee_Account=' . $payee_Account . '&'
+                . 'Amount='.$amount . '&'
+                . 'PAY_IN=1&'
+                . 'PAYMENT_ID=' . $payment_id, 'rb');
+
+            if($f_invest===false)
+            {
+                echo 'error openning url';
+            }
+            $out_invest=array(); $out_invest="";
+            while(!feof($f_invest)) $out_invest.=fgets($f_invest);
+            fclose($f_invest);
+            if(!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $out_invest, $result_invest, PREG_SET_ORDER))
+            {
+                echo 'Ivalid output';
+                exit;
+            }
+            $ar_invest="";
+            foreach($result_invest as $item_invest)
+            {
+                $key_invest=$item_invest[1];
+                $ar_invest[$key_invest]=$item_invest[2];
+            }
+            if(array_key_exists('ERROR',$ar_invest))
+            {
+                if($ar_invest['ERROR'] == 'Not enough money to pay')
+                {
+                    return $this->render('MainMainBundle::balance.html.twig'
+                        , array(
+                            'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                }
+                else {
+                    return $this->render('MainMainBundle::balance.html.twig'
+                        , array(
+                            'err_cash' => $ar_invest['ERROR']));
+                }
+            }
+            else {
+
+                $user->getWallet()->setBalance($user_balance -( $amount+($amount * 0.02)));
+                $user->getStatistics()
+                    ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
+
+                $message = 'Операция по выводу средств на кошелек Perfect Money';
+                UserHistory::addToHistory($em, $user->getId(), $amount, $message);
+                $em->flush();
+
+                return $this->render('MainMainBundle::balance.html.twig', array(
+                    'err_cash' => "Операция по выводу средств на кошелек Perfect Money на сумму ".$amount.'$ успешно проведена!!!'));
+
+            }
         }
-        $em->flush();
-
-        return $this->render('MainMainBundle::balance.html.twig');
+        return $this->render('MainMainBundle::balance.html.twig', array(
+            'err_cash' => "На вашем счету, в системе, не достаточно денег!!!"));
     }
 
     /**
@@ -220,7 +279,115 @@ class UserController extends Controller {
      * @Security("has_role('USER_ROLE')")
      * @return Response $response
      */
-    public function balanceAction() {
+    public function balanceAction(Request $request) {
         return $this->render('@MainMain/balance.html.twig');
+    }
+
+    /**
+     * @Route("/user/investMoney", name="main_invest_money")
+     * @Security("has_role('USER_ROLE')")
+     * @return Response $response
+     */
+    public function investMoneyAction(Request $request)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+       $AccountID =  $request->request->get('AccountID');
+       $PassPhrase = $request->request->get('PassPhrase');
+       $Amount = $request->request->get('Amount');
+        $f=fopen('https://perfectmoney.is/acct/balance.asp?AccountID='.$AccountID.'&PassPhrase='.$PassPhrase, 'rb');
+        if($f===false){
+            return $this->render('MainMainBundle::balance.html.twig'
+                , array(
+                    'err_cash' => "Ошыбка не правильный путь!!!"));
+        }
+        $out=array(); $out="";
+        while(!feof($f)) $out.=fgets($f);
+        fclose($f);
+        if(!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $out, $result, PREG_SET_ORDER)){
+            return $this->render('MainMainBundle::balance.html.twig'
+                , array(
+                    'err_cash' => "Не пытайтесь нас взламать - это наказывается законом!!!"));
+        }
+        $ar="";
+        foreach($result as $item){
+            $key=$item[1];
+            $ar[$key]=$item[2];
+        }
+        if(array_key_exists('ERROR',$ar))
+        {
+            if($ar['ERROR'] == 'Can not login with passed AccountID and PassPhrase')
+            {
+                return $this->render('MainMainBundle::balance.html.twig'
+                    , array(
+                        'err_cash' => 'Не правильный пароль или логин'));
+            }
+            else {
+                return $this->render('MainMainBundle::balance.html.twig'
+                    , array(
+                        'err_cash' => $ar['ERROR']));
+            }
+         }
+        else
+        {
+            $payer_Account = $user->getPerfectMoney(); //акаунт перфект моней
+            $content_Account = $ar[$payer_Account]; //содержымое аккаунта
+            $payee = $em->getRepository('MainMainBundle:User')->find(1);
+            $payee_Account = $payee->getPerfectMoney(); //счет глобального кошелька
+            $payment_id = rand(1,9999);
+            $f_invest=fopen('https://perfectmoney.is/acct/confirm.asp?'
+                . 'AccountID=' . $AccountID . '&'
+                . 'PassPhrase=' . $PassPhrase . '&'
+                .'Payer_Account=' . $payer_Account . '&'
+                . 'Payee_Account=' . $payee_Account . '&'
+                . 'Amount='.$Amount . '&'
+                . 'PAY_IN=1&'
+                . 'PAYMENT_ID=' . $payment_id, 'rb');
+
+            if($f_invest===false)
+                {
+                    echo 'error openning url';
+                }
+            $out_invest=array(); $out_invest="";
+            while(!feof($f_invest)) $out_invest.=fgets($f_invest);
+            fclose($f_invest);
+            if(!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $out_invest, $result_invest, PREG_SET_ORDER))
+                {
+                    echo 'Ivalid output';
+                    exit;
+                }
+            $ar_invest="";
+            foreach($result_invest as $item_invest)
+                {
+                    $key_invest=$item_invest[1];
+                    $ar_invest[$key_invest]=$item_invest[2];
+                }
+            if(array_key_exists('ERROR',$ar_invest))
+            {
+                if($ar_invest['ERROR'] == 'Not enough money to pay')
+                {
+                    return $this->render('MainMainBundle::balance.html.twig'
+                        , array(
+                            'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                }
+                else {
+                    return $this->render('MainMainBundle::balance.html.twig'
+                        , array(
+                            'err_cash' => $ar_invest['ERROR']));
+                }
+            }
+            else
+            {
+              $balance = $user->getWallet()->getBalance();
+                $balance = $balance + $Amount;
+                $user->getWallet()->setBalance($balance);
+                $em->flush();
+                return $this->render('MainMainBundle::balance.html.twig', array(
+                    'err_cash' => 'Поздравляем! Вы внесли в систему '.$Amount.'$ !'));
+            }
+        }
+
     }
 }
