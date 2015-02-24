@@ -10,6 +10,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Дамп структуры базы данных main
+CREATE DATABASE IF NOT EXISTS `main` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `main`;
+
+
 -- Дамп структуры для таблица main.admin_record
 CREATE TABLE IF NOT EXISTS `admin_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -92,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы main.roles: ~2 rows (приблизительно)
+-- Дамп данных таблицы main.roles: ~3 rows (приблизительно)
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` (`id`, `name`) VALUES
 	(1, 'USER_ROLE'),
