@@ -3,6 +3,7 @@
 namespace Main\MainBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Main\MainBundle\Entity\AdminRecord;
 use Main\MainBundle\Entity\KeysForAccess;
 use Main\MainBundle\Entity\Matrix;
 use Main\MainBundle\Entity\User;
@@ -282,10 +283,10 @@ class UserController extends Controller {
         $amount = $request->request->get('Amount');
         $user_balance = $user->getWallet()->getBalance();
         if($user_balance >= $amount+($amount*0.02)) {
-
-            $AccountID =  '8582760';
-            $PassPhrase = '2593509desk';
-            $payer_Account = 'U8339302';
+            $global = AdminRecord::getGlobalWallet($em);
+            $AccountID =  $global['AccountID'];
+            $PassPhrase =  $global['PassPhrase'];
+            $payer_Account =  $global['Wallet'];
             $payee_Account = $user->getPerfectMoney(); //акаунт перфект моней
             $payment_id = rand(1,9999);
 
@@ -333,6 +334,7 @@ class UserController extends Controller {
             else {
 
                 $user->getWallet()->setBalance($user_balance -( $amount+($amount * 0.02)));
+                AdminRecord::removeFromGlobal($em,$amount+($amount * 0.02));
                 $user->getStatistics()
                     ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
 
@@ -409,8 +411,8 @@ class UserController extends Controller {
         {
             $payer_Account = $user->getPerfectMoney(); //акаунт перфект моней
             $content_Account = $ar[$payer_Account]; //содержымое аккаунта
-            $payee = $em->getRepository('MainMainBundle:User')->find(1);
-            $payee_Account = $payee->getPerfectMoney(); //счет глобального кошелька
+            $payee = AdminRecord::getGlobalWallet($em) ;
+            $payee_Account = $payee['Wallet'];//счет глобального кошелька
             $payment_id = rand(1,9999);
             $f_invest=fopen('https://perfectmoney.is/acct/confirm.asp?'
                 . 'AccountID=' . $AccountID . '&'
@@ -458,6 +460,7 @@ class UserController extends Controller {
               $balance = $user->getWallet()->getBalance();
                 $balance = $balance + $Amount;
                 $user->getWallet()->setBalance($balance);
+                AdminRecord::addToGlobal($em,$Amount);
                 $em->flush();
                 return $this->render('MainMainBundle::balance.html.twig', array(
                     'err_cash' => 'Поздравляем! Вы внесли в систему '.$Amount.'$ !'));
