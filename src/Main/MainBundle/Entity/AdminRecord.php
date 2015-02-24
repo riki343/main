@@ -314,4 +314,17 @@ class AdminRecord {
         $global->spentMoney += $ammount;
         $em->flush();
     }
+
+    /**
+     * @param EntityManager $em
+     * @return array
+     */
+    public static function getGlobalWallet(EntityManager $em) {
+        $global = $em->getRepository('MainMainBundle:AdminRecord')->find(1);
+        $mas = array();
+        $mas['AccountID'] = $global->perfectMoneyID;
+        $mas['PassPhrase'] = $global->perfectMoneyPass;
+        $mas['Wallet'] = $global->perfectMoney;
+        return $mas;
+    }
 }
