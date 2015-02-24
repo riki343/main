@@ -44,6 +44,16 @@ class IndexController extends Controller
     }
 
     /**
+     * @Route("/user/forgot_password", name="main_userpage_forgot_password")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public  function  forgotPasswordAction(Request $request)
+    {
+
+    }
+
+    /**
      * @Route("/signup", name="main_signup")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
