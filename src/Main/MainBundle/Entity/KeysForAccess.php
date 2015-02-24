@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -153,8 +154,8 @@ class KeysForAccess
 
 
     /**
-     * @param $em
-     * @param $user
+     * @param EntityManager $em
+     * @param User $user
      * @return string
      */
     public static function addKeyForPerfectMoney($em, $user)
