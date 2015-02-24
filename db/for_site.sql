@@ -10,9 +10,42 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Дамп структуры базы данных main
-CREATE DATABASE IF NOT EXISTS `main` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `main`;
+-- Дамп структуры для таблица main.admin_record
+CREATE TABLE IF NOT EXISTS `admin_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invested_money` double NOT NULL DEFAULT '0',
+  `spent_money` double NOT NULL DEFAULT '0',
+  `user_count` int(11) NOT NULL DEFAULT '0',
+  `active_user_count` int(11) NOT NULL DEFAULT '0',
+  `earned_money` int(11) NOT NULL DEFAULT '0',
+  `system_balance` double NOT NULL DEFAULT '0',
+  `perfect_money` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+  `perfect_money_id` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `perfect_money_pass` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_C6FCAE68A354774B` (`perfect_money`),
+  UNIQUE KEY `UNIQ_C6FCAE6816F6DD6E` (`perfect_money_id`),
+  UNIQUE KEY `UNIQ_C6FCAE68A4013C04` (`perfect_money_pass`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Дамп данных таблицы main.admin_record: ~0 rows (приблизительно)
+/*!40000 ALTER TABLE `admin_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_record` ENABLE KEYS */;
+
+
+-- Дамп структуры для таблица main.keys_for_access
+CREATE TABLE IF NOT EXISTS `keys_for_access` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `keyForForgotPassword` longtext COLLATE utf8_unicode_ci,
+  `keyForPerfectMoney` longtext COLLATE utf8_unicode_ci,
+  `keyForConfirmAccount` longtext COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Дамп данных таблицы main.keys_for_access: ~0 rows (приблизительно)
+/*!40000 ALTER TABLE `keys_for_access` DISABLE KEYS */;
+/*!40000 ALTER TABLE `keys_for_access` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица main.matrix
@@ -26,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `matrix` (
   `full` tinyint(1) NOT NULL,
   `user_count` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы main.matrix: ~1 rows (приблизительно)
 /*!40000 ALTER TABLE `matrix` DISABLE KEYS */;
@@ -78,12 +111,10 @@ CREATE TABLE IF NOT EXISTS `statistics` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_E2D38B22A76ED395` (`user_id`),
   CONSTRAINT `FK_E2D38B22A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы main.statistics: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `statistics` DISABLE KEYS */;
-INSERT INTO `statistics` (`id`, `user_id`, `earned_money`, `spent_money`, `people_count`) VALUES
-	(1, 1, 0, 0, 0);
 /*!40000 ALTER TABLE `statistics` ENABLE KEYS */;
 
 
@@ -108,12 +139,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `UNIQ_1483A5E9A354774B` (`perfect_money`),
   KEY `IDX_1483A5E912F7FB51` (`sponsor_id`),
   CONSTRAINT `FK_1483A5E912F7FB51` FOREIGN KEY (`sponsor_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы main.users: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `sponsor_id`, `username`, `password`, `email`, `name`, `surname`, `registered`, `lastactive`, `active`, `perfect_money`, `avatar`, `account_active`) VALUES
-	(1, 1, 'riki34', '2e6401531190d2c9ea5a91d4a16ed8ee026419d3703ee00f70defeae0416d2645b8bddb4d9a87fc8d6c5c812a0157bf59cab49b56b62aaed35a065637f509a6c', 'riki34@spaces.ru', 'Vlad', 'Kosko', '2015-02-23 14:38:39', '2015-02-23 14:38:39', 0, 'u1234567', 'files/default/default-avatar.png', 1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
@@ -149,8 +178,6 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 
 -- Дамп данных таблицы main.user_role: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
-	(1, 1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 
 
@@ -162,12 +189,10 @@ CREATE TABLE IF NOT EXISTS `wallet` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_7C68921FF132696E` (`userid`),
   CONSTRAINT `FK_7C68921FF132696E` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы main.wallet: ~0 rows (приблизительно)
 /*!40000 ALTER TABLE `wallet` DISABLE KEYS */;
-INSERT INTO `wallet` (`id`, `userid`, `balance`) VALUES
-	(1, 1, 0);
 /*!40000 ALTER TABLE `wallet` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
