@@ -2,6 +2,7 @@
 
 namespace Main\MainBundle\Controller;
 
+use Main\MainBundle\Entity\AdminRecord;
 use Main\MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -35,6 +36,7 @@ class IndexController extends Controller
             )
         );
     }
+
 
     /**
      * @Route("/login_check", name="login_check")
@@ -108,6 +110,9 @@ class IndexController extends Controller
         );
 
         User::addUser($em, $this->get('security.encoder_factory'), $parameters);
+
+        AdminRecord::addNewUser($em);
+
         return $this->redirectToRoute('main_login');
     }
 }

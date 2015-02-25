@@ -327,4 +327,22 @@ class AdminRecord {
         $mas['Wallet'] = $global->perfectMoney;
         return $mas;
     }
+
+    /**
+     * @param EntityManager $em
+     */
+    public static function addNewUser(EntityManager $em) {
+        $global = $em->getRepository('MainMainBundle:AdminRecord')->find(1);
+        $global->userCount++;
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     */
+    public static function addNewActiveUser(EntityManager $em) {
+        $global = $em->getRepository('MainMainBundle:AdminRecord')->find(1);
+        $global->activeUserCount++;
+        $em->flush();
+    }
 }

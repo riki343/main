@@ -260,6 +260,8 @@ class UserController extends Controller {
                 $parrentId1lvl = $parrent_1lvl;
             }
 
+            AdminRecord::addNewActiveUser($em); // For admin statistics
+
             $em->flush();
             return $this->render('MainMainBundle::balance.html.twig', array(
                 'err_cash' => "Поздравляем, активация прошла успешно  !!!"));
