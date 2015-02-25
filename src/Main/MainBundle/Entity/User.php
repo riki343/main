@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Main\MainBundle\Services\Notifier;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Main\MainBundle\Extras\ChromePhp as console;
 
 /**
  * User

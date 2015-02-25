@@ -1,10 +1,10 @@
 parameters:
   database_driver: pdo_mysql
   database_host: 127.0.0.1
-  database_port: null
+  database_port: ~
   database_name: main
   database_user: main
-  database_password: '123456'
+  database_password: 123456
 
   mailer_transport: smtp
   mailer_host: mail.easytoinvest.net

@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Main\MainBundle\Extras\ChromePhp as console;
 
 class IndexController extends Controller
 {
