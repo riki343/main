@@ -26,6 +26,12 @@ class IndexController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $error = $authenticationUtils->getLastAuthenticationError();
+        if ($error && $error->getMessageKey() == 'Invalid credentials.') {
+            $error = 'Неправильный логин или пароль!';
+        } else if ($error) {
+            $error = $error->getMessageKey();
+        }
+
 
         $lastUsername = $authenticationUtils->getLastUsername();
 
