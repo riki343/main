@@ -542,6 +542,47 @@ class User implements UserInterface, \Serializable {
     }
 
     /**
+     * @param EntityManager $em
+     * @param $encoderFactory
+     * @param User $user
+     * @param $parameters
+     * @return int
+     */
+    public static function forgotPassword($em, $encoderFactory, $user, $parameters)
+    {
+        $encoder = $encoderFactory->getEncoder($user);
+        $encodedPassword = $encoder->encodePassword($parameters['currentPassword'], $user->getSalt());
+        if ($encodedPassword != $user->getPassword())
+            return 0;
+        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
+            return 1;
+        $usr = $em->getRepository('IntranetMainBundle:User')->find($user->getId());
+        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
+        $usr->setPassword($newPassword);
+        $em->flush();
+        return 2;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $encoderFactory
+     * @param User $user
+     * @param $parameters
+     * @return int
+     */
+    public static function resetPassword($em, $encoderFactory, $user, $parameters)
+    {
+        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
+            return 0;
+        $encoder = $encoderFactory->getEncoder($user);
+        $usr = $em->getRepository('MainMainBundle:User')->find($user->getId());
+        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
+        $usr->setPassword($newPassword);
+        $em->flush();
+        return 1;
+    }
+
+    /**
      * Set sponsorid
      *
      * @param integer $sponsorid

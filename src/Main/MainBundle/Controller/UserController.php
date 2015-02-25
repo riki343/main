@@ -156,13 +156,14 @@ class UserController extends Controller {
         if ($user->getEmail() != $enteredEmail)
             return $this->render('MainMainBundle::account.html.twig', array('mes' => 3));
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $keyForAccess = KeysForAccess::addKeyForPerfectMoney($em, $user);
 
         $link = $this->get('router')->generate('main_userpage_change_perfect_money_page', array('keyForAccess' => $keyForAccess), true);
 
         $message = "Dear, " . $user->getName();
-        $message .= "<br><br> для того чтобы изменить свой Perfect money<br> перейдите по следующей ссылке: <br>" . $link;
+        $message .= "<br><br> Чтобы изменить свой Perfect money, <br> перейдите по следующей ссылке: <br>" . $link;
         $mailer = $this->get('mailer');
         try {
             $message = $mailer->createMessage()

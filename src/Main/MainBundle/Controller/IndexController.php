@@ -2,7 +2,9 @@
 
 namespace Main\MainBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Main\MainBundle\Entity\AdminRecord;
+use Main\MainBundle\Entity\KeysForAccess;
 use Main\MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -14,14 +16,13 @@ use Main\MainBundle\Extras\ChromePhp as console;
 
 class IndexController extends Controller
 {
-    public function indexAction() {
-        return $this->render('MainMainBundle::home.html.twig');
-    }
-
     /**
      * @Route("/login", name="login_route")
+     * @param Request $request
+     * @param null $param
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loginAction(Request $request)
+    public function loginAction(Request $request, $param = null)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
@@ -34,6 +35,8 @@ class IndexController extends Controller
 
 
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        if ($param != null) $error = $param;
 
         return $this->render('MainMainBundle::login.html.twig',
             array(
@@ -58,7 +61,73 @@ class IndexController extends Controller
      */
     public  function  forgotPasswordAction(Request $request)
     {
+        $enteredEmail = $request->request->get('userEmail');
+        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneBy(array('email' =>$enteredEmail));
+        if ($user == null)
+            return $this->forward('MainMainBundle:Index:login', array('param' => "Не найден Email!"));
 
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $keyForAccess = KeysForAccess::addKeyForForgotPassword($em, $user);
+
+        $link = $this->get('router')->generate('main_reset_password_page', array('keyForAccess' => $keyForAccess) ,true);
+
+        $message = "Dear, " . $user->getName();
+        $message .= "<br><br> Чтобы восстановить свой пароль, <br> перейдите по следующей ссылке: <br>" . $link;
+        $mailer = $this->get('mailer');
+        try {
+            $message = $mailer->createMessage()
+                ->setSubject('Восстановление пароля!')
+                ->setFrom('')
+                ->setTo($user->getEmail())
+                ->setBody($message, 'text/html');
+            $mailer->send($message);
+        } catch (\Swift_RfcComplianceException $ex) { }
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Мы отправили вам Email с дальнейшими инструкциями!"));
+    }
+
+    /**
+     * @param Request $request
+     * @param $keyForAccess
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function resetPasswordAction(Request $request, $keyForAccess)
+    {
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForForgotPassword' => $keyForAccess));
+        if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
+        $userid = $recordFromKey->getUserid();
+        $em = $this->getDoctrine()->getManager();
+        $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
+        //foreach ($allRecords as $record)
+            //$em->remove($record);
+        $em->flush();
+        return $this->render("MainMainBundle::resetPassword.html.twig", array('userid' => $userid));
+    }
+
+    /**
+     * @param Request $request
+     * @param $userid
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function resetPasswordSaveAction(Request $request, $userid)
+    {
+        $newPassword = $request->request->get('newPassword');
+        $repeatNewPassword = $request->request->get('repeatNewPassword');
+
+        $parameters = array(
+            'newPassword' => $newPassword,
+            'repeatNewPassword' => $repeatNewPassword
+        );
+
+        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->find($userid);
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $status = User::resetPassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+
+        if ($status == 0)
+            return $this->render("MainMainBundle::resetPassword.html.twig", array('userid' => $userid, 'zm' => 0));
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Пароль успешно изменен!"));
     }
 
     /**

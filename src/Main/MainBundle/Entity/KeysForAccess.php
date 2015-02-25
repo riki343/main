@@ -173,4 +173,25 @@ class KeysForAccess
 
         return $keyForAccess;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @return string
+     */
+    public static function addKeyForForgotPassword($em, $user)
+    {
+        $newRecord = new KeysForAccess();
+
+        $datetime = new \DateTime();
+        srand($datetime->format('s'));
+        $keyForAccess = md5(rand(1000, 100000));
+
+        $newRecord->setUserid($user->getId());
+        $newRecord->setKeyForForgotPassword($keyForAccess);
+        $em->persist($newRecord);
+        $em->flush();
+
+        return $keyForAccess;
+    }
 }

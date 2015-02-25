@@ -17,6 +17,18 @@ main_login:
     path: /login
     defaults: { _controller: MainMainBundle:Index:login }
 
+main_login_forgot_password:
+    pattern: /login/forgot_password
+    defaults: { _controller: MainMainBundle:Index:forgotPassword }
+
+main_reset_password_page:
+    pattern: /reset_password/{keyForAccess}
+    defaults: { _controller: MainMainBundle:Index:resetPassword }
+
+main_reset_password_save:
+    pattern: /reset_password_save/{userid}
+    defaults: { _controller: MainMainBundle:Index:resetPasswordSave }
+
 main_login_check:
     path: /login_check
     defaults: { _controller: MainMainBundle:Index:loginCheck }
@@ -63,10 +75,6 @@ main_userpage_change_perfect_money_page:
 main_userpage_change_perfect_money_page_save:
     path: /user/change_perfect_money_save
     defaults: { _controller: MainMainBundle:User:changePerfectMoneySave }
-
-main_userpage_forgot_password:
-    pattern: /user/forgot_password
-    defaults: { _controller: MainMainBundle:Index:forgotPasswrod }
 
 main_activate_acount:
     path: /user/activateAcount

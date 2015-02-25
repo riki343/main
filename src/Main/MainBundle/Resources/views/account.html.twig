@@ -25,10 +25,6 @@
                         <a id="settings-tab" aria-controls="settings" data-toggle="tab" role="tab" href="#settings" aria-expanded="false">Настройки</a>
                     </li>
 
-                    <li class="" role="presentation">
-                        <a id="profile-tab" aria-controls="profile" data-toggle="tab" role="tab" href="#profile" aria-expanded="false">Безопасность</a>
-                    </li>
-
                     {% if app.user.accountActive == false %}
                     <li class="{% if zm is defined %}active{% endif %}" role="presentation">
                         <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="false">Активация аккаунта</a>
