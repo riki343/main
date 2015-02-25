@@ -87,3 +87,7 @@ main_admin_panel:
 main_invest_money:
     path: /user/investMoney
     defaults: { _controller: MainMainBundle:User:investMoney }
+
+main_admin_change_perfect_money:
+    path: /admin/change_perfect_money
+    defaults: { _controller: MainMainBundle:Admin:changePerfectMoneySettings }

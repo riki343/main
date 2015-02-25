@@ -3,52 +3,130 @@
 {% block title %}Admin Panel{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <h3 class="page-header">Админ панель</h3> <br>
-
-            <div class="col-md-4 yourbalans">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">На вашем балансе:</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                {% if success is defined %}
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        {% if success == 1 %}
+                            {{ 'Операция выполнена успешно' }}
+                        {% endif %}
                     </div>
-                    <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;"> {{ app.user.wallet.balance }}$</h2> </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 yourbalans">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">На вашем балансе:</h3>
+                {% elseif error is defined %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        {% if error == 1 %}
+                            {{ 'ID введен неверно' }}
+                        {% elseif error == 2 %}
+                            {{ 'Пароль не может быть пустым' }}
+                        {% elseif error == 3 %}
+                            {{ 'Кошелек введен неверно' }}
+                        {% endif %}
                     </div>
-                    <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;"> {{ app.user.wallet.balance }}$</h2> </div>
-                </div>
-            </div>
+                {% endif %}
 
-            <div class="col-md-4 yourbalans">
+                <h3 class="page-header">Админ панель</h3> <br>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">На вашем балансе:</h3>
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Инвестировано денег:</h3>
+                        </div>
+                        <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.investedMoney }}$
+                            </h2>
+                        </div>
                     </div>
-                    <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;"> {{ app.user.wallet.balance }}$</h2> </div>
                 </div>
-            </div>
 
-            <div class="col-md-4 yourbalans">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">На вашем балансе:</h3>
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Выведено денег:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.spentMoney }}$
+                            </h2> </div>
                     </div>
-                    <div class="panel-body"><h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;"> {{ app.user.wallet.balance }}$</h2> </div>
                 </div>
-            </div>
 
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Заработано денег:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.earnedMoney }}$
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Системный баланс:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.systemBalance }}$
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Зарегистрировано пользователей:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.userCount }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 yourbalans">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Активированых пользователей:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="text-center" style="color:green; margin-bottom: 0; margin-top: 0;">
+                                {{ adminRecord.activeUserCount }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-header"><h3>Настройки Perfect Money</h3></div>
+                <form class="form-horizontal col-md-4" autocomplete="off" action="{{ path('main_admin_change_perfect_money') }}" method="post">
+                    <div class="form-group">
+                        <input type="text" id="id" name="id" class="form-control" pattern="[0-9]{5,10}" value="" placeholder="ID" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="pass" name="pass" class="form-control" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" value="" placeholder="Пароль" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="wallet" name="wallet" class="form-control" pattern="[Uu]{1}[0-9]{7}" value="" placeholder="Кошелек" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="form-control btn-primary">
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

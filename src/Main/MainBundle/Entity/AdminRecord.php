@@ -330,6 +330,14 @@ class AdminRecord {
 
     /**
      * @param EntityManager $em
+     * @return AdminRecord
+     */
+    public static function getAdminWallet(EntityManager $em) {
+        return $em->getRepository('MainMainBundle:AdminRecord')->find(1);
+    }
+
+    /**
+     * @param EntityManager $em
      */
     public static function addNewUser(EntityManager $em) {
         $global = $em->getRepository('MainMainBundle:AdminRecord')->find(1);
