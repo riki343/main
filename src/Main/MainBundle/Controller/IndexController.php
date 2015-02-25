@@ -195,7 +195,7 @@ class IndexController extends Controller
         $message = "Dear, " . $username;
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
-        $this->get('main.notifier')->sendNotificationToEmail($email, $message);
+        $this->get('main.notifier')->sendNotificationToEmail($email, $message, "easytoinvest.net Подтверждение Email");
 
         return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно зарегестрировались. На ваш Email отправлено письмо, по которому вам нужно подтвердить свой Email!"));
     }
@@ -236,7 +236,7 @@ class IndexController extends Controller
         $message = "Dear, " . $user->getUsername();
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
-        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message);
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Подтверждение Email");
 
         return $this->render('MainMainBundle::account.html.twig', array('sendToEmail' => ""));
     }

@@ -25,13 +25,14 @@ class Notifier {
     /**
      * @param $myEmail
      * @param $message
+     * @param $subject
      */
-    public function sendNotificationToEmail($myEmail, $message)
+    public function sendNotificationToEmail($myEmail, $message, $subject)
     {
         try {
             $message = \Swift_Message::newInstance()
-                ->setSubject('notification!')
-                ->setFrom('support@main.com')
+                ->setSubject($subject)
+                ->setFrom('support@easytoinvest.net')
                 ->setTo($myEmail)
                 ->setBody($message, 'text/html');
             $this->mailer->send($message);
