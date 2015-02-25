@@ -39,6 +39,29 @@
                         <br>
                         <br>
                         <div class="col-md-5">
+
+                            {% if sendToEmail is defined %}
+                                <div class="alert alert-success">
+                                    Письмо успешно отправлено!
+                                </div>
+
+                            {% else %}
+                                {% if app.user.active == false %}
+                                    <div class="alert alert-info">
+                                        Уважаемый пользователь, для использования возможностей сайта вам необходимо подтвердить свой Email. После регистрации на ваш Email было отправлено письмо, в котором описано, как это сделать. Если по каким-то причинам оно не пришло, вы можете повторно отправить его.
+
+                                        <form method="post" action="{{ path('main_confirm_email_send') }}" style="max-width: 350px;">
+
+                                            <div style="margin-top: 40px;">
+                                                <button type="submit" class="btn btn-primary">Отправить</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                {% endif %}
+
+                            {% endif %}
+
                             <h4 class="page-header">Ваша информация</h4>
                             <dl>
                                 <dt><img src="{{ asset(app.user.avatar) }}" style="height:90px;"></dt>
@@ -46,7 +69,13 @@
                                 <dt>Имя:</dt>
                                 <dd>{{ app.user.name ~ ' ' ~ app.user.username }}</dd>
                                 <dt>Email:</dt>
-                                <dd>{{ app.user.email }}</dd>
+                                {% if app.user.active == true %}
+                                    <dd><span class="successEmail" style="cursor: pointer; color: rgb(0, 150, 70);">{{ app.user.email }}</span></dd>
+
+                                {% else %}
+                                    <dd><span class="errorEmail" style="cursor: pointer; color: rgb(255, 0, 0);">{{ app.user.email }}</span></dd>
+
+                                {% endif %}
                                 <dt>Кошелек perfect money:</dt>
                                 <dd>{{ app.user.perfectMoney }}</dd>
                             </dl>
@@ -145,7 +174,7 @@
 
                         <!-- Change ID perfect money from Email -->
 
-                        <a href="#" data-toggle="modal" data-target="#myModal" style="font-size: 1.1em; text-decoration: none;">
+                        <a {% if app.user.active == true %} href="#" data-toggle="modal" data-target="#myModal" {% endif %} style="font-size: 1.1em; text-decoration: none;">
                             Смена perfect money
                         </a>
 
@@ -184,4 +213,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block JavaScripts %}
+    {{ parent() }}
+    <script>
+        $('.successEmail').tooltip({'trigger':'hover', 'title': 'Email подтвержден!'});
+        $('.errorEmail').tooltip({'trigger':'hover', 'title': 'Email не подтвержден!'});
+    </script>
 {% endblock %}

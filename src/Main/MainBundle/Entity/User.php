@@ -511,6 +511,17 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @param EntityManager $em
+     * @param $userid
+     */
+    public static function confirmEmail($em, $userid)
+    {
+        $user = $em->getRepository('MainMainBundle:User')->find($userid);
+        $user->setActive(true);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
      * @param $encoderFactory
      * @param User $user
      * @param $parameters

@@ -22,13 +22,17 @@ class Notifier {
         $this->mailer = $mailer;
     }
 
-    public function sendNotificationToEmail($user, $message)
+    /**
+     * @param $myEmail
+     * @param $message
+     */
+    public function sendNotificationToEmail($myEmail, $message)
     {
         try {
             $message = \Swift_Message::newInstance()
                 ->setSubject('notification!')
                 ->setFrom('support@main.com')
-                ->setTo($user->getEmail())
+                ->setTo($myEmail)
                 ->setBody($message, 'text/html');
             $this->mailer->send($message);
         } catch (\Swift_RfcComplianceException $ex) {  }

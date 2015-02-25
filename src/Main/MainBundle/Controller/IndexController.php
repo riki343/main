@@ -98,8 +98,8 @@ class IndexController extends Controller
         $userid = $recordFromKey->getUserid();
         $em = $this->getDoctrine()->getManager();
         $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
-        //foreach ($allRecords as $record)
-            //$em->remove($record);
+        foreach ($allRecords as $record)
+            $em->remove($record);
         $em->flush();
         return $this->render("MainMainBundle::resetPassword.html.twig", array('userid' => $userid));
     }
@@ -172,6 +172,7 @@ class IndexController extends Controller
             ));
         }
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         $parameters = array(
@@ -186,6 +187,57 @@ class IndexController extends Controller
 
         AdminRecord::addNewUser($em);
 
-        return $this->redirectToRoute('main_login');
+        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneBy(array('email' => $email));
+        $keyForAccess = KeysForAccess::addKeyForConfirmEmail($em, $user);
+
+        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
+
+        $message = "Dear, " . $username;
+        $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
+
+        $this->get('main.notifier')->sendNotificationToEmail($email, $message);
+
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно зарегестрировались. На ваш Email отправлено письмо, по которому вам нужно подтвердить свой Email!"));
+    }
+
+    /**
+     * @param Request $request
+     * @param $keyForAccess
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirmEmailAction(Request $request, $keyForAccess)
+    {
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForConfirmAccount' => $keyForAccess));
+        if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
+        $userid = $recordFromKey->getUserid();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        User::confirmEmail($em, $userid);
+
+        $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
+        foreach ($allRecords as $record)
+            $em->remove($record);
+        $em->flush();
+
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно подтвердили свой Email!"));
+    }
+
+    public  function confirmEmailSendAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $keyForAccess = KeysForAccess::addKeyForConfirmEmail($em, $user);
+
+        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
+
+        $message = "Dear, " . $user->getUsername();
+        $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message);
+
+        return $this->render('MainMainBundle::account.html.twig', array('sendToEmail' => ""));
     }
 }
