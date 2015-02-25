@@ -24,17 +24,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UserController extends Controller {
 
     /**
-     * @Route("/user/active_account", name="main_userpage_active_account")
-     * @Security("has_role('USER_ROLE')")
-     * @param Request $request
-     * @return Response $response
-     */
-    public function active_accountAction(Request $request)
-    {
-        return $this->render('MainMainBundle::account.html.twig', array('zm' => ""));
-    }
-
-    /**
      * @Route("/user/statistics", name="main_userpage_statistics")
      * @Security("has_role('USER_ROLE')")
      * @param Request $request

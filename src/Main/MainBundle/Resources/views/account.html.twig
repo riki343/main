@@ -25,11 +25,6 @@
                         <a id="settings-tab" aria-controls="settings" data-toggle="tab" role="tab" href="#settings" aria-expanded="false">Настройки</a>
                     </li>
 
-                    {% if app.user.accountActive == false %}
-                    <li class="{% if zm is defined %}active{% endif %}" role="presentation">
-                        <a id="activeaccaunt-tab" aria-controls="yes" data-toggle="tab" role="tab" href="#activeaccaunt" aria-expanded="false">Активация аккаунта</a>
-                    </li>
-                    {% endif %}
                 </ul>
 
                 <!-- End list of tabs -->
@@ -183,19 +178,6 @@
                     </div>
 
                     <!-- End tab of settings -->
-
-                    <!-- Tab of active account -->
-
-                    {% if app.user.accountActive == false %}
-                    <div id="activeaccaunt" class="tab-pane fade{% if zm is defined %} active in{% endif %}" aria-labelledby="activeaccaunt-tab" role="tabpanel">
-
-                        <p style="text-align: left;">
-                            <form method="post" action="{{ path('main_activate_acount') }}">
-                                <button type="submit" class="btn btn-primary">Активировать аккаунт</button>
-                            </form>
-                        </p>
-                    </div>
-                    {% endif %}
 
                 </div>
 
