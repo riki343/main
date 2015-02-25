@@ -146,17 +146,12 @@ class UserController extends Controller {
 
         $link = $this->get('router')->generate('main_userpage_change_perfect_money_page', array('keyForAccess' => $keyForAccess), true);
 
-        $message = "Dear, " . $user->getName();
+        $message = "Уважаемый, " . $user->getName();
         $message .= "<br><br> Чтобы изменить свой Perfect money, <br> перейдите по следующей ссылке: <br>" . $link;
         $mailer = $this->get('mailer');
-        try {
-            $message = $mailer->createMessage()
-                ->setSubject('Смена Perfect money!')
-                ->setFrom('')
-                ->setTo($user->getEmail())
-                ->setBody($message, 'text/html');
-            $mailer->send($message);
-        } catch (\Swift_RfcComplianceException $ex) { }
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Смена Perfect money");
+
         return $this->render('MainMainBundle::account.html.twig', array('mes' => 4));
     }
 

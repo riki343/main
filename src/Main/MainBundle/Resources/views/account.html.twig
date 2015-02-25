@@ -152,17 +152,17 @@
 
                             <div class="form-group">
                                 <span class="control-label">Старый пароль:</span>
-                                <input name="currentPassword" type="password" class="form-control" required>
+                                <input name="currentPassword" type="password" class="form-control" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" required>
                             </div>
 
                             <div class="form-group">
                                 <span class="control-label">Новый пароль:</span>
-                                <input name="newPassword" type="password" class="form-control" required>
+                                <input name="newPassword" type="password" class="form-control" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" required>
                             </div>
 
                             <div class="form-group">
                                 <span class="control-label">Повторите новый пароль:</span>
-                                <input name="repeatNewPassword" type="password" class="form-control" required>
+                                <input name="repeatNewPassword" type="password" class="form-control" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" required>
                             </div>
 
                             <div style="margin: 40px 0;">

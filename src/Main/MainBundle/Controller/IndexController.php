@@ -71,17 +71,11 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_reset_password_page', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Dear, " . $user->getName();
+        $message = "Уважаемый, " . $user->getName();
         $message .= "<br><br> Чтобы восстановить свой пароль, <br> перейдите по следующей ссылке: <br>" . $link;
-        $mailer = $this->get('mailer');
-        try {
-            $message = $mailer->createMessage()
-                ->setSubject('Восстановление пароля!')
-                ->setFrom('')
-                ->setTo($user->getEmail())
-                ->setBody($message, 'text/html');
-            $mailer->send($message);
-        } catch (\Swift_RfcComplianceException $ex) { }
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Восстановление пароля");
+
         return $this->forward('MainMainBundle:Index:login', array('param' => "Мы отправили вам Email с дальнейшими инструкциями!"));
     }
 
@@ -191,7 +185,7 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Dear, " . $username;
+        $message = "Уважаемый, " . $username;
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($email, $message, "easytoinvest.net Подтверждение Email");
@@ -232,7 +226,7 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Dear, " . $user->getUsername();
+        $message = "Уважаемый, " . $user->getUsername();
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Подтверждение Email");
