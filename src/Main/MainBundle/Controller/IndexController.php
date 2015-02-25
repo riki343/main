@@ -163,7 +163,6 @@ class IndexController extends Controller
 
         $email = $request->request->get('email');
         $name = $request->request->get('name');
-        $surname = $request->request->get('surname');
         $perfectMoney = $request->request->get('perfectMoney');
         $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByPerfectMoney($perfectMoney);
         if ($exists != null)
@@ -180,7 +179,6 @@ class IndexController extends Controller
             'password' => $password,
             'email' => $email,
             'name' => $name,
-            'surname' => $surname,
             'perfectMoney' => $perfectMoney
         );
 

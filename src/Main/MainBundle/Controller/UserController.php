@@ -103,9 +103,7 @@ class UserController extends Controller {
         }
 
         $new_name = $request->request->get('new_name');
-        $new_surname = $request->request->get('new_surname');
         $user->setName($new_name);
-        $user->setSurname($new_surname);
         $em->flush();
         return $this->render('MainMainBundle::account.html.twig');
     }

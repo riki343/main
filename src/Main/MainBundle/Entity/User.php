@@ -54,13 +54,6 @@ class User implements UserInterface, \Serializable {
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="surname", type="string", length=255)
-     */
-    private $surname;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="registered", type="datetime")
@@ -204,7 +197,6 @@ class User implements UserInterface, \Serializable {
             $this->password,
             $this->email,
             $this->name,
-            $this->surname,
             $this->registered,
             $this->lastactive,
             $this->perfectMoney,
@@ -223,7 +215,6 @@ class User implements UserInterface, \Serializable {
             $this->password,
             $this->email,
             $this->name,
-            $this->surname,
             $this->registered,
             $this->lastactive,
             $this->perfectMoney,
@@ -313,28 +304,6 @@ class User implements UserInterface, \Serializable {
         return $this->name;
     }
 
-    /**
-     * Set surname
-     *
-     * @param string $surname
-     * @return User
-     */
-    public function setSurname($surname)
-    {
-        $this->surname = $surname;
-    
-        return $this;
-    }
-
-    /**
-     * Get surname
-     *
-     * @return string 
-     */
-    public function getSurname()
-    {
-        return $this->surname;
-    }
 
     /**
      * Set registered
@@ -465,7 +434,6 @@ class User implements UserInterface, \Serializable {
         $user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
         $user->setEmail($parameters['email']);
         $user->setName($parameters['name']);
-        $user->setSurname($parameters['surname']);
         $user->setRegistered(new \DateTime());
         $user->setLastactive(new \DateTime());
         $user->setActive(false);
@@ -805,12 +773,13 @@ class User implements UserInterface, \Serializable {
      */
     public function childAccountActivate(User $user, $ammount, EntityManager $em, Notifier $notifier) {
         $this->statistics->setPeopleCount($this->statistics->getPeopleCount() + 1);
-        $message = "На ваш счет зачислено " . $ammount . "$ от " . $user->getName() . " " .
-            $user->getSurname() . ", который присоединился к вашей команде!";
+        $message = "На ваш счет зачислено " . $ammount . "$ от " .
+            $user->getUsername() . ", который присоединился к вашей команде!";
         $notifier->createNotification($this->id, $message);
 
         $message = 'Получено ' . $ammount . '$ за активацию аккаунта от пользователя ' .
-            $user->getName() . ' ' . $user->getSurname();
+            $user->Username();
+
         UserHistory::addToHistory($em, $this->getId(), $ammount, $message);
         $this->wallet->setBalance($this->wallet->getBalance() + $ammount);
         $this->statistics->setEarnedMoney($this->statistics->getEarnedMoney() + $ammount);

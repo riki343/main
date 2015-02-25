@@ -23,7 +23,7 @@
                         <li>
                             <a style="background-color: lightgoldenrodyellow;">
                                 <img src="{{ asset(app.user.avatar) }}" style="height:90px;"><br><br>
-                                {{ app.user.name ~ ' ' ~ app.user.surname }}
+                                {{ app.user.name ~ ' ' ~ app.user.username }}
                             </a>
                         </li>
                         {% if app.user.accountActive == false %}

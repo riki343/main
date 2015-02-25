@@ -57,8 +57,8 @@
                                 <blockquote style="margin:10px;">
                                     <h5>Стоимость активации аккаунта составляет 21.00$ +<br>
                                 <span style="color: red;">комиссия Perfect Money:<br>
-                                <h6 style="font-weight: 600;">1. Если аккаунт вертифицирован, комисия составляет 0,05%;<br>
-                                2. Если аккаунт не вертифицирован, комисия составляет 2,0%;<br>
+                                <h6 style="font-weight: 600;">1. Если аккаунт верифицирован, комисия составляет 0,05%;<br>
+                                2. Если аккаунт не верифицирован, комисия составляет 2,0%;<br>
                                     </h6>
                                 </span>
                                     </h5>
@@ -102,9 +102,8 @@
                          <form action="{{ path('main_withdraw_money') }}" method="post">
                             <div class="panel-body">
                                  <div class="input-group">
-
                                      <span class="input-group-addon" id="basic-addon1">$</span>
-                                     <input class="form-control" type="text" placeholder="Введите сумму" name="Amount">
+                                     <input class="form-control" pattern="[0-9.]{1,15}" type="text" placeholder="Введите сумму" name="Amount">
                                         <span class="input-group-btn">
                                             <button class="btn btn-primary" type="submit">Вывести</button>
                                         </span>
