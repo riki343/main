@@ -146,7 +146,7 @@ class UserController extends Controller {
 
         $link = $this->get('router')->generate('main_userpage_change_perfect_money_page', array('keyForAccess' => $keyForAccess), true);
 
-        $message = "Уважаемый, " . $user->getName();
+        $message = "Здраствуйте, " . $user->getName();
         $message .= "<br><br> Чтобы изменить свой Perfect money, <br> перейдите по следующей ссылке: <br>" . $link;
         $mailer = $this->get('mailer');
 

@@ -71,7 +71,7 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_reset_password_page', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Уважаемый, " . $user->getName();
+        $message = "Здраствуйте, " . $user->getName();
         $message .= "<br><br> Чтобы восстановить свой пароль, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Восстановление пароля");
@@ -185,7 +185,7 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Уважаемый, " . $username;
+        $message = "Здраствуйте, " . $username;
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($email, $message, "easytoinvest.net Подтверждение Email");
@@ -226,7 +226,7 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Уважаемый, " . $user->getUsername();
+        $message = "Здраствуйте, " . $user->getUsername();
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Подтверждение Email");
