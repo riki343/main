@@ -788,7 +788,7 @@ class User implements UserInterface, \Serializable {
         $notifier->createNotification($this->id, $message);
 
         $message = 'Получено ' . $ammount . '$ за активацию аккаунта от пользователя ' .
-            $user->Username();
+            $user->getUsername();
 
         UserHistory::addToHistory($em, $this->getId(), $ammount, $message);
         $this->wallet->setBalance($this->wallet->getBalance() + $ammount);
