@@ -40,6 +40,9 @@
                         {#
                         <li><a href="#">Поддержка</a></li>
                         #}
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('main_admin_panel') }}">Админка</a></li>
+                        {% endif %}
                         <li><a href="{{ path('main_logout') }}">Выйти</a></li>
                     </ul>
                 </div>

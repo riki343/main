@@ -11,15 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminController extends Controller
 {
     /**
      * @Route("/admin", name="main_admin_panel")
-     * @Security("has_role('ADMIN_ROLE')")
+     * @Security("has_role('ROLE_ADMIN')")
      * @return Response $response
      */
     public function indexAction() {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -31,10 +36,16 @@ class AdminController extends Controller
 
     /**
      * @Route("/admin/change_perfect_money", name="main_admin_change_perfect_money")
-     * @Security("has_role('ADMIN_ROLE')")
+     * @Security("has_role('ROLE_ADMIN')")
      * @param Request $request
      */
     public function changePerfectMoneySettingsAction(Request $request) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false) {
+            throw $this->createAccessDeniedException();
+        } else if ($request->getMethod() != 'POST') {
+            return new Response('Only post method allowed!');
+        }
+
         $id = $request->request->get('id');
         $pass = $request->request->get('pass');
         $wallet = $request->request->get('wallet');

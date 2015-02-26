@@ -22,7 +22,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/statistics", name="main_userpage_statistics")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -33,7 +33,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/my_team", name="main_userpage_my_team")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -50,7 +50,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/account", name="main_userpage_account")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -61,7 +61,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_profile", name="main_userpage_change_profile")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -96,7 +96,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_password", name="main_userpage_change_password")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -128,7 +128,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_perfect_money", name="main_userpage_change_perfect_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -158,13 +158,14 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_perfect_money/{keyForAccess}", name="main_userpage_change_perfect_money_page")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param string $keyForAccess
      * @return Response $response
      */
     public function changePerfectMoneyChangeAction($keyForAccess)
     {
-        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForPerfectMoney' => $keyForAccess));
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')
+            ->findOneBy(array('keyForPerfectMoney' => $keyForAccess));
         if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
         $userid = $recordFromKey->getUserid();
         $em = $this->getDoctrine()->getManager();
@@ -177,7 +178,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_perfect_money_save", name="main_userpage_change_perfect_money_page_save")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -197,7 +198,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/activateAcount", name="main_activate_acount")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -252,7 +253,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/withdrawMoney", name="main_withdraw_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -335,7 +336,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/balance", name="main_balance")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @return Response $response
      */
     public function balanceAction(Request $request) {
@@ -344,7 +345,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/investMoney", name="main_invest_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @return Response $response
      */
     public function investMoneyAction(Request $request)

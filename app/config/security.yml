@@ -10,8 +10,8 @@ security:
             entity: { class: Main\MainBundle\Entity\User, property: username }
 
     role_hierarchy:
-            ADMIN_ROLE:       USER_ROLE
-            SUPER_ADMIN_ROLE: [ADMIN_ROLE, ROLE_ALLOWED_TO_SWITCH]
+            ROLE_ADMIN:       ROLE_USER
+            ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     firewalls:
         dev:
@@ -35,7 +35,6 @@ security:
 
 
     access_control:
-    #    - { path: ^/user, roles: USER_ROLE }
-    #    - { path: ^/user/statistics, roles: USER_ROLE }
-    #    - { path: ^/admin, roles: [USER_ROLE, ADMIN_ROLE] }
-    #    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, roles: [ROLE_USER] }
+        - { path: ^/admin, roles: [ROLE_ADMIN] }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
