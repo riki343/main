@@ -43,7 +43,7 @@ class AdminController extends Controller
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') === false) {
             throw $this->createAccessDeniedException();
         } else if ($request->getMethod() != 'POST') {
-            return new Response('Only post method allowed!');
+            return new Response('Only "POST" method allowed!');
         }
 
         $id = $request->request->get('id');
@@ -72,6 +72,7 @@ class AdminController extends Controller
         $em->flush();
 
 
-        return $this->render('@MainMain/adminPanel.html.twig', array('adminRecord' => $global, 'success' => 1));
+        return $this->render('@MainMain/adminPanel.html.twig',
+            array('adminRecord' => $global, 'success' => 1));
     }
 }
