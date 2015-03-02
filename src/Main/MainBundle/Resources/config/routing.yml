@@ -40,10 +40,6 @@ main_userpage:
     path: /user
     defaults: { _controller: MainMainBundle:User:account }
 
-main_userpage_active_account:
-    path: /user/active_account
-    defaults: { _controller: MainMainBundle:User:active_account }
-
 main_userpage_statistics:
     path: /user/statistics
     defaults: { _controller: MainMainBundle:User:statistics }
@@ -99,3 +95,11 @@ main_invest_money:
 main_admin_change_perfect_money:
     path: /admin/change_perfect_money
     defaults: { _controller: MainMainBundle:Admin:changePerfectMoneySettings }
+
+main_confirm_email:
+    pattern: /user/confirm_email/{keyForAccess}
+    defaults: { _controller: MainMainBundle:Index:confirmEmail }
+
+main_confirm_email_send:
+    path: /user/confirm_email_send
+    defaults: { _controller: MainMainBundle:Index:confirmEmailSend }

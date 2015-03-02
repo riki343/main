@@ -12,31 +12,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
-// |@Route| \\
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-// |@Security| \\
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use Main\MainBundle\Extras\ChromePhp as console;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller {
 
     /**
-     * @Route("/user/active_account", name="main_userpage_active_account")
-     * @Security("has_role('USER_ROLE')")
-     * @param Request $request
-     * @return Response $response
-     */
-    public function active_accountAction(Request $request)
-    {
-        return $this->render('MainMainBundle::account.html.twig', array('zm' => ""));
-    }
-
-    /**
      * @Route("/user/statistics", name="main_userpage_statistics")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -47,7 +33,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/my_team", name="main_userpage_my_team")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -64,7 +50,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/account", name="main_userpage_account")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -75,7 +61,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_profile", name="main_userpage_change_profile")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -110,7 +96,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_password", name="main_userpage_change_password")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -142,7 +128,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_perfect_money", name="main_userpage_change_perfect_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -160,30 +146,26 @@ class UserController extends Controller {
 
         $link = $this->get('router')->generate('main_userpage_change_perfect_money_page', array('keyForAccess' => $keyForAccess), true);
 
-        $message = "Dear, " . $user->getName();
+        $message = "Здраствуйте, " . $user->getName();
         $message .= "<br><br> Чтобы изменить свой Perfect money, <br> перейдите по следующей ссылке: <br>" . $link;
         $mailer = $this->get('mailer');
-        try {
-            $message = $mailer->createMessage()
-                ->setSubject('Смена Perfect money!')
-                ->setFrom('')
-                ->setTo($user->getEmail())
-                ->setBody($message, 'text/html');
-            $mailer->send($message);
-        } catch (\Swift_RfcComplianceException $ex) { }
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Смена Perfect money");
+
         return $this->render('MainMainBundle::account.html.twig', array('mes' => 4));
     }
 
 
     /**
      * @Route("/user/change_perfect_money/{keyForAccess}", name="main_userpage_change_perfect_money_page")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param string $keyForAccess
      * @return Response $response
      */
     public function changePerfectMoneyChangeAction($keyForAccess)
     {
-        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForPerfectMoney' => $keyForAccess));
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')
+            ->findOneBy(array('keyForPerfectMoney' => $keyForAccess));
         if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
         $userid = $recordFromKey->getUserid();
         $em = $this->getDoctrine()->getManager();
@@ -196,7 +178,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/change_perfect_money_save", name="main_userpage_change_perfect_money_page_save")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -216,7 +198,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/activateAcount", name="main_activate_acount")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -271,7 +253,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/withdrawMoney", name="main_withdraw_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return Response $response
      */
@@ -356,7 +338,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/balance", name="main_balance")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @return Response $response
      */
     public function balanceAction(Request $request) {
@@ -365,7 +347,7 @@ class UserController extends Controller {
 
     /**
      * @Route("/user/investMoney", name="main_invest_money")
-     * @Security("has_role('USER_ROLE')")
+     * @Security("has_role('ROLE_USER')")
      * @return Response $response
      */
     public function investMoneyAction(Request $request)

@@ -26,19 +26,23 @@
                                 {{ app.user.name ~ ' ' ~ app.user.username }}
                             </a>
                         </li>
+
                         {% if app.user.accountActive == false %}
-                            <li><a class="activeacc" href="{{ path('main_userpage_active_account') }}">Активировать Акаунт</a></li>
+                            <li><a class="activeacc" {% if app.user.active == true %} href="{{ path('main_activate_acount') }}" {% endif %}>Активировать Акаунт</a></li>
                         {% endif %}
-                        <li><a href="{{ path('main_balance') }}">Баланс <span class="label label-primary">{{ app.user.wallet.balance }}$</span></a></li>
-                        <li><a href="{{ path('main_userpage_statistics') }}">Статистика</a></li>
+                        <li><a {% if app.user.active == true %} href="{{ path('main_balance') }}" {% endif %}>Баланс <span class="label label-primary">{{ app.user.wallet.balance }}$</span></a></li>
+                        <li><a {% if app.user.active == true %} href="{{ path('main_userpage_statistics') }}" {% endif %}>Статистика</a></li>
                         {#
                         <li><a href="#">Сообщения <span class="label label-primary">2</span></a></li>
                         #}
-                        <li><a href="{{ path('main_userpage_my_team') }}">Моя команда</a></li>
+                        <li><a {% if app.user.active == true %} href="{{ path('main_userpage_my_team') }}" {% endif %}>Моя команда</a></li>
                         <li><a href="{{ path('main_userpage_account') }}">Аккаунт</a></li>
                         {#
                         <li><a href="#">Поддержка</a></li>
                         #}
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('main_admin_panel') }}">Админка</a></li>
+                        {% endif %}
                         <li><a href="{{ path('main_logout') }}">Выйти</a></li>
                     </ul>
                 </div>

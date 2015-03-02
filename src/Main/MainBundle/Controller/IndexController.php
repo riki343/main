@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Main\MainBundle\Extras\ChromePhp as console;
 
 class IndexController extends Controller
 {
@@ -72,17 +71,11 @@ class IndexController extends Controller
 
         $link = $this->get('router')->generate('main_reset_password_page', array('keyForAccess' => $keyForAccess) ,true);
 
-        $message = "Dear, " . $user->getName();
+        $message = "Здраствуйте, " . $user->getName();
         $message .= "<br><br> Чтобы восстановить свой пароль, <br> перейдите по следующей ссылке: <br>" . $link;
-        $mailer = $this->get('mailer');
-        try {
-            $message = $mailer->createMessage()
-                ->setSubject('Восстановление пароля!')
-                ->setFrom('')
-                ->setTo($user->getEmail())
-                ->setBody($message, 'text/html');
-            $mailer->send($message);
-        } catch (\Swift_RfcComplianceException $ex) { }
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Восстановление пароля");
+
         return $this->forward('MainMainBundle:Index:login', array('param' => "Мы отправили вам Email с дальнейшими инструкциями!"));
     }
 
@@ -98,8 +91,8 @@ class IndexController extends Controller
         $userid = $recordFromKey->getUserid();
         $em = $this->getDoctrine()->getManager();
         $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
-        //foreach ($allRecords as $record)
-            //$em->remove($record);
+        foreach ($allRecords as $record)
+            $em->remove($record);
         $em->flush();
         return $this->render("MainMainBundle::resetPassword.html.twig", array('userid' => $userid));
     }
@@ -172,6 +165,7 @@ class IndexController extends Controller
             ));
         }
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         $parameters = array(
@@ -186,6 +180,57 @@ class IndexController extends Controller
 
         AdminRecord::addNewUser($em);
 
-        return $this->redirectToRoute('main_login');
+        $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneBy(array('email' => $email));
+        $keyForAccess = KeysForAccess::addKeyForConfirmEmail($em, $user);
+
+        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
+
+        $message = "Здраствуйте, " . $username;
+        $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
+
+        $this->get('main.notifier')->sendNotificationToEmail($email, $message, "easytoinvest.net Подтверждение Email");
+
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно зарегестрировались. На ваш Email отправлено письмо, по которому вам нужно подтвердить свой Email!"));
+    }
+
+    /**
+     * @param Request $request
+     * @param $keyForAccess
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirmEmailAction(Request $request, $keyForAccess)
+    {
+        $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForConfirmAccount' => $keyForAccess));
+        if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
+        $userid = $recordFromKey->getUserid();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        User::confirmEmail($em, $userid);
+
+        $allRecords = $em->getRepository('MainMainBundle:KeysForAccess')->findBy(array('userid' => $userid));
+        foreach ($allRecords as $record)
+            $em->remove($record);
+        $em->flush();
+
+        return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно подтвердили свой Email!"));
+    }
+
+    public  function confirmEmailSendAction(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $keyForAccess = KeysForAccess::addKeyForConfirmEmail($em, $user);
+
+        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
+
+        $message = "Здраствуйте, " . $user->getUsername();
+        $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
+
+        $this->get('main.notifier')->sendNotificationToEmail($user->getEmail(), $message, "easytoinvest.net Подтверждение Email");
+
+        return $this->render('MainMainBundle::account.html.twig', array('sendToEmail' => ""));
     }
 }

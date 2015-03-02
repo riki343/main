@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Main\MainBundle\Services\Notifier;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Main\MainBundle\Extras\ChromePhp as console;
 
 /**
  * User
@@ -511,6 +510,17 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @param EntityManager $em
+     * @param $userid
+     */
+    public static function confirmEmail($em, $userid)
+    {
+        $user = $em->getRepository('MainMainBundle:User')->find($userid);
+        $user->setActive(true);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
      * @param $encoderFactory
      * @param User $user
      * @param $parameters
@@ -778,7 +788,7 @@ class User implements UserInterface, \Serializable {
         $notifier->createNotification($this->id, $message);
 
         $message = 'Получено ' . $ammount . '$ за активацию аккаунта от пользователя ' .
-            $user->Username();
+            $user->getUsername();
 
         UserHistory::addToHistory($em, $this->getId(), $ammount, $message);
         $this->wallet->setBalance($this->wallet->getBalance() + $ammount);
