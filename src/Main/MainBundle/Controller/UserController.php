@@ -283,73 +283,75 @@ class UserController extends Controller {
         $user = $this->getUser();
         $amount = $request->request->get('Amount');
         $user_balance = $user->getWallet()->getBalance();
-        if($user_balance >= $amount+($amount*0.02)) {
-            $global = AdminRecord::getGlobalWallet($em);
-            $AccountID =  $global['AccountID'];
-            $PassPhrase =  $global['PassPhrase'];
-            $payer_Account =  $global['Wallet'];
-            $payee_Account = $user->getPerfectMoney(); //акаунт перфект моней
-            $payment_id = rand(1,9999);
+        if($amount > 36 && $amount != '')
+        {
+            if ($user_balance >= $amount + ($amount * 0.02)) {
+                $global = AdminRecord::getGlobalWallet($em);
+                $AccountID = $global['AccountID'];
+                $PassPhrase = $global['PassPhrase'];
+                $payer_Account = $global['Wallet'];
+                $payee_Account = $user->getPerfectMoney(); //акаунт перфект моней
+                $payment_id = rand(1, 9999);
 
-            $f_invest=fopen('https://perfectmoney.is/acct/confirm.asp?'
-                . 'AccountID=' . $AccountID . '&'
-                . 'PassPhrase=' . $PassPhrase . '&'
-                .'Payer_Account=' . $payer_Account . '&'
-                . 'Payee_Account=' . $payee_Account . '&'
-                . 'Amount='.$amount . '&'
-                . 'PAY_IN=1&'
-                . 'PAYMENT_ID=' . $payment_id, 'rb');
+                $f_invest = fopen('https://perfectmoney.is/acct/confirm.asp?'
+                    . 'AccountID=' . $AccountID . '&'
+                    . 'PassPhrase=' . $PassPhrase . '&'
+                    . 'Payer_Account=' . $payer_Account . '&'
+                    . 'Payee_Account=' . $payee_Account . '&'
+                    . 'Amount=' . $amount . '&'
+                    . 'PAY_IN=1&'
+                    . 'PAYMENT_ID=' . $payment_id, 'rb');
 
-            if($f_invest===false)
-            {
-                echo 'error openning url';
-            }
-            $out_invest=array(); $out_invest="";
-            while(!feof($f_invest)) $out_invest.=fgets($f_invest);
-            fclose($f_invest);
-            if(!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $out_invest, $result_invest, PREG_SET_ORDER))
-            {
-                echo 'Ivalid output';
-                exit;
-            }
-            $ar_invest="";
-            foreach($result_invest as $item_invest)
-            {
-                $key_invest=$item_invest[1];
-                $ar_invest[$key_invest]=$item_invest[2];
-            }
-            if(array_key_exists('ERROR',$ar_invest))
-            {
-                if($ar_invest['ERROR'] == 'Not enough money to pay')
-                {
-                    return $this->render('MainMainBundle::balance.html.twig'
-                        , array(
-                            'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                if ($f_invest === false) {
+                    echo 'error openning url';
                 }
-                else {
-                    return $this->render('MainMainBundle::balance.html.twig'
-                        , array(
-                            'err_cash' => $ar_invest['ERROR']));
+                $out_invest = array();
+                $out_invest = "";
+                while (!feof($f_invest)) $out_invest .= fgets($f_invest);
+                fclose($f_invest);
+                if (!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $out_invest, $result_invest, PREG_SET_ORDER)) {
+                    echo 'Ivalid output';
+                    exit;
+                }
+                $ar_invest = "";
+                foreach ($result_invest as $item_invest) {
+                    $key_invest = $item_invest[1];
+                    $ar_invest[$key_invest] = $item_invest[2];
+                }
+                if (array_key_exists('ERROR', $ar_invest)) {
+                    if ($ar_invest['ERROR'] == 'Not enough money to pay') {
+                        return $this->render('MainMainBundle::balance.html.twig'
+                            , array(
+                                'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                    } else {
+                        return $this->render('MainMainBundle::balance.html.twig'
+                            , array(
+                                'err_cash' => $ar_invest['ERROR']));
+                    }
+                } else {
+
+                    $user->getWallet()->setBalance($user_balance - ($amount + ($amount * 0.02)));
+                    AdminRecord::removeFromGlobal($em, $amount + ($amount * 0.02));
+                    $user->getStatistics()
+                        ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
+
+                    $message = 'Операция по выводу средств на кошелек Perfect Money';
+                    UserHistory::addToHistory($em, $user->getId(), $amount, $message);
+                    $em->flush();
+
+                    return $this->render('MainMainBundle::balance.html.twig', array(
+                        'err_cash' => "Операция по выводу средств на кошелек Perfect Money на сумму " . $amount . '$ успешно проведена!!!'));
+
                 }
             }
-            else {
-
-                $user->getWallet()->setBalance($user_balance -( $amount+($amount * 0.02)));
-                AdminRecord::removeFromGlobal($em,$amount+($amount * 0.02));
-                $user->getStatistics()
-                    ->setSpentMoney($user->getStatistics()->getSpentMoney() + $amount);
-
-                $message = 'Операция по выводу средств на кошелек Perfect Money';
-                UserHistory::addToHistory($em, $user->getId(), $amount, $message);
-                $em->flush();
-
-                return $this->render('MainMainBundle::balance.html.twig', array(
-                    'err_cash' => "Операция по выводу средств на кошелек Perfect Money на сумму ".$amount.'$ успешно проведена!!!'));
-
-            }
+            return $this->render('MainMainBundle::balance.html.twig', array(
+                'err_cash' => "На вашем счету, в системе, не достаточно денег!!!"));
         }
-        return $this->render('MainMainBundle::balance.html.twig', array(
-            'err_cash' => "На вашем счету, в системе, не достаточно денег!!!"));
+        else
+        {
+            return $this->render('MainMainBundle::balance.html.twig', array(
+                'err_cash' => "Минимальная сумма для вывода составляет 36$ !!!"));
+        }
     }
 
     /**
