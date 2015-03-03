@@ -111,14 +111,17 @@
                 <div class="page-header"><h3>Настройки Perfect Money</h3></div>
                 <form class="form-horizontal col-md-4" autocomplete="off" action="{{ path('main_admin_change_perfect_money') }}" method="post">
                     <div class="form-group">
+                        <label for="id">Perfect Money ID: </label>
                         <input type="text" id="id" name="id" class="form-control" pattern="[0-9]{5,10}" value="" placeholder="ID" required>
                     </div>
 
                     <div class="form-group">
+                        <label for="pass">Perfect Money Пароль: </label>
                         <input type="text" id="pass" name="pass" class="form-control" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" value="" placeholder="Пароль" required>
                     </div>
 
                     <div class="form-group">
+                        <label for="wallet">Perfect Money Кошелек: </label>
                         <input type="text" id="wallet" name="wallet" class="form-control" pattern="[Uu]{1}[0-9]{7}" value="" placeholder="Кошелек" required>
                     </div>
 
