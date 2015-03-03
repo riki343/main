@@ -152,6 +152,12 @@ class IndexController extends Controller
             ));
 
         $email = $request->request->get('email');
+        $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByEmail($email);
+        if ($exists != null)
+            return $this->render('MainMainBundle::register.html.twig', array(
+                'zm' => "Пользователь с таким email уже зарегистрирован"
+            ));
+
         $name = $request->request->get('name');
         $perfectMoney = $request->request->get('perfectMoney');
         $exists = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneByPerfectMoney($perfectMoney);
