@@ -5,6 +5,7 @@ namespace Main\MainBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Main\MainBundle\Services\Notifier;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -455,6 +456,9 @@ class User implements UserInterface, \Serializable {
 
         $statistics->setUser($user);
         $em->persist($statistics);
+
+        User::GenerateDefaultAvatar($em, $user);
+
         $em->flush();
     }
 
@@ -844,5 +848,58 @@ class User implements UserInterface, \Serializable {
             }
         }
         return $newNotifications;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     */
+    public static function GenerateDefaultAvatar(EntityManager $em, User $user)
+    {
+        /*if ($user->getAvatar() != null) {
+            $fs = new Filesystem();
+            $file_path = __DIR__ . '/../../../../web/documents/' . $user->getAvatar();
+            if ($fs->exists($file_path)) $fs->remove($file_path);
+        }*/
+
+        $text_colors = array(
+            array(1, 201, 220), array(126, 0, 151), array(0, 151, 71),
+            array(236, 126, 0), array(210, 8, 0), array(167, 0, 219),
+            array(15, 0, 226), array(244, 0, 114)
+        );
+
+        $rnd_clr = rand(0, count($text_colors) - 1);
+        $first = substr(ucfirst($user->getUsername()),0,1);
+        $text = $first;
+        $font = __DIR__.'/../../../../web/bundles/main/fonts/DejaVuSansMono.ttf';
+
+        $fs = new Filesystem();
+
+        $image_path = __DIR__.'/../../../../web/files/' . $user->getUsername() .'/avatar/';
+        $width = 150; $height = 150;
+        $center = round($width / 2);
+        $box = imagettfbbox(70, 0, $font, $text);
+        $position = $center - round(($box[2]-$box[0])/2);
+
+        // Draw image
+        $im = imagecreate($width, $height);
+        imagefilledrectangle($im, 0, 0, $width, $height, imagecolorallocate($im, $text_colors[$rnd_clr][0],
+            $text_colors[$rnd_clr][1], $text_colors[$rnd_clr][2]));
+        imagettftext($im, 70, 0, $position - 2, 105, imagecolorallocate($im, 255, 255, 255),
+            $font, $first);
+
+        $datetime = new \DateTime();
+        srand($datetime->format('s'));
+
+        $file_name = rand(1000, 100000);
+        $fs = new Filesystem();
+        $fs->dumpFile($image_path . $file_name . '.jpeg', '');
+        imagejpeg($im, $image_path . $file_name . '.jpeg');
+
+        // Set new avatar as current
+        $user->setAvatar('files/' . $user->getUsername() . '/avatar/' . $file_name . '.jpeg');
+
+        $em->persist($user);
+        $em->flush();
     }
 }

@@ -69,18 +69,28 @@
                             </div>
                             <form action="{{ path('main_invest_money') }}" method="post">
                                 <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="perfect-money-id">Perfect Money ID:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input id="perfect-money-id" value="" pattern="[0-9]{1,15}" type="text" class="form-control" name="AccountID" required/>
+                                        </div>
+                                    </div>
 
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input type="text" class="form-control" placeholder="ID Клиента" name="AccountID" />
+                                    <div class="form-group">
+                                        <label for="perfect-money-pass">Perfect Money Пароль:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="password" value="" id="perfect-money-pass" class="form-control" name="PassPhrase" required/>
+                                        </div>
                                     </div>
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                        <input type="password" class="form-control" placeholder="Пароль" name="PassPhrase" />
-                                    </div>
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon"><i class="fa fa-money"></i></span>
-                                        <input type="text" class="form-control" placeholder="Сумма" name="Amount" />
+
+                                    <div class="form-group">
+                                        <label for="perfect-money-sum">Сумма:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                            <input type="text" value="" id="perfect-money-sum" pattern="[0-9]{1,15}" class="form-control" name="Amount" required/>
+                                        </div>
                                     </div>
 
                                 </div>

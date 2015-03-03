@@ -65,7 +65,7 @@ class UserController extends Controller {
      * @param Request $request
      * @return Response $response
      */
-    public  function changeProfileAction(Request $request)
+    public function changeProfileAction(Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -77,6 +77,7 @@ class UserController extends Controller {
         if(file_exists($file_path)) unlink($file_path);
 
         $em = $this->getDoctrine()->getManager();
+        /** @var User $usr */
         $usr = $em->getRepository('MainMainBundle:User')->find($user->getId());
         $file = $request->files->get('new_image');
         if ($file != null)
@@ -343,6 +344,16 @@ class UserController extends Controller {
      */
     public function balanceAction(Request $request) {
         return $this->render('@MainMain/balance.html.twig');
+    }
+
+    /**
+     * @Route("/user/generate_avatar", name="main_generate_avatar")
+     * @Security("has_role('ROLE_USER')")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function generateAvatarAction() {
+        User::GenerateDefaultAvatar($this->getDoctrine()->getManager(), $this->getUser());
+        return $this->redirectToRoute('main_userpage');
     }
 
     /**

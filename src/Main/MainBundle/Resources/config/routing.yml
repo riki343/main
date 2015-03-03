@@ -103,3 +103,7 @@ main_confirm_email:
 main_confirm_email_send:
     path: /user/confirm_email_send
     defaults: { _controller: MainMainBundle:Index:confirmEmailSend }
+
+main_generate_avatar:
+    path: /user/generate_avatar
+    defaults: { _controller: MainMainBundle:User:generateAvatar }

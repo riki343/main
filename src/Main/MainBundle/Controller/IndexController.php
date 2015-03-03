@@ -32,9 +32,7 @@ class IndexController extends Controller
             $error = $error->getMessageKey();
         }
 
-
         $lastUsername = $authenticationUtils->getLastUsername();
-
         if ($param != null) $error = $param;
 
         return $this->render('MainMainBundle::login.html.twig',
@@ -44,7 +42,6 @@ class IndexController extends Controller
             )
         );
     }
-
 
     /**
      * @Route("/login_check", name="login_check")
@@ -183,14 +180,15 @@ class IndexController extends Controller
         $user = $this->getDoctrine()->getRepository('MainMainBundle:User')->findOneBy(array('email' => $email));
         $keyForAccess = KeysForAccess::addKeyForConfirmEmail($em, $user);
 
-        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess) ,true);
+        $link = $this->get('router')->generate('main_confirm_email', array('keyForAccess' => $keyForAccess), true);
 
         $message = "Здраствуйте, " . $username;
         $message .= "<br><br> Чтобы подтвердить свой Email, <br> перейдите по следующей ссылке: <br>" . $link;
 
         $this->get('main.notifier')->sendNotificationToEmail($email, $message, "easytoinvest.net Подтверждение Email");
 
-        return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно зарегестрировались. На ваш Email отправлено письмо, по которому вам нужно подтвердить свой Email!"));
+        return $this->forward('MainMainBundle:Index:login',
+            array('param' => "Поздравляем, вы успешно зарегестрировались. На ваш Email отправлено письмо, по которому вам нужно подтвердить свой Email!"));
     }
 
     /**
