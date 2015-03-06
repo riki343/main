@@ -97,7 +97,7 @@ main_admin_change_perfect_money:
     defaults: { _controller: MainMainBundle:Admin:changePerfectMoneySettings }
 
 main_confirm_email:
-    pattern: /user/confirm_email/{keyForAccess}
+    pattern: /confirm_email/{keyForAccess}
     defaults: { _controller: MainMainBundle:Index:confirmEmail }
 
 main_confirm_email_send:
