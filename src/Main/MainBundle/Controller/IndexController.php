@@ -51,7 +51,7 @@ class IndexController extends Controller
     }
 
     /**
-     * @Route("/user/forgot_password", name="main_userpage_forgot_password")
+     * @Route("/user/forgot_password")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -77,6 +77,7 @@ class IndexController extends Controller
     }
 
     /**
+     * @Route("/reset_password/{keyForAccess}")
      * @param Request $request
      * @param $keyForAccess
      * @return \Symfony\Component\HttpFoundation\Response
@@ -95,6 +96,7 @@ class IndexController extends Controller
     }
 
     /**
+     * @Route("/reset_password_save/{userid}")
      * @param Request $request
      * @param $userid
      * @return \Symfony\Component\HttpFoundation\Response
@@ -198,11 +200,11 @@ class IndexController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @Route("/confirm_email/{keyForAccess}")
      * @param $keyForAccess
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function confirmEmailAction(Request $request, $keyForAccess)
+    public function confirmEmailAction($keyForAccess)
     {
         $recordFromKey = $this->getDoctrine()->getRepository('MainMainBundle:KeysForAccess')->findOneBy(array('keyForConfirmAccount' => $keyForAccess));
         if (!$recordFromKey) throw new NotFoundHttpException('Страница не найдена');
@@ -220,6 +222,11 @@ class IndexController extends Controller
         return $this->forward('MainMainBundle:Index:login', array('param' => "Поздравляем, вы успешно подтвердили свой Email!"));
     }
 
+    /**
+     * @Route("/user/confirm_email_send")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public  function confirmEmailSendAction(Request $request)
     {
         /** @var User $user */
