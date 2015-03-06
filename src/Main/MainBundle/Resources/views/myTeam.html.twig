@@ -25,6 +25,7 @@
                     </div>
 
                     {% for ch in child %}
+                        {% if app.user.id != ch.id %}
                         <div class="col-md-4">
                             <div class="panel" style="box-shadow: 0 0 2px 0 #dddddd;">
                                 <div class="panel-heading">
@@ -33,7 +34,7 @@
                                             <img src="{{ asset(ch.avatar) }}" style="height:90px;">
                                         </div>
                                         <div style="display: inline-block; vertical-align: top; margin-left: 15px;">
-                                            <span style="font-size: 1.2em;"><b>{{ ch.name }}</b></span>
+                                            <span style="font-size: 1.2em;"><b>{{ ch.name }}</b></span><br>
                                             <span style="color: #666666; font-size: 0.7em;">{{ ch.registered| date('Y-m-d H:i:s') }}</span>
                                         </div>
                                     </div>
@@ -46,6 +47,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
 
                 {% endif %}

@@ -12,10 +12,10 @@
 		 data-vide-bg="{{ asset('files/default/default-background.mp4') }}" data-vide-options="loop: true, muted: true, position: 0% 0%">
 	</div>
 
-	<section class="big-background">
+	<section class="big-background" id="reg-form">
 		<div class="pattern"></div>
 		<div class="big-background-container">
-			<h1 class="big-background-title">Контора</h1>
+			<h1 class="big-background-title">Easy To Invest</h1>
 			<div class="divider"></div>
 			<br>
 			<div class="row">
@@ -44,6 +44,12 @@
 					<a href="{{ path('main_signup') }}" class="btn btn-primary ">Регистрация</a>
 					<br><br><br><br><br><br>
 				</form>
+
+				<br><br>
+				<div class="col-md-12">
+					<a class="about-section-btn" style="color: #ffffff;" id="see-presentation" href="#presentation-view">Посмотреть презентацию</a>
+				</div>
+
 
 			</div>
 		</div>
@@ -76,9 +82,28 @@
 	<div class="wrapper">
 		<section class="about-section">
 			<div class="about-section-container">
-				<h2 class="about-section-title">Тут вы сможете то и то</h2>
-				<p>Никита сказал что все будет супер так то получилось вот <br/>И короче тут просто текст о том что мы можем допустить вот сделать что-то ааа как же так  <br/>Но это не самое страшное что может произойти потому что страшнее дальше</p>
-				<a href="#" target="_blank" class="about-section-btn">Кликни на меня</a>
+				<h2 class="about-section-title">Easy to invest</h2>
+
+				<br><img src="{{ asset('bundles/main/images/money.gif') }}" style="height:200px;"><br>
+				<p><strong>Это легкодоступный</strong> и простой в использовании <br> высокодохдный финансовый инструмент,<br> механизм которого
+					позволяет получать <br>прибыль в кротчайший сроки.
+				</p>
+				<br><img src="{{ asset('bundles/main/images/graf.gif') }}" style="height:200px;"><br>
+				<p><strong>Используя инструмент</strong> вы сможете воплотить <br> свои мечты в реальность, вместе с людьми<br> со всего мира, которых объединяет <br>Единая цель - стать финансово независимыми.
+				</p>
+
+				<br><img src="{{ asset('bundles/main/images/cash.gif') }}" style="height:200px;"><br>
+				<p>Все, что вам нужно, - это <strong>интернет и желание</strong><br> получить доступ к новым финансовым возможностям.<br> То, что предлагаем мы, еще никто не предлагал .
+				</p>
+				<div id="presentation-view"></div>
+
+				<br><br>
+
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/t2GqD4O-ZvU" frameborder="0" allowfullscreen></iframe>
+
+				<br><br>
+				<a class="about-section-btn" id="reg-now" href="#reg-form">Зарегестрируйтесь сейчас</a>
+
 			</div>
 
 		</section>
@@ -88,9 +113,9 @@
 			<div class="small-background-container">
 				<h2 class="small-background-title"><span>Мы в соц сетях </span></h2>
 				<ul class="socials">
-					<li><a href="#" target="_blank"><i class="fa fa-facebook-square fa-3x"></i></a></li>
-					<li><a href="#" target="_blank"><i class="fa fa-twitter-square fa-3x"></i></a></li>
-					<li><a href="#" target="_blank"><i class="fa fa-google-plus-square fa-3x"></i></a></li>
+					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-facebook-square fa-3x"></i></a></li>
+					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-twitter-square fa-3x"></i></a></li>
+					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-google-plus-square fa-3x"></i></a></li>
 				</ul>
 			</div>
 		</section>
@@ -102,7 +127,36 @@
 	<script src="{{ asset('bundles/main/js/jQuery/jquery-migrate-1.2.1.min.js') }}"></script>
 	<script src="{{ asset('bundles/main/js/jQuery/jquery-ui.min.js') }}"></script>
 	<script src="{{ asset('bundles/main/js/jQuery/jquery.vide.min.js') }}"></script>
+	<script src="{{ asset('bundles/main/js/jQuery/jquery.smooth-scroll.js') }}"></script>
 	<script src="{{ asset('bundles/main/js/Bootstrap/bootstrap.min.js') }}"></script>
+	<script>
+		$(function () {
+			$('#reg-now').bind('click', function (event) {
+				event.preventDefault();
+				var link = this;
+				$.smoothScroll({
+					scrollTarget: link.hash,
+					easing: 'swing',
+					speed: 700,
+					preventDefault: true
+				});
+				return false;
+			});
+
+			$('#see-presentation').bind('click', function (event) {
+				event.preventDefault();
+				var link = this;
+				$.smoothScroll({
+					scrollTarget: link.hash,
+					easing: 'swing',
+					speed: 700,
+					preventDefault: true
+				});
+				return false;
+			});
+		});
+
+	</script>
 {% endblock %}
 
 {% block page %}
