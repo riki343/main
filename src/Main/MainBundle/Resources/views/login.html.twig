@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block index %}
+
 	<div id="bgvid"
 		 data-vide-bg="{{ asset('files/default/default-background.mp4') }}" data-vide-options="loop: true, muted: true, position: 0% 0%">
 	</div>
@@ -42,14 +43,18 @@
 					<input type="hidden" name="_target_path" value="/user" />
 					<button class="btn btn-success" type="submit">Вход</button>
 					<a href="{{ path('main_signup') }}" class="btn btn-primary ">Регистрация</a>
-					<br><br><br><br><br><br>
 				</form>
 
-				<br><br>
-				<div class="col-md-12">
+				<br>
+				<div class="col-md-12" style="margin-top: 40px;">
 					<a class="about-section-btn" style="color: #ffffff;" id="see-presentation" href="#presentation-view">Посмотреть презентацию</a>
 				</div>
-
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 
 			</div>
 		</div>
@@ -80,45 +85,56 @@
     </div>
 
 	<div class="wrapper">
-		<section class="about-section">
-			<div class="about-section-container">
-				<h2 class="about-section-title">Easy to invest</h2>
+		<div class="row">
+			<div class="col-xs-12">
+				<section class="about-section">
+					<div class="about-section-container">
+						<h2 class="about-section-title">Easy to invest</h2>
 
-				<br><img src="{{ asset('bundles/main/images/money.gif') }}" style="height:200px;"><br>
-				<p><strong>Это легкодоступный</strong> и простой в использовании <br> высокодохдный финансовый инструмент,<br> механизм которого
-					позволяет получать <br>прибыль в кротчайший сроки.
-				</p>
-				<br><img src="{{ asset('bundles/main/images/graf.gif') }}" style="height:200px;"><br>
-				<p><strong>Используя инструмент</strong> вы сможете воплотить <br> свои мечты в реальность, вместе с людьми<br> со всего мира, которых объединяет <br>Единая цель - стать финансово независимыми.
-				</p>
+						<br><img src="{{ asset('bundles/main/images/money.gif') }}" style="height:200px;"><br>
+						<p><strong>Это легкодоступный</strong> и простой в использовании <br> высокодохдный финансовый инструмент,<br> механизм которого
+							позволяет получать <br>прибыль в кротчайший сроки.
+						</p>
+						<br><img src="{{ asset('bundles/main/images/graf.gif') }}" style="height:200px;"><br>
+						<p><strong>Используя инструмент</strong> вы сможете воплотить <br> свои мечты в реальность, вместе с людьми<br> со всего мира, которых объединяет <br>Единая цель - стать финансово независимыми.
+						</p>
 
-				<br><img src="{{ asset('bundles/main/images/cash.gif') }}" style="height:200px;"><br>
-				<p>Все, что вам нужно, - это <strong>интернет и желание</strong><br> получить доступ к новым финансовым возможностям.<br> То, что предлагаем мы, еще никто не предлагал .
-				</p>
-				<div id="presentation-view"></div>
+						<br><img src="{{ asset('bundles/main/images/cash.gif') }}" style="height:200px;"><br>
+						<p>Все, что вам нужно, - это <strong>интернет и желание</strong><br> получить доступ к новым финансовым возможностям.<br> То, что предлагаем мы, еще никто не предлагал .
+						</p>
+						<div id="presentation-view"></div>
 
-				<br><br>
+						<br><br>
 
-				<iframe width="560" height="315" src="https://www.youtube.com/embed/t2GqD4O-ZvU" frameborder="0" allowfullscreen></iframe>
+						<div class="row">
+							<div class="col-xs-12 col-md-offset-3 col-md-6">
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/t2GqD4O-ZvU" frameborder="0" allowfullscreen></iframe>
+								</div>
+							</div>
+						</div>
 
-				<br><br>
-				<a class="about-section-btn" id="reg-now" href="#reg-form">Зарегестрируйтесь сейчас</a>
 
+						<br><br><br>
+
+						<a class="about-section-btn" id="reg-now" href="#reg-form">Зарегестрируйтесь сейчас</a>
+
+					</div>
+
+				</section>
+
+				<section class="small-background-section">
+					<div class="pattern"></div>
+					<div class="small-background-container">
+						<h2 class="small-background-title"><span>Мы в соц сетях </span></h2>
+						<ul class="socials">
+							<li><a href="http://vk.com/easytoinvest" target="_blank"><i class="fa fa-vk fa-3x"></i></a></li>
+							<li><a href="http://twitter.com/justeasyinvest" target="_blank"><i class="fa fa-twitter fa-3x"></i></a></li>
+						</ul>
+					</div>
+				</section>
 			</div>
-
-		</section>
-
-		<section class="small-background-section">
-			<div class="pattern"></div>
-			<div class="small-background-container">
-				<h2 class="small-background-title"><span>Мы в соц сетях </span></h2>
-				<ul class="socials">
-					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-facebook-square fa-3x"></i></a></li>
-					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-twitter-square fa-3x"></i></a></li>
-					<li><a href="http://easytoinvest.net/login#" target="_blank"><i class="fa fa-google-plus-square fa-3x"></i></a></li>
-				</ul>
-			</div>
-		</section>
+		</div>
 	</div>
 {% endblock %}
 
