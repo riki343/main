@@ -305,7 +305,7 @@ class UserController extends Controller {
                     if ($ar_invest['ERROR'] == 'Not enough money to pay') {
                         return $this->render('MainMainBundle::balance.html.twig'
                             , array(
-                                'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                                'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учётом комиссии!!!'));
                     } else {
                         return $this->render('MainMainBundle::balance.html.twig'
                             , array(
@@ -443,7 +443,7 @@ class UserController extends Controller {
                 {
                     return $this->render('MainMainBundle::balance.html.twig'
                         , array(
-                            'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учотом комиссии!!!'));
+                            'err_cash' => 'Не достаточно средств на счету, пожалуйста пополните свой счет с учётом комиссии!!!'));
                 }
                 else {
                     return $this->render('MainMainBundle::balance.html.twig'

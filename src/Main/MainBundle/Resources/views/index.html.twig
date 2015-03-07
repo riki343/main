@@ -28,7 +28,7 @@
                         </li>
 
                         {% if app.user.accountActive == false %}
-                            <li><a class="activeacc" {% if app.user.active == true %} href="{{ path('main_activate_acount') }}" {% endif %}>Активировать Акаунт</a></li>
+                            <li><a class="activeacc" {% if app.user.active == true %} href="{{ path('main_activate_acount') }}" {% endif %}>Активировать Аккаунт</a></li>
                         {% endif %}
                         <li><a {% if app.user.active == true %} href="{{ path('main_balance') }}" {% endif %}>Баланс <span class="label label-primary">{{ app.user.wallet.balance }}$</span></a></li>
                         <li><a {% if app.user.active == true %} href="{{ path('main_userpage_statistics') }}" {% endif %}>Статистика</a></li>
