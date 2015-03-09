@@ -5,9 +5,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>{% block title %}Layout Page{% endblock %}</title>
+    <meta property="og:title" content="Easy To Invest" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="Easy To Invest - Для тех, кто понял – предела успешности не существует. Для тех, кто готов к постоянному увеличению дохода. Для тех, у кого почти получилось изменить мышление, подчинить эмоции. Для вас." />
+    <meta property="og:url" content="http://easytoinvest.net/login" />
+    <meta property="og:image" content="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
+    <meta name="title" content="Easy To Invest" />
+    <meta name="description" content="Easy To Invest - Для тех, кто понял – предела успешности не существует. Для тех, кто готов к постоянному увеличению дохода. Для тех, у кого почти получилось изменить мышление, подчинить эмоции. Для вас." />
+    {% block pageimage %}
+        <link rel="image_src" href="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
+    {% endblock %}
+    <meta name="author" content="Vladislav Kosko">
+    <title>{% block title %}Easy To Invest{% endblock %}</title>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,6 +50,7 @@
             <div {% if app.user %}class="container-fluid"{% endif %}>
                 <div class="row">
                     <div class="col-lg-12">
+                        <img src="{{ asset('files/default/easytoinvest-default.jpg') }}" style="display: none;">
                         {% block body %}
 
                         {% endblock %}

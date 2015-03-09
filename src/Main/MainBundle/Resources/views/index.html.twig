@@ -44,6 +44,12 @@
                             <li><a href="{{ path('main_admin_panel') }}">Админка</a></li>
                         {% endif %}
                         <li><a href="{{ path('main_logout') }}">Выйти</a></li>
+                        <li style="position: fixed; bottom: 20px;">
+                            <div class="pluso" data-background="transparent" data-options="medium,square,line,horizontal,nocounter,theme=03"
+                                 data-services="vkontakte,facebook,twitter,tumblr,linkedin,google" data-url="http://easytoinvest.net/login"
+                                 data-title="Easy To Invest" data-user="826106625">
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -51,3 +57,16 @@
         </nav>
     {% endblock %}
 {% endif %}
+{% block JavaScripts %}
+{{ parent() }}
+    <script type="text/javascript">(function() {
+            if (window.pluso)if (typeof window.pluso.start == "function") return;
+            if (window.ifpluso==undefined) { window.ifpluso = 1;
+                var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+                s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+                var h=d[g]('body')[0];
+                h.appendChild(s);
+            }})();
+    </script>
+{% endblock %}
