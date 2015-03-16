@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head itemscope itemtype="http://schema.org/Article">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Добавьте указанные ниже теги в заголовок страницы. -->
+    <meta itemprop="name" content="Easy To Invest">
+    <meta itemprop="description" content="Зарабатывайте инвестируя! Без приглашений! Автоматическое начисление средств. Регистрируйтесь сейчас!">
+    <meta itemprop="image" content="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="Easy To Invest" />
-    <meta property="og:type" content="article" />
-    <meta property="og:description" content="Easy To Invest - Для тех, кто понял – предела успешности не существует. Для тех, кто готов к постоянному увеличению дохода. Для тех, у кого почти получилось изменить мышление, подчинить эмоции. Для вас." />
-    <meta property="og:url" content="http://easytoinvest.net/login" />
-    <meta property="og:image" content="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:site_name" content="Easytoinvest.net" />
+    <meta prefix="og: http://ogp.me/ns#" property="fb:app_id" content="797714073637018" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:title" content="Easy To Invest" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:type" content="website" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:description" content="Зарабатывайте инвестируя! Без приглашений! Автоматическое начисление средств. Регистрируйтесь сейчас!" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:url" content="http://easytoinvest.net/" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image" content="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
     <meta name="title" content="Easy To Invest" />
-    <meta name="description" content="Easy To Invest - Для тех, кто понял – предела успешности не существует. Для тех, кто готов к постоянному увеличению дохода. Для тех, у кого почти получилось изменить мышление, подчинить эмоции. Для вас." />
+    <meta name="description" content="Зарабатывайте инвестируя! Без приглашений! Автоматическое начисление средств. Регистрируйтесь сейчас!" />
     {% block pageimage %}
-        <link rel="image_src" href="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
     {% endblock %}
-    <meta name="author" content="Vladislav Kosko">
     <title>{% block title %}Easy To Invest{% endblock %}</title>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -34,7 +40,10 @@
         <link href="{{ asset('bundles/main/css/custom.css') }}" type="text/css" rel="stylesheet">
     {% endblock %}
 </head>
-<body id="body" style="overflow-x: hidden;">
+<body id="body" style="overflow-x: hidden;" itemscope itemtype="http://schema.org/Product">
+    <h1 itemprop="name" class="hidden">Easy To Invest</h1>
+    <img itemprop="image" class="hidden" src="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
+    <p itemprop="description" class="hidden">Зарабатывайте инвестируя! Без приглашений! Автоматическое начисление средств. Регистрируйтесь сейчас!</p>
 {% block index %}
 
 {% endblock %}

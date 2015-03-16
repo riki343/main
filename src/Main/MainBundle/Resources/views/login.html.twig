@@ -1,7 +1,6 @@
 {% extends '@MainMain/layout.html.twig' %}
 
 {% block pageimage %}
-	<link rel="image_src" href="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" />
 {% endblock %}
 
 {% block title %}Easy To Invest{% endblock %}
@@ -12,6 +11,7 @@
 {% endblock %}
 
 {% block index %}
+	<img src="http://easytoinvest.net/web/files/default/easytoinvest-default.jpg" class="hidden" />
 
 	<div id="bgvid"
 		 data-vide-bg="{{ asset('files/default/default-background.mp4') }}" data-vide-options="loop: true, muted: true, position: 0% 0%">
@@ -127,7 +127,7 @@
 
 				</section>
 
-				<section class="small-background-section">
+				<section class="small-background-section" style="padding-bottom: 30px;">
 					<div class="pattern"></div>
 					<div class="small-background-container">
 						<h2 class="small-background-title"><span>Мы в соц сетях </span></h2>
@@ -139,6 +139,11 @@
 							<li><a href="http://easytoinvest.tumblr.com" target="_blank"><i class="fa fa-tumblr fa-3x"></i></a></li>
 							<li><a href="https://www.linkedin.com/in/easytoinvest" target="_blank"><i class="fa fa-linkedin fa-3x"></i></a></li>
 						</ul>
+						<h4 class="small-background-title" style="font-size: 22px; margin-bottom: 5px;">Контакты</h4>
+						<div class="small-background-container" style="color: #f5f5f5">
+							<h5><b>Австрия, 4020 Linz, Bethlehemstraße, 35</b></h5>
+							<h5>mail@easytoinvest.net</h5>
+						</div>
 					</div>
 				</section>
 			</div>
