@@ -62,7 +62,7 @@
                         <input type="password" class="form-control password" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" name="repeatPassword" placeholder="Повторите пароль" required/>
                     </div>
                     <button type="submit" class="btn btn-success ">Регистрация</button>
-                    <a class="btn btn-default btn-primary" href="http://youtu.be/fv7HWEAYeZY" target="_blank" style="text-decoration: none;">Инструкция</a>
+                    <button type="button" class="btn btn-default btn-primary" data-target="#instruction" data-toggle="modal" style="text-decoration: none;">Инструкция</button>
                 </form>
             </div>
         </div>
@@ -70,6 +70,77 @@
     <div class="backstretch" style="left: 0; top: 0; overflow: hidden; margin: 0; padding: 0; height: 100%; width: 100%; z-index: -999999; position: fixed;">
         <img style="position: absolute; margin: 0; padding: 0; border: medium none; width: 100%; height: 100%; max-width: none; z-index: -999999; left: 0; top:0;" src="{{ asset('bundles/main/images/bg/3.jpg') }}" class="deleteable">
     </div>
+
+    <!-- Modal window -->
+    <div class="modal fade" id="instruction" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Инструкция по регистрации</h2>
+                </div>
+                <div class="modal-body">
+                    <a class="btn btn-default btn-primary text-center" target="_blank" href="https://www.youtube.com/watch?v=EjxyXDvYQQc">Видео инструкция</a><br>
+                    <hr/>
+                    <ul class="list-unstyled" style="font-size: 12px;">
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 1.</b> Вводим свои данные, e-mail, вводим номер долларового кошелька системы Perfect Money,
+                                если у вас его еще нет, то переходим к регистрации на сайте www.perfectmoney.is . Если же вы
+                                уже имеете кошелек, то переходим к шагу 3.
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 2.</b> Вводим данные для регистрации нового кошелька. Проверяем почту указанную при
+                                регистрации. Вводим полученный от Perfect money ID* номер из письма, пароль и входим в
+                                систему Perfect Money.
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 3.</b> Переходим к настройке системы, нажав на кнопку «Настройки» в правом углу. Под пунктом
+                                «Безопасность» нажимаем кнопку «Изменить параметры безопасности».
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 4.</b> Листаем страницу в самый низ, и в поле API* наживаем кнопку «Включить» и кнопку
+                                «Редактировать». В поле IP маска вводим следующие символы « *.*.*.* », вводим код с
+                                изображения и жмем «Сохранить». Поздравляем, вы успешно завершили настройку для работы с
+                                Easy To Invest.
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 5.</b> В меню «Ввод» пополняем любым удобным для вас способом, ваш долларовый кошелек* ( в
+                                формате U1234567). Одним из самых быстрых и дешевых является обмен Perfect money USD через
+                                обменные пункты-партнеры.
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 6.</b> Пополнив кошелек, возвращаемся на страницу регистрации Easy To Invest, вводим кошелек
+                                в нужное поле и подтвердив e-mail, входим в личный кабинет Easy To Invest
+                            </p>
+                        </li>
+                        <li>
+                            <p style="font-size: 14px; text-align: left;">
+                                <b>Шаг 7.</b> Переходим в меню «Баланс», выбираем «Пополнить баланс», вводим Perfect money ID,
+                                пароль от Perfect Money и сумму 21 доллар. Нажимаем «Активировать Аккаунт».
+                                Поздравляем, Вы успешно прошли регистрацию и активацию в системе Easy To Invest!
+                                Вы внесете огромный вклад в развитие компании и получения вашего дохода, рассказав о нас в соц. сетях
+                                с помощью кнопок в левом нижнем углу.
+                            </p>
+                        </li>
+                        <li>*Perfect Money ID – уникальный номер вашего аккаунта, высланный вам на почту системой Perfect Money</li>
+                        <li>*API – программный интерфейс, настройка его необходима для нормальной работы систем</li>
+                        <li>*долларовый кошелек – кошелек с номером после буквы «U» например U1234321</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 
@@ -124,4 +195,19 @@
     </script>
     <noscript><div><img src="//mc.yandex.ru/watch/28895565" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
+
+    <!-- KISSmetrics tracking snippet -->
+    <script type="text/javascript">var kmq = kmq || [];
+        var kmk = kmk || '02a21239ef1c2d8cc469fc0b05ff0d504a1628ae';
+        function _kms(u){
+            setTimeout(function(){
+                var d = document, f = d.getElementsByTagName('script')[0],
+                        s = d.createElement('script');
+                s.type = 'text/javascript'; s.async = true; s.src = u;
+                f.parentNode.insertBefore(s, f);
+            }, 1);
+        }
+        _kms('//i.kissmetrics.com/i.js');
+        kms('//doug1izaerwt3.cloudfront.net/' + kmk + '.1.js');
+    </script>
 {% endblock %}
